@@ -81,12 +81,12 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
   margin-left:0 !important;
 }
 section.main{
-  padding-top:0.35rem !important;
+  padding-top:0.15rem !important;
   padding-left:1rem !important;
   padding-right:1rem !important;
 }
 section.main .block-container{
-  padding-top:0.35rem !important;
+  padding-top:0.15rem !important;
   padding-bottom:1rem !important;
   max-width:100% !important;
 }
