@@ -79,17 +79,63 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 .stApp { background: #f0f4f8; }
 [data-testid="stHeader"] { display:none; }
 #MainMenu, footer { visibility:hidden; }
+section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
+  display: none !important;
+}
 
-.orbis-topbar{
+/* Top bar: style only the column row immediately after the hidden marker */
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker),
+.element-container:has(.orbis-topbar-row-marker){
+  display:none !important;
+  height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"],
+.element-container:has(.orbis-topbar-row-marker) + .element-container{
   background: linear-gradient(135deg,#111827,#1f2937 55%,#374151);
   border-radius: 12px;
   padding: 10px 14px;
-  color:#fff;
   margin-bottom: 8px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  border: none;
 }
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="stHorizontalBlock"],
+.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="stHorizontalBlock"]{
+  align-items: center !important;
+}
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] .orbis-title,
+.element-container:has(.orbis-topbar-row-marker) + .element-container .orbis-title{ color:#fff; }
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] .orbis-sub,
+.element-container:has(.orbis-topbar-row-marker) + .element-container .orbis-sub{ color:#fff; opacity:.68; }
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child,
+.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child{
+  display:flex !important;
+  justify-content:flex-end !important;
+  align-items:center !important;
+}
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child .stButton,
+.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child .stButton{
+  margin:0 !important;
+}
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child .stButton > button,
+.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child .stButton > button{
+  min-height:34px !important;
+  padding:6px 16px !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  background:#f1f5f9 !important;
+  color:#1e293b !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:8px !important;
+  box-shadow:0 1px 2px rgba(0,0,0,.06) !important;
+}
+[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child .stButton > button:hover,
+.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child .stButton > button:hover{
+  background:#fff !important;
+  border-color:#94a3b8 !important;
+  color:#0f172a !important;
+}
+
 .orbis-left{ display:flex; align-items:center; gap:10px; }
 .orbis-topbar .orbis-title{ color:#fff; }
 .orbis-topbar .orbis-sub{ color:#fff; opacity:.68; }
@@ -869,29 +915,29 @@ def _load_pending_demo_case(case: dict) -> bool:
 
 
 def run_analyzer_app() -> None:
-    if st.sidebar.button("Log out", use_container_width=True):
-        st.session_state.authenticated = False
-        st.rerun()
-
     pending_demo = st.session_state.pop("pending_demo_case", None)
     if pending_demo is not None:
         _load_pending_demo_case(pending_demo)
 
-    st.markdown(
-        """
-        <div class="orbis-topbar">
-          <div class="orbis-left">
-            <div class="orbis-icon">✦</div>
-            <div>
-              <div class="orbis-title">Orbis QC</div>
-              <div class="orbis-sub">XYZ Structure Viewer + Lewis Analysis</div>
+    st.markdown('<span class="orbis-topbar-row-marker"></span>', unsafe_allow_html=True)
+    top_left, top_right = st.columns([5.4, 0.8], gap="small")
+    with top_left:
+        st.markdown(
+            """
+            <div class="orbis-left">
+              <div class="orbis-icon">✦</div>
+              <div>
+                <div class="orbis-title">Orbis QC</div>
+                <div class="orbis-sub">XYZ Structure Viewer + Lewis Analysis</div>
+              </div>
             </div>
-          </div>
-          <div class="status-chip">XYZ · Ready</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
+    with top_right:
+        if st.button("Log out", key="logout_btn"):
+            st.session_state.authenticated = False
+            st.rerun()
 
     engine = load_engine()
 
