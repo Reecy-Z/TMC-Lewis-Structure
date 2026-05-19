@@ -289,16 +289,6 @@ div[data-testid="stCodeBlock"]{
 [data-testid="stCustomComponentV1"]{
   margin-bottom:0 !important;
 }
-.status-line{
-  margin-top:8px;
-  border:1px solid #d0dae8;
-  background:#f7f9fc;
-  border-radius:10px;
-  padding:6px 10px;
-  font-family:'JetBrains Mono', monospace;
-  font-size:10px;
-  color:#64748b;
-}
 .login-wrap{
   max-width:400px;
   margin:12vh auto 0 auto;
@@ -1140,11 +1130,6 @@ def run_analyzer_app() -> None:
             mime="text/plain",
         )
         st.markdown("</div>", unsafe_allow_html=True)
-
-        st.markdown(
-            '<div class="status-line">Drag → rotate · Scroll → zoom · Right-drag → pan · ILP backend active</div>',
-            unsafe_allow_html=True,
-        )
 
     except UnsupportedTransitionMetalError as exc:
         show_unsupported_tm_error(exc)
