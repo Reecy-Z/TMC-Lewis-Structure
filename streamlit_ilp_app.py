@@ -1115,6 +1115,10 @@ def run_analyzer_app() -> None:
         st.code(cbc_report, language="text")
 
         if ox_summary:
+            st.markdown(
+                '<div class="section-head">TM Oxidation State</div>',
+                unsafe_allow_html=True,
+            )
             st.code(ox_summary, language="text")
 
         export_text = (
