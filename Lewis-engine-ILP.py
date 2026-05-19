@@ -1090,7 +1090,7 @@ def print_cbc_report(
 
     print()
     print("=" * 72)
-    print("  CBC Ligand Classification  (L = dative, X = covalent, Z = Lewis-acid)")
+    print("  Ligand Classification  (L = dative, X = covalent, Z = Lewis-acid)")
     print("=" * 72)
 
     adj_lewis = defaultdict(set)
