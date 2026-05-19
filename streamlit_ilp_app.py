@@ -80,21 +80,35 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 [data-testid="stAppViewContainer"]{
   margin-left:0 !important;
 }
+[data-testid="stToolbar"],
+[data-testid="stDecoration"],
+[data-testid="stStatusWidget"]{
+  display:none !important;
+}
 section.main{
-  padding-top:0.15rem !important;
+  padding-top:0 !important;
   padding-left:1rem !important;
   padding-right:1rem !important;
 }
-section.main .block-container{
-  padding-top:0.15rem !important;
+section.main .block-container,
+section.main [data-testid="stMainBlockContainer"]{
+  padding-top:0 !important;
   padding-bottom:1rem !important;
   max-width:100% !important;
 }
+section.main > div:first-child{
+  padding-top:0 !important;
+  margin-top:0 !important;
+}
 section.main [data-testid="stVerticalBlock"] > div:first-child{
   padding-top:0 !important;
+  margin-top:0 !important;
 }
 section.main [data-testid="stElementContainer"]{
   padding-top:0 !important;
+  margin-top:0 !important;
+}
+section.main [data-testid="stVerticalBlockBorderWrapper"]{
   margin-top:0 !important;
 }
 [data-testid="stHeader"] { display:none; }
@@ -103,43 +117,28 @@ section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
   display: none !important;
 }
 
-/* Top bar: style only the column row immediately after the hidden marker */
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker),
-.element-container:has(.orbis-topbar-row-marker){
-  display:none !important;
-  height:0 !important;
-  margin:0 !important;
-  padding:0 !important;
+/* Top bar container */
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner){
+  background: linear-gradient(135deg,#111827,#1f2937 55%,#374151) !important;
+  border:none !important;
+  border-radius:12px !important;
+  padding:8px 14px !important;
+  margin:0 0 8px 0 !important;
 }
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"],
-.element-container:has(.orbis-topbar-row-marker) + .element-container{
-  background: linear-gradient(135deg,#111827,#1f2937 55%,#374151);
-  border-radius: 12px;
-  padding: 8px 14px;
-  margin-top: 0 !important;
-  margin-bottom: 8px;
-  border: none;
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner) [data-testid="stHorizontalBlock"]{
+  align-items:center !important;
 }
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="stHorizontalBlock"],
-.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="stHorizontalBlock"]{
-  align-items: center !important;
-}
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] .orbis-title,
-.element-container:has(.orbis-topbar-row-marker) + .element-container .orbis-title{ color:#fff; }
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] .orbis-sub,
-.element-container:has(.orbis-topbar-row-marker) + .element-container .orbis-sub{ color:#fff; opacity:.68; }
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child,
-.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner) .orbis-title{ color:#fff; }
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner) .orbis-sub{ color:#fff; opacity:.68; }
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner) [data-testid="column"]:last-child{
   display:flex !important;
   justify-content:flex-end !important;
   align-items:center !important;
 }
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child .stButton,
-.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child .stButton{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner) [data-testid="column"]:last-child .stButton{
   margin:0 !important;
 }
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child .stButton > button,
-.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child .stButton > button{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner) [data-testid="column"]:last-child .stButton > button{
   min-height:34px !important;
   padding:6px 16px !important;
   font-size:12px !important;
@@ -150,16 +149,54 @@ section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
   border-radius:8px !important;
   box-shadow:0 1px 2px rgba(0,0,0,.06) !important;
 }
-[data-testid="stElementContainer"]:has(.orbis-topbar-row-marker) + [data-testid="stElementContainer"] [data-testid="column"]:last-child .stButton > button:hover,
-.element-container:has(.orbis-topbar-row-marker) + .element-container [data-testid="column"]:last-child .stButton > button:hover{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.orbis-topbar-inner) [data-testid="column"]:last-child .stButton > button:hover{
   background:#fff !important;
   border-color:#94a3b8 !important;
   color:#0f172a !important;
 }
 
+/* Control card container */
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-card-inner){
+  background:#ffffff !important;
+  border:1px solid #d0dae8 !important;
+  border-radius:12px !important;
+  padding:8px 10px 6px 10px !important;
+  margin:0 0 8px 0 !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-card-inner) [data-testid="stHorizontalBlock"]{
+  align-items:stretch !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-card-inner) [data-testid="stHorizontalBlock"] > [data-testid="column"]{
+  display:flex !important;
+  flex-direction:column !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-card-inner) [data-testid="stFileUploader"] section{
+  flex:1 1 auto;
+  min-height:88px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-card-inner) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
+  margin-top:auto;
+  margin-bottom:auto;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-card-inner) [data-testid="column"]:nth-child(3) .stButton{
+  flex:1 1 auto;
+  display:flex !important;
+  flex-direction:column !important;
+  margin-top:0 !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-card-inner) [data-testid="column"]:nth-child(3) .stButton > button{
+  flex:1 1 auto;
+  min-height:88px !important;
+  height:100% !important;
+}
+
+.orbis-topbar-inner,
+.control-card-inner{ display:none !important; height:0 !important; margin:0 !important; padding:0 !important; }
+
 .orbis-left{ display:flex; align-items:center; gap:10px; }
-.orbis-topbar .orbis-title{ color:#fff; }
-.orbis-topbar .orbis-sub{ color:#fff; opacity:.68; }
 .orbis-icon{
   width:34px; height:34px; border-radius:10px;
   background:linear-gradient(135deg,rgba(45,106,79,.5),rgba(27,67,50,.6));
@@ -196,43 +233,6 @@ section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
   border:1px solid #d0dae8;
   border-radius:12px;
   padding:4px 10px 8px 10px;
-}
-.control-card{
-  background:#ffffff;
-  border:1px solid #d0dae8;
-  border-radius:12px;
-  padding:8px 10px 6px 10px;
-  margin-bottom:8px;
-}
-/* Top control row: equal-height upload / charge / run button */
-.control-card [data-testid="stHorizontalBlock"]{
-  align-items:stretch !important;
-}
-.control-card [data-testid="stHorizontalBlock"] > [data-testid="column"]{
-  display:flex !important;
-  flex-direction:column !important;
-}
-.control-card [data-testid="stFileUploader"] section{
-  flex:1 1 auto;
-  min-height:88px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.control-card [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
-  margin-top:auto;
-  margin-bottom:auto;
-}
-.control-card [data-testid="column"]:nth-child(3) .stButton{
-  flex:1 1 auto;
-  display:flex !important;
-  flex-direction:column !important;
-  margin-top:0 !important;
-}
-.control-card [data-testid="column"]:nth-child(3) .stButton > button{
-  flex:1 1 auto;
-  min-height:88px !important;
-  height:100% !important;
 }
 .result-card{
   background:#ffffff;
@@ -940,71 +940,72 @@ def run_analyzer_app() -> None:
     if pending_demo is not None:
         _load_pending_demo_case(pending_demo)
 
-    st.markdown('<span class="orbis-topbar-row-marker"></span>', unsafe_allow_html=True)
-    top_left, top_right = st.columns([5.4, 0.8], gap="small")
-    with top_left:
-        st.markdown(
-            """
-            <div class="orbis-left">
-              <div class="orbis-icon">✦</div>
-              <div>
-                <div class="orbis-title">Orbis QC</div>
-                <div class="orbis-sub">XYZ Structure Viewer + Lewis Analysis</div>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with top_right:
-        if st.button("Log out", key="logout_btn"):
-            st.session_state.authenticated = False
-            st.rerun()
+    with st.container(border=True):
+        st.markdown('<span class="orbis-topbar-inner"></span>', unsafe_allow_html=True)
+        top_left, top_right = st.columns([5.4, 0.8], gap="small")
+        with top_left:
+            st.markdown(
+                """
+                <div class="orbis-left">
+                  <div class="orbis-icon">✦</div>
+                  <div>
+                    <div class="orbis-title">Orbis QC</div>
+                    <div class="orbis-sub">XYZ Structure Viewer + Lewis Analysis</div>
+                  </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with top_right:
+            if st.button("Log out", key="logout_btn"):
+                st.session_state.authenticated = False
+                st.rerun()
 
     engine = load_engine()
 
-    st.markdown('<div class="control-card">', unsafe_allow_html=True)
-    i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
-    with i1:
-        xyz_file = st.file_uploader("XYZ", type=["xyz"], label_visibility="collapsed")
-        if xyz_file is not None:
-            st.session_state.pop("demo_xyz_text", None)
-            st.session_state.pop("demo_xyz_name", None)
-    with i2:
-        st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
-        mol_charge = st.number_input(
-            "Charge",
-            step=1,
-            format="%d",
-            label_visibility="collapsed",
-            key="mol_charge",
-            help="Total molecular charge (e.g. −1 for anions, +1 for cations).",
-        )
-    with i3:
-        st.markdown('<p class="field-label">&nbsp;</p>', unsafe_allow_html=True)
-        has_xyz = xyz_file is not None or bool(st.session_state.get("demo_xyz_text"))
-        run_btn = st.button(
-            "Run Analysis",
-            type="primary",
-            disabled=not has_xyz,
-            use_container_width=True,
-        )
-
-    st.markdown('<p class="tiny-label">Quick examples</p>', unsafe_allow_html=True)
-    ex1, ex2, ex3 = st.columns(3, gap="small")
-    for col, case in zip((ex1, ex2, ex3), DEMO_CASES):
-        with col:
-            if st.button(
-                case["label"],
-                key=f"demo_{case['id']}",
+    with st.container(border=True):
+        st.markdown('<span class="control-card-inner"></span>', unsafe_allow_html=True)
+        i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
+        with i1:
+            xyz_file = st.file_uploader("XYZ", type=["xyz"], label_visibility="collapsed")
+            if xyz_file is not None:
+                st.session_state.pop("demo_xyz_text", None)
+                st.session_state.pop("demo_xyz_name", None)
+        with i2:
+            st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
+            mol_charge = st.number_input(
+                "Charge",
+                step=1,
+                format="%d",
+                label_visibility="collapsed",
+                key="mol_charge",
+                help="Total molecular charge (e.g. −1 for anions, +1 for cations).",
+            )
+        with i3:
+            st.markdown('<p class="field-label">&nbsp;</p>', unsafe_allow_html=True)
+            has_xyz = xyz_file is not None or bool(st.session_state.get("demo_xyz_text"))
+            run_btn = st.button(
+                "Run Analysis",
+                type="primary",
+                disabled=not has_xyz,
                 use_container_width=True,
-            ):
-                st.session_state.pending_demo_case = case
-                st.rerun()
-    if st.session_state.get("demo_load_error"):
-        st.error(st.session_state.demo_load_error)
-    if st.session_state.get("demo_xyz_name") and xyz_file is None:
-        st.caption(f"Loaded example: `{st.session_state.demo_xyz_name}`")
-    st.markdown("</div>", unsafe_allow_html=True)
+            )
+
+        st.markdown('<p class="tiny-label">Quick examples</p>', unsafe_allow_html=True)
+        ex1, ex2, ex3 = st.columns(3, gap="small")
+        for col, case in zip((ex1, ex2, ex3), DEMO_CASES):
+            with col:
+                if st.button(
+                    case["label"],
+                    key=f"demo_{case['id']}",
+                    use_container_width=True,
+                ):
+                    st.session_state.pending_demo_case = case
+                    st.rerun()
+        if st.session_state.get("demo_load_error"):
+            st.error(st.session_state.demo_load_error)
+        if st.session_state.get("demo_xyz_name") and xyz_file is None:
+            st.caption(f"Loaded example: `{st.session_state.demo_xyz_name}`")
 
     if not has_xyz:
         st.info("Upload an `.xyz` file or pick a quick example above to preview and analyze.")
