@@ -92,7 +92,7 @@ section[data-testid="stSidebar"],
   border-radius: 12px;
   padding: 10px 14px;
   color:#fff;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -121,21 +121,6 @@ section[data-testid="stSidebar"],
 }
 .mono-label{ font-family: 'JetBrains Mono', monospace; letter-spacing: .4px; color:#64748b; font-size:12px; text-transform: uppercase; }
 .tiny-label{ font-family:'JetBrains Mono', monospace; color:#718096; font-size:10px; text-transform:uppercase; letter-spacing:.5px; margin: 2px 0 6px 0; }
-.control-label{
-  font-family:'JetBrains Mono', monospace;
-  color:#334155;
-  font-size:11px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.55px;
-  margin:0 0 8px 2px;
-  line-height:1.1;
-  display:block;
-}
-.control-label--section{
-  margin-top:14px;
-  margin-bottom:8px;
-}
 .field-label{
   font-family:'JetBrains Mono', monospace;
   color:#64748b;
@@ -156,32 +141,23 @@ section[data-testid="stSidebar"],
 .control-label-row{ display:none !important; }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker){
   margin-bottom:8px !important;
-  gap:0.5rem !important;
-  padding-top:4px !important;
+  gap:0 !important;
+  padding-top:0 !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stMarkdownContainer"]{
   margin:0 !important;
   padding:0 !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stMarkdown"] p.control-label{
-  margin:0 0 8px 2px !important;
-  padding:0 !important;
-}
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stMarkdown"] p.control-label--section{
-  margin:14px 0 8px 2px !important;
-}
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has(.control-label-row) [data-testid="column"]{
-  min-height:18px !important;
-}
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has(.control-label-row){
-  margin-bottom:2px !important;
-}
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stMarkdown"]:has(p.control-label--section){
   margin-bottom:0 !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]){
   margin-top:0 !important;
+  margin-bottom:10px !important;
   align-items:stretch !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stMarkdown"] p.tiny-label{
+  margin:2px 0 6px 0 !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) > [data-testid="column"]{
   display:flex !important;
@@ -963,17 +939,17 @@ def run_analyzer_app() -> None:
     engine = load_engine()
 
     with st.container():
-        st.markdown('<span class="control-panel-marker"></span>', unsafe_allow_html=True)
         lh1, lh2, lh3 = st.columns([2.4, 0.9, 1.2], gap="small")
         with lh1:
             st.markdown(
-                '<span class="control-label-row"></span><p class="control-label">XYZ</p>',
+                '<span class="control-panel-marker control-label-row"></span>'
+                '<p class="field-label">XYZ</p>',
                 unsafe_allow_html=True,
             )
         with lh2:
-            st.markdown('<p class="control-label">Charge</p>', unsafe_allow_html=True)
+            st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
         with lh3:
-            st.markdown('<p class="control-label">Action</p>', unsafe_allow_html=True)
+            st.markdown('<p class="field-label">Action</p>', unsafe_allow_html=True)
 
         i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
         with i1:
@@ -999,7 +975,7 @@ def run_analyzer_app() -> None:
                 use_container_width=True,
             )
 
-        st.markdown('<p class="control-label control-label--section">Quick examples</p>', unsafe_allow_html=True)
+        st.markdown('<p class="tiny-label">Quick examples</p>', unsafe_allow_html=True)
         ex1, ex2, ex3 = st.columns(3, gap="small")
         for col, case in zip((ex1, ex2, ex3), DEMO_CASES):
             with col:
