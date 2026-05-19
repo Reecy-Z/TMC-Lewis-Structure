@@ -636,7 +636,7 @@ def format_tm_oxidation_report(
     return out.getvalue().strip()
 
 
-def tm_oxidation_warning_messages(
+def format_tm_oxidation_summary(
     engine,
     atoms,
     fc,
@@ -645,7 +645,8 @@ def tm_oxidation_warning_messages(
     *,
     cbc_interaction_records=None,
     cbc_neighbor_types=None,
-) -> list[str]:
+) -> str:
+    """One-line TM oxidation summary for the Streamlit UI."""
     common = engine.TM_COMMON_OXIDATION_STATES
     results = engine.tm_oxidation_from_charge_balance(
         atoms,
@@ -655,16 +656,23 @@ def tm_oxidation_warning_messages(
         cbc_interaction_records=cbc_interaction_records,
         cbc_neighbor_types=cbc_neighbor_types,
     )
-    msgs: list[str] = []
+    lines: list[str] = []
     for m in sorted(results):
         sym = atoms[m]
-        ox_state, _others_sum, _sigma_sum = results[m]
+        ox_state, _, _ = results[m]
+        label = f"{sym}{m + 1}"
         ref = common.get(sym)
-        if ref is not None and ox_state not in ref:
-            msgs.append(
-                f"{sym}{m + 1}: oxidation state {ox_state} not in common oxidation states {ref}"
+        if ref is None:
+            status = "—  (no TM_COMMON_OXIDATION_STATES entry)"
+        elif ox_state in ref:
+            status = f"√  (common for {sym}: {ref})"
+        else:
+            status = (
+                f"⚠ WARNING: oxidation state {ox_state} "
+                f"not in common oxidation states {ref}"
             )
-    return msgs
+        lines.append(f"{label}:  oxidation state = {ox_state} {status}")
+    return "\n".join(lines)
 
 
 def build_viewer_payload(
@@ -1057,7 +1065,7 @@ def run_analyzer_app() -> None:
                 engine, atoms, fc, int(mol_charge), bo=bo,
                 cbc_interaction_records=cbc_interaction_records,
             )
-            ox_warnings = tm_oxidation_warning_messages(
+            ox_summary = format_tm_oxidation_summary(
                 engine, atoms, fc, int(mol_charge), bo=bo,
                 cbc_interaction_records=cbc_interaction_records,
             )
@@ -1106,14 +1114,8 @@ def run_analyzer_app() -> None:
         st.markdown('<div class="section-head">CBC Report</div>', unsafe_allow_html=True)
         st.code(cbc_report, language="text")
 
-        if ox_report:
-            st.markdown(
-                '<div class="section-head">TM Oxidation State (charge balance)</div>',
-                unsafe_allow_html=True,
-            )
-            for msg in ox_warnings:
-                st.warning(msg)
-            st.code(ox_report, language="text")
+        if ox_summary:
+            st.code(ox_summary, language="text")
 
         export_text = (
             f"Read {len(atoms)} atoms  (charge={int(mol_charge)})\n\n"
