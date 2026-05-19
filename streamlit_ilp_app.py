@@ -154,17 +154,29 @@ section[data-testid="stSidebar"],
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] section{
   flex:0 0 auto !important;
   min-height:40px !important;
-  max-height:40px !important;
-  height:40px !important;
+  height:auto !important;
+  max-height:none !important;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  padding:0 0.35rem !important;
-  overflow:hidden;
+  padding:4px 8px !important;
+  overflow:visible !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] small{
+  display:none !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploaderDropzone"]{
+  display:flex !important;
+  align-items:center !important;
   padding:0 !important;
-  min-height:0 !important;
+  min-height:32px !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] button{
+  min-height:32px !important;
+  height:32px !important;
+  padding:0 10px !important;
+  font-size:12px !important;
+  line-height:1 !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
   flex:0 0 auto !important;
