@@ -77,6 +77,26 @@ def inject_styles():
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700&display=swap');
 html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 .stApp { background: #f0f4f8; }
+[data-testid="stAppViewContainer"]{
+  margin-left:0 !important;
+}
+section.main{
+  padding-top:0.35rem !important;
+  padding-left:1rem !important;
+  padding-right:1rem !important;
+}
+section.main .block-container{
+  padding-top:0.35rem !important;
+  padding-bottom:1rem !important;
+  max-width:100% !important;
+}
+section.main [data-testid="stVerticalBlock"] > div:first-child{
+  padding-top:0 !important;
+}
+section.main [data-testid="stElementContainer"]{
+  padding-top:0 !important;
+  margin-top:0 !important;
+}
 [data-testid="stHeader"] { display:none; }
 #MainMenu, footer { visibility:hidden; }
 section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
@@ -95,7 +115,8 @@ section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
 .element-container:has(.orbis-topbar-row-marker) + .element-container{
   background: linear-gradient(135deg,#111827,#1f2937 55%,#374151);
   border-radius: 12px;
-  padding: 10px 14px;
+  padding: 8px 14px;
+  margin-top: 0 !important;
   margin-bottom: 8px;
   border: none;
 }
@@ -1135,7 +1156,11 @@ def run_analyzer_app() -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title=APP_TITLE, layout="wide")
+    st.set_page_config(
+        page_title=APP_TITLE,
+        layout="wide",
+        initial_sidebar_state="collapsed",
+    )
     inject_styles()
     init_auth_session()
     try:
