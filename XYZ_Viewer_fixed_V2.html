@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orbis QC — XYZ Viewer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f0f4f8; --bg2:#ffffff; --bg3:#f7f9fc; --bg4:#edf1f7;
+    --border:#d0dae8; --border2:#e2eaf4;
+    --fg:#2d3748; --fga:#1a202c; --accent:#374151; --accent2:#16a34a; --dim:#718096;
+    --mono:'JetBrains Mono',monospace; --sans:'Sora',sans-serif;
+    --panel-w:320px; --header-h:58px; --status-h:26px;
+    --radius:10px; --radius-sm:6px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:13px;overflow:hidden}
+  #app{display:grid;grid-template-rows:var(--header-h) 1fr var(--status-h);grid-template-columns:var(--panel-w) 1fr;grid-template-areas:"header header" "panel viewer" "status status";height:100vh;width:100vw}
+
+  /* HEADER */
+  #header{grid-area:header;background:linear-gradient(135deg,#111827,#1f2937 50%,#374151);border-bottom:1px solid #111827;display:flex;align-items:center;padding:0 20px;gap:14px;z-index:10;box-shadow:0 2px 16px rgba(0,0,0,.3)}
+  .hdr-icon{width:36px;height:36px;background:linear-gradient(135deg,rgba(45,106,79,.5),rgba(27,67,50,.6));border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,.25),0 0 0 1px rgba(116,198,157,.25);flex-shrink:0;border:1px solid rgba(116,198,157,.35)}
+  .hdr-text{display:flex;flex-direction:column;gap:1px}
+  .hdr-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px;line-height:1}
+  .hdr-sub{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.4px;font-style:italic}
+  .hdr-sep{flex:1}
+  #mode-chip{font-family:var(--mono);font-size:10px;padding:4px 14px;border-radius:20px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);letter-spacing:.5px;transition:all .3s}
+  #mode-chip.ok{color:#bbf7d0;background:rgba(22,163,74,.25);border-color:rgba(22,163,74,.5)}
+  #mode-chip.loading{color:#fde68a;background:rgba(217,119,6,.2);border-color:rgba(217,119,6,.4)}
+
+  /* PANEL */
+  #panel{grid-area:panel;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;box-shadow:2px 0 8px rgba(0,0,0,.06)}
+  #file-strip{padding:12px 16px 10px;border-bottom:1px solid var(--border);background:var(--bg3);flex-shrink:0}
+  .file-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .file-label{font-size:10px;color:var(--dim);font-family:var(--mono);min-width:28px;white-space:nowrap}
+  .drop-zone{flex:1;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-family:var(--mono);font-size:10px;color:var(--dim);cursor:pointer;text-align:center;transition:all .2s;background:var(--bg2)}
+  .drop-zone:hover,.drop-zone.dragover{border-color:var(--accent);color:var(--accent);background:#f1f5f9}
+  .drop-zone.loaded{border-style:solid;border-color:var(--accent2);color:var(--accent2);background:#f0fdf4}
+  .drop-zone.py-loaded{border-style:solid;border-color:#7c3aed;color:#7c3aed;background:#f5f3ff}
+  .drop-zone.py-needed{border-color:#dc2626;color:#dc2626;animation:pulse-red 1.5s ease-in-out infinite}
+  @keyframes pulse-red{0%,100%{background:var(--bg2)}50%{background:#fef2f2}}
+  #file-info{font-family:var(--mono);font-size:10px;color:var(--dim);min-height:14px}
+  input[type="file"]{display:none}
+
+  /* TOOLBAR */
+  #viewer-toolbar{padding:6px 14px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative}
+  .vt-label{font-size:9px;color:var(--dim);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase}
+  .vt-sep{width:1px;height:16px;background:var(--border);flex-shrink:0}
+
+  /* PANEL BODY */
+  #panel-body{flex:1;overflow-y:auto;padding:14px}
+  #panel-body::-webkit-scrollbar{width:4px}
+  #panel-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+  /* SECTION */
+  .section{border:1px solid var(--border2);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+  .section:hover{border-color:var(--border)}
+  .section-header{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);cursor:pointer;user-select:none;transition:background .15s}
+  .section-header:hover{background:var(--bg4)}
+  .section-icon{font-size:12px;width:16px;text-align:center}
+  .section-title{font-size:10px;font-weight:700;color:var(--fga);letter-spacing:.6px;flex:1;text-transform:uppercase}
+  .section-arrow{color:var(--dim);font-size:10px;transition:transform .2s}
+  .section-arrow.closed{transform:rotate(-90deg)}
+  .section-body{padding:10px 12px;background:var(--bg2);border-top:1px solid var(--border2)}
+  .section-body.hidden{display:none}
+
+  /* CONTROLS */
+  .ctrl-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+  .ctrl-row:last-child{margin-bottom:0}
+  .ctrl-label{font-size:10px;color:var(--fg);font-family:var(--mono);white-space:nowrap;font-weight:600}
+  select,input[type="text"]{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fga);font-family:var(--mono);font-size:11px;padding:5px 9px;outline:none;transition:border-color .15s}
+  select:focus,input[type="text"]:focus{border-color:var(--accent)}
+  select{cursor:pointer;appearance:none;padding-right:22px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23718096'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:none;border-radius:var(--radius-sm);font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+  .btn-primary{background:linear-gradient(135deg,#1f2937,#374151);color:#fff;box-shadow:0 2px 8px rgba(31,41,55,.25)}
+  .btn-primary:hover{background:linear-gradient(135deg,#374151,#1f2937)}
+  .btn-secondary{background:var(--bg3);color:var(--fg);border:1px solid var(--border)}
+  .btn-secondary:hover{background:var(--bg4);border-color:#374151}
+  .swatches{display:flex;gap:4px;flex-wrap:wrap}
+  .swatch{width:20px;height:20px;border-radius:4px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .1s}
+  .swatch:hover{transform:scale(1.15)}
+  .swatch.active{border-color:var(--fga)}
+  .slider-group{display:flex;align-items:center;gap:7px}
+  .slider-val{font-family:var(--mono);font-size:11px;color:var(--fga);min-width:28px;text-align:right;font-weight:600}
+  input[type="range"]{-webkit-appearance:none;height:4px;background:#cbd5e1;border-radius:2px;outline:none;cursor:pointer}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#2d6a4f;cursor:pointer}
+  input[type="checkbox"]{width:13px;height:13px;accent-color:#2d6a4f;cursor:pointer}
+  .check-label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:var(--fg)}
+  .arrow-badge{padding:2px 6px;border-radius:3px;font-size:9px;font-weight:700;font-family:var(--mono)}
+
+  /* VIEWER */
+  #viewer{grid-area:viewer;background:#dfe7df;position:relative;overflow:hidden}
+  #plot{width:100%;height:100%}
+  #viewer-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(ellipse at center,#293548,#1e293b 70%);pointer-events:none}
+  .placeholder-text{font-size:14px;font-weight:500;opacity:.4;color:#94a3b8}
+  .placeholder-hint{font-size:11px;font-family:var(--mono);opacity:.25;color:#94a3b8}
+  #loading{position:absolute;inset:0;background:rgba(30,41,59,.92);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:100}
+  #loading.show{display:flex}
+  .spinner{width:36px;height:36px;border:2px solid rgba(255,255,255,.15);border-top-color:#2d6a4f;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #loading-text{font-family:var(--mono);font-size:10px;color:#94a3b8;letter-spacing:.4px}
+
+  /* STATUS */
+  #status{grid-area:status;background:var(--bg3);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:20px;font-family:var(--mono);font-size:9px;color:var(--dim)}
+  .status-item{display:flex;align-items:center;gap:5px}
+  .status-dot{width:5px;height:5px;border-radius:50%}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-family:var(--mono);font-size:11px;padding:8px 20px;border-radius:var(--radius);opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+  #toast.show{opacity:1}
+  #toast.success{border-color:#10b981;color:#10b981}
+  #toast.error{border-color:#f87171;color:#f87171}
+  #toast.info{border-color:#60a5fa;color:#60a5fa}
+
+  /* PYODIDE INIT BAR */
+  #py-init-bar{background:linear-gradient(90deg,#1e293b,#0f172a);border-bottom:1px solid #334155;padding:6px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;font-family:var(--mono);font-size:10px;color:#94a3b8}
+  #py-init-bar.hidden{display:none}
+  .py-progress{flex:1;height:4px;background:#334155;border-radius:2px;overflow:hidden}
+  .py-progress-bar{height:100%;background:linear-gradient(90deg,#2d6a4f,#74c69d);border-radius:2px;width:0%;transition:width .3s}
+
+  ::-webkit-scrollbar{width:4px}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header id="header">
+  <div class="hdr-icon">
+    <svg viewBox="0 0 36 36" width="22" height="22" fill="none">
+      <polygon points="18,2 21,15 34,18 21,21 18,34 15,21 2,18 15,15" fill="rgba(255,255,255,0.92)"/>
+      <polygon points="18,6 20.5,15.5 30,18 20.5,20.5 18,30 15.5,20.5 6,18 15.5,15.5" fill="none" stroke="rgba(116,198,157,0.7)" stroke-width="0.8"/>
+      <circle cx="18" cy="18" r="2.2" fill="rgba(116,198,157,0.9)"/>
+    </svg>
+  </div>
+  <div class="hdr-text">
+    <span class="hdr-title">Orbis <span style="font-weight:300;opacity:.55;font-size:12px">QC</span></span>
+    <span class="hdr-sub">XYZ Structure Viewer + Lewis Analysis</span>
+  </div>
+  <div class="hdr-sep"></div>
+  <div id="mode-chip">Initialising…</div>
+</header>
+
+<aside id="panel">
+  <div id="py-init-bar">
+    <span id="py-init-msg">Loading Python engine…</span>
+    <div class="py-progress"><div class="py-progress-bar" id="py-progress-bar"></div></div>
+  </div>
+
+  <div id="file-strip">
+    <!-- Python script selector -->
+    <div class="file-row">
+      <span class="file-label">lewis2.py</span>
+      <div class="drop-zone py-needed" id="py-drop" onclick="document.getElementById('py-input').click()" title="Select your lewis2.py file">
+        Select lewis2.py ↑
+      </div>
+      <input type="file" id="py-input" accept=".py">
+    </div>
+    <!-- XYZ file -->
+    <div class="file-row">
+      <span class="file-label">XYZ</span>
+      <div class="drop-zone" id="file-drop" onclick="document.getElementById('file-input').click()">
+        Drop .xyz or click to browse
+      </div>
+      <input type="file" id="file-input" accept=".xyz">
+      <button class="btn btn-secondary" style="padding:6px 9px;font-size:11px" onclick="resetCamera()" title="Reset camera">⌖</button>
+    </div>
+    <div id="file-info"></div>
+  </div>
+
+  <!-- Toolbar: background + save -->
+  <div id="viewer-toolbar">
+    <details id="bg-details" style="display:contents">
+      <summary style="display:flex;align-items:center;gap:6px;cursor:pointer;list-style:none;outline:none">
+        <span class="vt-label" style="cursor:pointer">Background</span>
+        <div id="bg-active-swatch" style="width:16px;height:16px;border-radius:3px;background:#dfe7df;border:1.5px solid var(--border);flex-shrink:0"></div>
+        <span style="font-size:9px;color:var(--dim);font-family:var(--mono)">▾</span>
+      </summary>
+    </details>
+    <div id="bg-swatch-panel" style="display:none;position:absolute;top:calc(var(--header-h) + 34px);left:0;z-index:200;background:#0c1220;border:1px solid var(--border);border-radius:var(--radius);padding:10px;box-shadow:0 8px 24px rgba(0,0,0,.6)">
+      <div class="swatches" id="bg-swatches" style="gap:5px;max-width:220px">
+        <div class="swatch" style="background:#12121f" data-color="#12121f" onclick="setBgColor(this)" title="Space"></div>
+        <div class="swatch" style="background:#000" data-color="#000000" onclick="setBgColor(this)" title="Black"></div>
+        <div class="swatch" style="background:#fff;border:1px solid #555" data-color="#ffffff" onclick="setBgColor(this)" title="White"></div>
+        <div class="swatch" style="background:#f0f0f0;border:1px solid #ccc" data-color="#f0f0f0" onclick="setBgColor(this)" title="Paper"></div>
+        <div class="swatch active" style="background:#dfe7df;border:1px solid #ccc" data-color="#dfe7df" onclick="setBgColor(this)" title="Sage"></div>
+        <div class="swatch" style="background:#1a1a2e" data-color="#1a1a2e" onclick="setBgColor(this)" title="Deep blue"></div>
+        <div class="swatch" style="background:#1b2a3a" data-color="#1b2a3a" onclick="setBgColor(this)" title="Navy"></div>
+        <div class="swatch" style="background:#1a2a1a" data-color="#1a2a1a" onclick="setBgColor(this)" title="Forest"></div>
+        <div class="swatch" style="background:#2a2a2a" data-color="#2a2a2a" onclick="setBgColor(this)" title="Charcoal"></div>
+        <div class="swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);border:1px solid #555;position:relative;overflow:hidden" title="Custom" onclick="document.getElementById('bg-custom-input').click()">
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;text-shadow:0 0 3px #000;font-weight:700">+</span>
+        </div>
+        <input type="color" id="bg-custom-input" style="display:none;width:0;height:0;opacity:0" onchange="setBgColorCustom(this.value)">
+      </div>
+    </div>
+    <div class="vt-sep"></div>
+    <div id="save-settings-toggle" onclick="toggleSaveSettings()" style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:3px 6px;border-radius:4px;border:1px solid var(--border2);background:var(--bg3)">
+      <span class="vt-label" style="color:var(--dim)">PNG · 3× · 2400×1800</span>
+      <span id="save-settings-arrow" style="font-size:9px;color:var(--dim);font-family:var(--mono)">▾</span>
+    </div>
+    <div id="save-settings-panel" style="display:none;position:absolute;top:calc(var(--header-h) + 34px);right:0;z-index:200;background:#0c1220;border:1px solid var(--border);border-radius:var(--radius);padding:12px;box-shadow:0 8px 24px rgba(0,0,0,.6);min-width:200px">
+      <div style="font-size:9px;color:var(--dim);font-family:var(--mono);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Export Settings</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;color:var(--fg);font-family:var(--mono);min-width:52px">Format</span>
+          <select id="img-format" style="flex:1;padding:3px 20px 3px 6px;font-size:10px" onchange="updateSaveLabel()">
+            <option value="png" selected>PNG</option><option value="svg">SVG</option><option value="jpeg">JPEG</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;color:var(--fg);font-family:var(--mono);min-width:52px">Scale</span>
+          <select id="img-scale" style="flex:1;padding:3px 20px 3px 6px;font-size:10px" onchange="updateSaveLabel()">
+            <option value="1">1×</option><option value="2">2×</option><option value="3" selected>3×</option><option value="4">4×</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:10px;color:var(--fg);font-family:var(--mono);min-width:52px">Size</span>
+          <input type="text" id="img-width" value="2400" style="flex:1;min-width:0;padding:3px 5px;font-size:10px" oninput="updateSaveLabel()">
+          <span style="font-size:10px;color:var(--dim)">×</span>
+          <input type="text" id="img-height" value="1800" style="flex:1;min-width:0;padding:3px 5px;font-size:10px" oninput="updateSaveLabel()">
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="saveImage()" style="padding:4px 11px;font-size:11px">⬇ Save</button>
+  </div>
+
+  <div id="panel-body">
+    <!-- Rendering style -->
+    <div class="ctrl-row" style="margin-bottom:12px">
+      <span class="ctrl-label">Rendering</span>
+      <select id="mol-style" onchange="onMolStyleChange()">
+        <option value="ball_stick">Ball &amp; Stick</option>
+        <option value="ball_stick_dark" selected>Ball &amp; Stick (Dark/Print)</option>
+        <option value="wireframe">Wireframe</option>
+        <option value="symbolic_3d">Symbolic 3D</option>
+      </select>
+    </div>
+
+    <div id="symbolic-opts" style="display:none;margin-bottom:10px">
+      <div class="ctrl-row">
+        <label class="check-label"><input type="checkbox" id="sym3d-show-bonds" checked onchange="if(state.loaded) visualize()"> Show bonds</label>
+        <label class="check-label" style="margin-left:8px"><input type="checkbox" id="sym3d-show-H" onchange="if(state.loaded) visualize()"> Include H</label>
+      </div>
+    </div>
+
+    <div class="ctrl-row" style="margin-bottom:12px">
+      <label class="check-label"><input type="checkbox" id="hide-H" onchange="applyHideH()"> Hide hydrogen atoms</label>
+    </div>
+
+    <!-- Display Options -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-icon">◈</span>
+        <span class="section-title">Display Options</span>
+        <span class="section-arrow closed">▾</span>
+      </div>
+      <div class="section-body hidden">
+        <div class="ctrl-row">
+          <label class="check-label"><input type="checkbox" id="show-bonds" checked onchange="if(state.loaded) visualize()"> Show bonds</label>
+          <label class="check-label"><input type="checkbox" id="show-labels" onchange="if(state.loaded) visualize()"> Symbols</label>
+        </div>
+        <div class="ctrl-row">
+          <label class="check-label"><input type="checkbox" id="show-numbers" onchange="if(state.loaded) visualize()"> Numbers</label>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:4px">
+          <span class="ctrl-label">Label size</span>
+          <div class="slider-group">
+            <input type="range" id="label-size" min="8" max="28" value="12" style="width:80px">
+            <span class="slider-val" id="label-size-val">12</span>
+          </div>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:4px">
+          <span class="ctrl-label">Label colour</span>
+          <div class="swatches" id="label-swatches">
+            <div class="swatch active" style="background:#fff;border:1px solid #ccc" data-color="#ffffff" onclick="setLabelColor(this)"></div>
+            <div class="swatch" style="background:#000" data-color="#000000" onclick="setLabelColor(this)"></div>
+            <div class="swatch" style="background:#ffff00" data-color="#ffff00" onclick="setLabelColor(this)"></div>
+            <div class="swatch" style="background:#00ffff" data-color="#00ffff" onclick="setLabelColor(this)"></div>
+          </div>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:4px">
+          <span class="ctrl-label">Label atoms</span>
+          <input type="text" id="label-atoms" value="" placeholder="all / 1,3 / 1-5" style="width:110px" onchange="if(state.loaded) visualize()">
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">Hidden atoms</span>
+          <input type="text" id="hidden-atoms" value="" placeholder="none / 1,2 / 1-5" style="width:110px" onchange="if(state.loaded) visualize()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Dative Arrows (only when lewis2.py loaded) -->
+    <div class="section" id="dative-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-icon">⇝</span>
+        <span class="section-title">Dative Arrows</span>
+        <span class="section-arrow closed">▾</span>
+      </div>
+      <div class="section-body hidden">
+        <div class="ctrl-row" style="margin-bottom:4px">
+          <label class="check-label"><input type="checkbox" id="show-dative" checked onchange="if(state.loaded) visualize()">
+            Show dative arrows
+          </label>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:4px">
+          <span class="ctrl-label">Arrow colour</span>
+          <div class="swatches" id="dative-color-swatches">
+            <div class="swatch active" style="background:#FF9500" data-color="#FF9500" onclick="setDativeColor(this)" title="Amber"></div>
+            <div class="swatch" style="background:#00CC55" data-color="#00CC55" onclick="setDativeColor(this)" title="Green"></div>
+            <div class="swatch" style="background:#3399FF" data-color="#3399FF" onclick="setDativeColor(this)" title="Blue"></div>
+            <div class="swatch" style="background:#ff4466" data-color="#ff4466" onclick="setDativeColor(this)" title="Red"></div>
+            <div class="swatch" style="background:#ffffff;border:1px solid #ccc" data-color="#ffffff" onclick="setDativeColor(this)" title="White"></div>
+          </div>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:6px">
+          <span class="ctrl-label">Arrow width</span>
+          <div class="slider-group">
+            <input type="range" id="arrow-width" min="2" max="10" value="4" style="width:70px">
+            <span class="slider-val" id="arrow-width-val">4</span>
+          </div>
+        </div>
+        <div id="dative-info" style="font-size:9px;font-family:var(--mono);color:var(--dim);margin-top:4px;line-height:1.6"></div>
+        <div class="ctrl-hint" style="margin-top:6px;font-size:9px;color:var(--dim);font-family:var(--mono)">Arrows: donor → acceptor. π-bond donors start from bond midpoint.</div>
+      </div>
+    </div>
+
+    <div id="vis-info" style="margin-top:10px;font-size:9px;font-family:var(--mono);color:var(--dim)">Load lewis2.py and a .xyz file to begin.</div>
+  </div>
+</aside>
+
+<main id="viewer">
+  <div id="viewer-placeholder">
+    <svg viewBox="0 0 80 80" width="64" height="64" fill="none" style="opacity:.1">
+      <polygon points="40,4 46,34 76,40 46,46 40,76 34,46 4,40 34,34" fill="#fff"/>
+      <circle cx="40" cy="40" r="5" fill="#74c69d"/>
+    </svg>
+    <div class="placeholder-text">No structure loaded</div>
+    <div class="placeholder-hint">Select lewis2.py → drop a .xyz file</div>
+  </div>
+  <div id="plot"></div>
+  <div id="loading">
+    <div class="spinner"></div>
+    <div id="loading-text" style="font-family:var(--mono);font-size:10px;color:#94a3b8">Rendering…</div>
+  </div>
+</main>
+
+<footer id="status">
+  <span class="status-item">Drag → rotate · Scroll → zoom · Right-drag → pan</span>
+  <span class="status-item"><span class="status-dot" style="background:#FF9500"></span>Dative (LP)</span>
+  <span class="status-item"><span class="status-dot" style="background:#3399FF"></span>Dative (π)</span>
+  <span class="status-item" id="status-atoms"></span>
+</footer>
+</div>
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  ATOM DISPLAY DATA
+// ══════════════════════════════════════════════════════════════════
+const ATOM_PROPS = {
+  H:{r:.31,cpk:'#FFFFFF'},  C:{r:.77,cpk:'#909090'},  N:{r:.75,cpk:'#3050F8'},
+  O:{r:.73,cpk:'#FF0D0D'},  F:{r:.71,cpk:'#90E050'},  S:{r:1.03,cpk:'#FFFF30'},
+  P:{r:1.06,cpk:'#FF8000'}, Cl:{r:.99,cpk:'#1FF01F'}, Br:{r:1.14,cpk:'#A62929'},
+  I:{r:1.33,cpk:'#940094'}, Na:{r:1.54,cpk:'#AB5CF2'}, Mg:{r:1.30,cpk:'#8AFF00'},
+  Al:{r:1.18,cpk:'#BFA6A6'},Si:{r:1.11,cpk:'#F0C8A0'}, Ca:{r:1.74,cpk:'#3DFF00'},
+  Fe:{r:1.25,cpk:'#E06633'}, Cu:{r:1.28,cpk:'#C88033'}, Zn:{r:1.22,cpk:'#7D80B0'},
+  Au:{r:1.44,cpk:'#FFD123'}, Pt:{r:1.36,cpk:'#D0D0E0'}, Pd:{r:1.31,cpk:'#B0B0C0'},
+  Rh:{r:1.35,cpk:'#00B4FF'}, Ir:{r:1.36,cpk:'#175487'}, Ru:{r:1.34,cpk:'#248F8F'},
+  Zr:{r:1.60,cpk:'#94BFFF'}, Ta:{r:1.46,cpk:'#4DA6FF'}, Ni:{r:1.10,cpk:'#50D050'},
+  Mo:{r:1.45,cpk:'#54B5B5'}, W:{r:1.37,cpk:'#2194D6'},  Re:{r:1.31,cpk:'#267DAB'},
+};
+const ATOM_DARK = {
+  H:'#aaa',C:'#222',N:'#1030cc',O:'#cc0000',F:'#2a8800',S:'#b08800',
+  P:'#cc5500',Cl:'#007700',Br:'#7a1c1c',I:'#550055',Na:'#7030aa',Mg:'#336600',
+  Al:'#888066',Si:'#996644',Ca:'#226600',Fe:'#993311',Cu:'#884400',Zn:'#445577',
+  Au:'#997700',Pt:'#555566',Pd:'#556655',Rh:'#005577',Ir:'#112244',Ru:'#115555',
+  Zr:'#4466aa',Ta:'#335588',Ni:'#227722',Mo:'#336666',W:'#224466',Re:'#224455',
+};
+const MASS = {
+  H:1.008,C:12.011,N:14.007,O:15.999,F:18.998,S:32.06,P:30.974,Cl:35.45,
+  Br:79.904,I:126.904,Na:22.99,Mg:24.305,Al:26.982,Si:28.085,Ca:40.078,
+  Fe:55.845,Cu:63.546,Zn:65.38,Au:196.967,Pt:195.08,Pd:106.42,Rh:102.906,
+  Ir:192.217,Ru:101.07,Zr:91.22,Ta:180.948,Ni:58.693,Mo:95.96,W:183.84,Re:186.207,
+};
+const DEFAULT_ATOM = {r:1.00,cpk:'#FF69B4'};
+
+// ══════════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════════
+const state = {
+  loaded: false,
+  atoms: [], coords: [], bonds: [], dativeBonds: [],
+  bgColor: '#dfe7df', labelColor: '#ffffff', dativeColor: '#FF9500',
+  pyReady: false, lewisCode: null,
+  _newFile: false,
+};
+
+// ══════════════════════════════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+function showToast(msg,type=''){const t=$('toast');t.textContent=msg;t.className='show '+type;setTimeout(()=>t.className='',3000)}
+function setLoading(on,txt='Rendering…'){$('loading').classList.toggle('show',on);$('loading-text').textContent=txt}
+function toggleSection(hdr){const a=hdr.querySelector('.section-arrow'),b=hdr.parentElement.querySelector('.section-body');a.classList.toggle('closed');b.classList.toggle('hidden')}
+
+// ══════════════════════════════════════════════════════════════════
+//  PYODIDE INITIALISATION
+// ══════════════════════════════════════════════════════════════════
+let pyodide = null;
+
+async function initPyodide() {
+  try {
+    const bar = $('py-init-bar'), prog = $('py-progress-bar'), msg = $('py-init-msg');
+    msg.textContent = 'Loading Python engine (first load ~5s)…';
+    prog.style.width = '15%';
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js';
+    document.head.appendChild(script);
+    await new Promise((res, rej) => { script.onload = res; script.onerror = rej; });
+
+    prog.style.width = '40%';
+    msg.textContent = 'Starting Python runtime…';
+
+    pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/' });
+    prog.style.width = '80%';
+    msg.textContent = 'Loading standard library…';
+
+    await pyodide.loadPackagesFromImports('import json, math, sys; from collections import defaultdict');
+    prog.style.width = '100%';
+    msg.textContent = '✓ Python ready';
+    state.pyReady = true;
+
+    setTimeout(() => { bar.classList.add('hidden'); }, 1200);
+    $('mode-chip').textContent = 'Select lewis2.py';
+    $('mode-chip').className = 'loading';
+    showToast('Python engine ready — select lewis2.py', 'info');
+  } catch(e) {
+    $('py-init-msg').textContent = '✗ Python load failed: ' + e.message;
+    $('mode-chip').textContent = 'Python failed';
+    showToast('Pyodide load failed — check connection', 'error');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  LEWIS BRIDGE CODE (injected after lewis2.py)
+// ══════════════════════════════════════════════════════════════════
+const BRIDGE_CODE = `
+import json
+
+def _get_lewis_json(xyz_text, charge_val=0):
+    lines = xyz_text.strip().splitlines()
+    n = int(lines[0].strip())
+    atoms, coords = [], []
+    for ln in lines[2:2+n]:
+        p = ln.split()
+        raw = p[0]
+        sym = raw[0].upper() + raw[1:].lower() if len(raw) > 1 else raw.upper()
+        atoms.append(sym)
+        coords.append([float(p[1]), float(p[2]), float(p[3])])
+
+    charge = int(charge_val)
+    unknown = sorted(set(a for a in atoms if a not in VALENCE))
+    for u in unknown:
+        VALENCE[u]=4; CORE_E[u]=0; COV_R[u]=0.77; STD_CAP[u]=4; ENEG[u]=2.55
+
+    bo, lp, fc, stats = find_best_lewis(atoms, coords, charge)
+    results = classify_cbc_ligands(atoms, coords, bo, lp, fc, charge)
+
+    # Identify all single-atom L-type TM bonds: these show as arrows (no bond line).
+    # Both those already in Lewis bo (e.g. W-CO, Pd-NHC) and those not in Lewis
+    # (e.g. Rh-P) are represented exclusively by the dative arrow.
+    l_pairs = set()
+    for metal_idx in sorted(results):
+        if not is_TM(atoms[metal_idx]):
+            continue
+        for atom_tuple, cbc_char in results[metal_idx]:
+            if cbc_char == "L" and len(atom_tuple) == 1:
+                lig = atom_tuple[0]
+                l_pairs.add((min(metal_idx, lig), max(metal_idx, lig)))
+
+    # Bond lines: Lewis bonds excluding L-type TM pairs (arrow replaces them),
+    # plus X/Z-type TM contacts not already in Lewis bo.
+    bonds_list = []
+    bo_keys = set()
+    for (i, j), order in sorted(bo.items()):
+        bo_keys.add((min(i,j), max(i,j)))
+        if (min(i,j), max(i,j)) not in l_pairs:
+            bonds_list.append({"i": i, "j": j, "order": order})
+
+    # Count X-type occurrences per (metal, ligand) pair so that
+    # multi-X ligands (nitrido N → 3X, oxo O → 2X, imido NR → 2X)
+    # are drawn with the correct bond order instead of always order 1.
+    x_counts = {}
+    for metal_idx in sorted(results):
+        if not is_TM(atoms[metal_idx]):
+            continue
+        for atom_tuple, cbc_char in results[metal_idx]:
+            if cbc_char not in ("X", "Z") or len(atom_tuple) != 1:
+                continue
+            lig = atom_tuple[0]
+            if lig == metal_idx:
+                continue
+            key = (min(metal_idx, lig), max(metal_idx, lig))
+            if key not in bo_keys:
+                x_counts[key] = x_counts.get(key, 0) + 1
+
+    for key, count in x_counts.items():
+        i, j = key
+        bonds_list.append({"i": i, "j": j, "order": min(count, 3)})
+
+    # Dative arrows: all L-type TM contacts (single LP donor or pi cluster).
+    # The arrow shaft is the sole visual bond for these — no separate bond line.
+    dative_bonds = []
+    for metal_idx in sorted(results):
+        if not is_TM(atoms[metal_idx]):
+            continue
+        for atom_tuple, cbc_char in results[metal_idx]:
+            if cbc_char != "L":
+                continue
+            donor_atoms = list(atom_tuple)
+            pi_bond_pair = None
+            if len(atom_tuple) == 2:
+                a, b = atom_tuple
+                if bo.get((min(a,b), max(a,b)), 0) >= 2:
+                    pi_bond_pair = [a, b]
+            dative_bonds.append({
+                "donor_atoms": donor_atoms,
+                "acceptor": metal_idx,
+                "pi_bond_pair": pi_bond_pair
+            })
+
+    DONOR_ONS = {"O", "N", "S"}
+    _ANG_MIN, _ANG_MAX = 170.0, 190.0
+
+    def _bo_ij(i, j):
+        return bo.get((min(i, j), max(i, j)), 0)
+
+    def _angle_center(a_idx, center_idx, c_idx):
+        ax, ay, az = coords[a_idx]
+        bx, by, bz = coords[center_idx]
+        cx, cy, cz = coords[c_idx]
+        v1 = (ax - bx, ay - by, az - bz)
+        v2 = (cx - bx, cy - by, cz - bz)
+        n1 = math.sqrt(v1[0]**2 + v1[1]**2 + v1[2]**2)
+        n2 = math.sqrt(v2[0]**2 + v2[1]**2 + v2[2]**2)
+        if n1 < 1e-10 or n2 < 1e-10:
+            return None
+        cosang = max(-1.0, min(1.0, (v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2])/(n1*n2)))
+        return math.degrees(math.acos(cosang))
+
+    def _draw_supplemental(tm, lig, ml_order):
+        if lp.get(lig, 0) < 1:
+            return False
+        if ml_order == 2:
+            return True
+        if ml_order != 1:
+            return False
+        for nbr in range(len(atoms)):
+            if nbr in (lig, tm) or is_TM(atoms[nbr]):
+                continue
+            if _bo_ij(lig, nbr) < 2:
+                continue
+            ang = _angle_center(tm, lig, nbr)
+            if ang is not None and _ANG_MIN <= ang <= _ANG_MAX:
+                return True
+        return False
+
+    seen_sup = set()
+    for (i, j), order in sorted(bo.items()):
+        if order <= 0:
+            continue
+        si, sj = atoms[i], atoms[j]
+        if is_TM(si) and not is_TM(sj):
+            tm, lig = i, j
+        elif is_TM(sj) and not is_TM(si):
+            tm, lig = j, i
+        else:
+            continue
+        if atoms[lig] not in DONOR_ONS:
+            continue
+        key = (min(tm, lig), max(tm, lig))
+        if key in l_pairs or key in seen_sup:
+            continue
+        if not _draw_supplemental(tm, lig, int(order)):
+            continue
+        dative_bonds.append({
+            "donor_atoms": [lig],
+            "acceptor": tm,
+            "pi_bond_pair": None,
+            "kind": "lp_on_covalent_ml",
+            "covalent_order": int(order),
+        })
+        seen_sup.add(key)
+
+    bundle_keys = set()
+    for d in dative_bonds:
+        if d.get("kind") != "lp_on_covalent_ml":
+            continue
+        lig = d["donor_atoms"][0]
+        tm = d["acceptor"]
+        bundle_keys.add((min(tm, lig), max(tm, lig)))
+    bonds_list = [
+        b
+        for b in bonds_list
+        if (min(b["i"], b["j"]), max(b["i"], b["j"])) not in bundle_keys
+    ]
+
+    return json.dumps({
+        "atoms": atoms, "coords": coords,
+        "bonds": bonds_list, "dative_bonds": dative_bonds,
+        "formal_charges": list(fc),
+        "stats": {"total_e": stats["total_e"], "lewis_e": stats["lewis_e"]}
+    })
+`;
+
+// ══════════════════════════════════════════════════════════════════
+//  PYTHON FILE LOADING
+// ══════════════════════════════════════════════════════════════════
+$('py-input').addEventListener('change', e => {
+  if (e.target.files[0]) loadPyFile(e.target.files[0]);
+});
+
+async function loadPyFile(file) {
+  if (!file.name.endsWith('.py')) { showToast('Please select a .py file','error'); return; }
+  const text = await file.text();
+  state.lewisCode = text;
+  $('py-drop').textContent = '✓ ' + file.name;
+  $('py-drop').className = 'drop-zone py-loaded';
+
+  if (!state.pyReady) { showToast('Python engine still loading…','info'); return; }
+  await injectLewisCode();
+}
+
+async function injectLewisCode() {
+  try {
+    // Patch out the __main__ guard and inject bridge
+    const patched = state.lewisCode.replace("if __name__ == '__main__':", "if False:");
+    await pyodide.runPythonAsync(patched);
+    await pyodide.runPythonAsync(BRIDGE_CODE);
+    $('mode-chip').textContent = 'Ready';
+    $('mode-chip').className = 'ok';
+    showToast('lewis2.py loaded — drop a .xyz file', 'success');
+
+    // If xyz already loaded, re-run
+    if (state._xyzText) runAnalysis(state._xyzText, state._xyzName);
+  } catch(e) {
+    showToast('lewis2.py error: ' + e.message.slice(0,60), 'error');
+    console.error(e);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  XYZ FILE LOADING
+// ══════════════════════════════════════════════════════════════════
+$('file-input').addEventListener('change', e => { if (e.target.files[0]) handleXYZ(e.target.files[0]); });
+$('file-drop').addEventListener('dragover', e => { e.preventDefault(); $('file-drop').classList.add('dragover'); });
+$('file-drop').addEventListener('dragleave', () => $('file-drop').classList.remove('dragover'));
+$('file-drop').addEventListener('drop', e => {
+  e.preventDefault(); $('file-drop').classList.remove('dragover');
+  const f = e.dataTransfer.files[0]; if (f) handleXYZ(f);
+});
+
+async function handleXYZ(file) {
+  const text = await file.text();
+  state._xyzText = text;
+  state._xyzName = file.name;
+  $('file-drop').textContent = file.name;
+  $('file-drop').classList.add('loaded');
+
+  if (!state.pyReady || !state.lewisCode) {
+    // Parse XYZ manually for geometry-only view
+    showToast('Showing geometry only (lewis2.py not yet loaded)', 'info');
+    parseXYZFallback(text, file.name);
+    return;
+  }
+  await runAnalysis(text, file.name);
+}
+
+async function runAnalysis(xyzText, fname) {
+  setLoading(true, 'Running Lewis analysis…');
+  $('viewer-placeholder').style.display = 'none';
+  try {
+    // Escape the xyz text for Python string — only need to escape backslashes and triple-quotes
+    const escaped = xyzText.replace(/\\/g,'\\\\').replace(/"""/g,'\\"\\"\\"');
+    const result = await pyodide.runPythonAsync(`_get_lewis_json("""${escaped}""", 0)`);
+    const data = JSON.parse(result);
+
+    state.atoms      = data.atoms;
+    state.coords     = data.coords;
+    state.bonds      = data.bonds;       // [{i,j,order}]
+    state.dativeBonds = data.dative_bonds; // [{donor_atoms,acceptor,pi_bond_pair}]
+    state.loaded     = true;
+    state._newFile   = true;
+
+    const n = state.atoms.length;
+    $('file-info').textContent = `${n} atoms · ${state.bonds.length} bonds · ${state.dativeBonds.length} dative`;
+    $('status-atoms').textContent = `${n} atoms`;
+    $('vis-info').textContent = `✓ ${fname} · ${n} atoms`;
+    $('mode-chip').textContent = `XYZ · ${n} atoms`;
+    $('mode-chip').className = 'ok';
+
+    // Update dative info
+    updateDativeInfo();
+    visualize();
+    showToast('Loaded: ' + fname, 'success');
+  } catch(e) {
+    showToast('Analysis error: ' + e.message.slice(0,60), 'error');
+    console.error(e);
+    setLoading(false);
+  }
+}
+
+// Fallback: just parse XYZ geometry, no bond orders from python
+function parseXYZFallback(text, fname) {
+  const lines = text.replace(/\r\n/g,'\n').split('\n');
+  const n = parseInt(lines[0].trim());
+  const atoms = [], coords = [];
+  for (let i = 2; i < 2+n && i < lines.length; i++) {
+    const p = lines[i].trim().split(/\s+/);
+    if (p.length < 4) continue;
+    let el = p[0]; el = el.length>1 ? el[0].toUpperCase()+el.slice(1).toLowerCase() : el.toUpperCase();
+    atoms.push(el);
+    coords.push([parseFloat(p[1]),parseFloat(p[2]),parseFloat(p[3])]);
+  }
+  state.atoms = atoms; state.coords = coords;
+  state.bonds = detectBondsAuto(atoms, coords);
+  state.dativeBonds = [];
+  state.loaded = true; state._newFile = true;
+  $('file-info').textContent = `${n} atoms (geometry only — load lewis2.py for bonds)`;
+  $('status-atoms').textContent = `${n} atoms`;
+  $('mode-chip').textContent = `XYZ (geo only)`;
+  visualize();
+}
+
+// Auto-detect bonds for fallback
+function detectBondsAuto(atoms, coords) {
+  const BOND_SCALE = 1.3;
+  const bonds = [];
+  for (let i=0;i<atoms.length;i++) {
+    const ri=(ATOM_PROPS[atoms[i]]||DEFAULT_ATOM).r;
+    for (let j=i+1;j<atoms.length;j++) {
+      const rj=(ATOM_PROPS[atoms[j]]||DEFAULT_ATOM).r;
+      const thr=BOND_SCALE*(ri+rj);
+      const dx=coords[i][0]-coords[j][0],dy=coords[i][1]-coords[j][1],dz=coords[i][2]-coords[j][2];
+      if (dx*dx+dy*dy+dz*dz < thr*thr) bonds.push({i,j,order:1});
+    }
+  }
+  return bonds;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  GEOMETRY
+// ══════════════════════════════════════════════════════════════════
+function centerOfMass(atoms, coords) {
+  let tm=0,cx=0,cy=0,cz=0;
+  for (let i=0;i<atoms.length;i++) {
+    const m=MASS[atoms[i]]||12; tm+=m;
+    cx+=m*coords[i][0]; cy+=m*coords[i][1]; cz+=m*coords[i][2];
+  }
+  return tm>0 ? [cx/tm,cy/tm,cz/tm] : [0,0,0];
+}
+
+function sym3dVisible(atoms, bonds) {
+  const nb={};
+  for (let i=0;i<atoms.length;i++) nb[i]=[];
+  for (const {i,j} of bonds){nb[i].push(j);nb[j].push(i);}
+  const vis=new Set();
+  for (let i=0;i<atoms.length;i++){
+    if (atoms[i]==='H' && nb[i].length>0 && nb[i].every(n=>atoms[n]==='C')) continue;
+    vis.add(i);
+  }
+  return vis;
+}
+
+function perpVec(v){
+  const ref=Math.abs(v[0])<.9?[1,0,0]:[0,1,0];
+  const p=[v[1]*ref[2]-v[2]*ref[1],v[2]*ref[0]-v[0]*ref[2],v[0]*ref[1]-v[1]*ref[0]];
+  const n=Math.sqrt(p[0]**2+p[1]**2+p[2]**2);return n>1e-10?p.map(x=>x/n):[0,1,0];
+}
+const vAdd=(a,b)=>a.map((x,i)=>x+b[i]);
+const vSub=(a,b)=>a.map((x,i)=>x-b[i]);
+const vScl=(a,s)=>a.map(x=>x*s);
+const vLen=a=>Math.sqrt(a.reduce((s,x)=>s+x*x,0));
+
+function parseFilter(str,n){
+  str=(str||'').trim().toLowerCase();
+  if(!str||str==='all')return null;
+  if(str==='none')return new Set();
+  const s=new Set();
+  for(const t of str.replace(/\s/g,'').split(',')){
+    if(t.includes('-')){const[a,b]=t.split('-').map(Number);for(let i=a;i<=b;i++)if(i>=1&&i<=n)s.add(i-1);}
+    else{const i=parseInt(t);if(!isNaN(i)&&i>=1&&i<=n)s.add(i-1);}
+  }
+  return s;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  DATIVE ARROW TRACES
+// ══════════════════════════════════════════════════════════════════
+function mlBundlePairKey(i, j) {
+  return i < j ? `${i},${j}` : `${j},${i}`;
+}
+
+function mlBundleKeysFromDative(dativeBonds) {
+  const keys = new Set();
+  for (const d of dativeBonds) {
+    if (d.kind !== 'lp_on_covalent_ml') continue;
+    const donors = d.donor_atoms || [];
+    if (donors.length !== 1) continue;
+    keys.add(mlBundlePairKey(donors[0], d.acceptor));
+  }
+  return keys;
+}
+
+/** Even stripe offsets for n lines (matches double/triple covalent spacing). */
+function bondStripeOffsets(n) {
+  if (n === 2) return [-0.15, 0.15];
+  if (n === 3) return [-0.2, 0, 0.2];
+  const half = 0.2;
+  if (n <= 1) return [0];
+  const out = [];
+  for (let k = 0; k < n; k++) out.push(-half + (2 * half * k) / (n - 1));
+  return out;
+}
+
+function buildBundledCovalentDativeTraces(ca, d, styleOpts) {
+  const {isDark, bc, bcD, bcT, bw, color, shaftW, CONE_FRAC} = styleOpts;
+  const lig = d.donor_atoms[0];
+  const tm = d.acceptor;
+  const order = Math.min(3, Math.max(1, d.covalent_order || 1));
+  const pDonor = ca[lig];
+  const pMetal = ca[tm];
+  if (!pDonor || !pMetal) return [];
+
+  const nTotal = order + 1;
+  const stripes = bondStripeOffsets(nTotal);
+  const axis = vSub(pMetal, pDonor);
+  const nLen = vLen(axis);
+  if (nLen < 1e-10) return [];
+  const perp = vScl(perpVec(vScl(axis, 1 / nLen)), 1);
+  const covColor = order >= 3 ? bcT : order >= 2 ? bcD : bc;
+  const traces = [];
+
+  for (let k = 0; k < order; k++) {
+    const off = vScl(perp, stripes[k]);
+    const a = vAdd(pDonor, off);
+    const b = vAdd(pMetal, off);
+    traces.push({
+      type: 'scatter3d',
+      mode: 'lines',
+      x: [a[0], b[0], null],
+      y: [a[1], b[1], null],
+      z: [a[2], b[2], null],
+      line: {color: covColor, width: bw},
+      hoverinfo: 'none',
+      showlegend: false,
+    });
+  }
+
+  const offA = vScl(perp, stripes[order]);
+  const pOrigin = vAdd(pDonor, offA);
+  const pAcceptor = vAdd(pMetal, offA);
+  const axisA = vSub(pAcceptor, pOrigin);
+  const len = vLen(axisA);
+  if (len < 1e-6) return traces;
+  const axisN = vScl(axisA, 1 / len);
+  const coneLen = Math.min(CONE_FRAC * len, 0.6);
+  const pConeBase = vSub(pAcceptor, vScl(axisN, coneLen));
+
+  traces.push({
+    type: 'scatter3d',
+    mode: 'lines',
+    x: [pOrigin[0], pConeBase[0], null],
+    y: [pOrigin[1], pConeBase[1], null],
+    z: [pOrigin[2], pConeBase[2], null],
+    line: {color, width: shaftW},
+    hoverinfo: 'none',
+    showlegend: false,
+  });
+  traces.push({
+    type: 'cone',
+    x: [pAcceptor[0]],
+    y: [pAcceptor[1]],
+    z: [pAcceptor[2]],
+    u: [axisN[0]],
+    v: [axisN[1]],
+    w: [axisN[2]],
+    sizemode: 'absolute',
+    sizeref: coneLen * 0.9,
+    colorscale: [[0, color], [1, color]],
+    showscale: false,
+    hovertext: [`σ+LP → M (order ${order}, atom ${lig + 1})`],
+    hoverinfo: 'text',
+    name: 'σ+LP → M',
+    showlegend: false,
+    anchor: 'tip',
+  });
+  return traces;
+}
+
+function buildDativeTraces(ca, dativeBonds, styleOpts) {
+  if (!$('show-dative').checked) return [];
+  const color = state.dativeColor;
+  const shaftW = parseInt($('arrow-width').value) || 4;
+  const CONE_FRAC = 0.28;
+  const traces = [];
+  const bundledOpts = styleOpts || {
+    isDark: false,
+    bc: '#888',
+    bcD: '#AADDFF',
+    bcT: '#FFCC66',
+    bw: 5,
+    color,
+    shaftW,
+    CONE_FRAC,
+  };
+
+  for (const d of dativeBonds) {
+    if (d.kind === 'lp_on_covalent_ml') {
+      traces.push(...buildBundledCovalentDativeTraces(ca, d, bundledOpts));
+      continue;
+    }
+
+    const {donor_atoms, acceptor, pi_bond_pair} = d;
+    const pAcceptor = ca[acceptor];
+    if (!pAcceptor) continue;
+
+    let pOrigin;
+    if (pi_bond_pair && pi_bond_pair.length === 2) {
+      // π-bond donor: origin = midpoint of the two bonded atoms
+      const pa = ca[pi_bond_pair[0]];
+      const pb = ca[pi_bond_pair[1]];
+      if (!pa || !pb) continue;
+      pOrigin = [(pa[0]+pb[0])/2, (pa[1]+pb[1])/2, (pa[2]+pb[2])/2];
+    } else if (donor_atoms.length === 1) {
+      pOrigin = ca[donor_atoms[0]];
+      if (!pOrigin) continue;
+    } else {
+      // Multi-atom cluster without clear pi pair: centroid
+      let sx=0,sy=0,sz=0,cnt=0;
+      for (const idx of donor_atoms) {
+        if (ca[idx]){sx+=ca[idx][0];sy+=ca[idx][1];sz+=ca[idx][2];cnt++;}
+      }
+      if (!cnt) continue;
+      pOrigin = [sx/cnt, sy/cnt, sz/cnt];
+    }
+
+    const axis = vSub(pAcceptor, pOrigin);
+    const len = vLen(axis);
+    if (len < 1e-6) continue;
+    const axisN = vScl(axis, 1/len);
+    const coneLen = Math.min(CONE_FRAC * len, 0.6);
+    const pConeBase = vSub(pAcceptor, vScl(axisN, coneLen));
+
+    // Shaft line
+    traces.push({
+      type:'scatter3d', mode:'lines',
+      x:[pOrigin[0],pConeBase[0],null],
+      y:[pOrigin[1],pConeBase[1],null],
+      z:[pOrigin[2],pConeBase[2],null],
+      line:{color, width:shaftW},
+      hoverinfo:'none', showlegend:false,
+    });
+
+    // Arrowhead cone (pointing donor→acceptor: tip at acceptor)
+    traces.push({
+      type:'cone',
+      x:[pAcceptor[0]], y:[pAcceptor[1]], z:[pAcceptor[2]],
+      u:[axisN[0]], v:[axisN[1]], w:[axisN[2]],
+      sizemode:'absolute', sizeref:coneLen*0.9,
+      colorscale:[[0,color],[1,color]], showscale:false,
+      hovertext:[pi_bond_pair ? `π-dative (atoms ${donor_atoms.map(x=>x+1).join('-')})` : `LP-dative (atom ${donor_atoms[0]+1})`],
+      hoverinfo:'text',
+      name: pi_bond_pair ? `π → M` : `LP → M`,
+      showlegend:false,
+      anchor:'tip',
+    });
+  }
+  return traces;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  FIGURE BUILDER
+// ══════════════════════════════════════════════════════════════════
+function buildFigure() {
+  const {atoms, coords, bonds, dativeBonds} = state;
+  const style      = $('mol-style').value;
+  const isDark     = style==='ball_stick_dark';
+  const isSymbolic = style==='symbolic_3d';
+  const showBonds  = isSymbolic ? ($('sym3d-show-bonds')?.checked??true) : $('show-bonds').checked;
+  const showLabels  = $('show-labels').checked;
+  const showNumbers = $('show-numbers').checked;
+  const labelSize   = parseInt($('label-size').value)||12;
+
+  const labelFilter  = parseFilter($('label-atoms').value, atoms.length);
+  const hiddenFilter = parseFilter($('hidden-atoms').value, atoms.length);
+  const isHidden = i => hiddenFilter!==null && hiddenFilter.has(i);
+
+  // Centre of mass
+  const [cx,cy,cz] = centerOfMass(atoms, coords);
+  const ca = coords.map(([x,y,z])=>[x-cx, y-cy, z-cz]);
+
+  const getLabel = (el, i) => {
+    if (!showLabels && !showNumbers) return '';
+    if (labelFilter!==null && !labelFilter.has(i)) return '';
+    if (showLabels && showNumbers) return `${el}${i+1}`;
+    if (showLabels) return el;
+    return String(i+1);
+  };
+
+  const traces = [];
+  const mlBundleKeys = mlBundleKeysFromDative(dativeBonds);
+  const dativeStyleOpts = {
+    isDark,
+    bc: isDark ? '#111' : '#888',
+    bcD: isDark ? '#333366' : '#AADDFF',
+    bcT: isDark ? '#553300' : '#FFCC66',
+    bw: isDark ? 6 : 5,
+    color: state.dativeColor,
+    shaftW: parseInt($('arrow-width').value) || 4,
+    CONE_FRAC: 0.28,
+  };
+
+  if (isSymbolic) {
+    const symH = $('sym3d-show-H')?.checked??false;
+    const vis  = symH ? new Set(atoms.map((_,i)=>i)) : sym3dVisible(atoms, bonds);
+    if (showBonds) {
+      const xs=[],ys=[],zs=[];
+      for (const {i,j} of bonds) {
+        if (!vis.has(i)||!vis.has(j)||isHidden(i)||isHidden(j)) continue;
+        xs.push(ca[i][0],ca[j][0],null); ys.push(ca[i][1],ca[j][1],null); zs.push(ca[i][2],ca[j][2],null);
+      }
+      if (xs.length) traces.push({type:'scatter3d',mode:'lines',x:xs,y:ys,z:zs,line:{color:'#555',width:4},hoverinfo:'none',showlegend:false});
+    }
+    const grps={};
+    for (let i=0;i<atoms.length;i++){
+      if (!vis.has(i)||isHidden(i)) continue;
+      const el=atoms[i], lbl=getLabel(el,i);
+      if (!grps[el]) grps[el]={x:[],y:[],z:[],hover:[],labels:[]};
+      grps[el].x.push(ca[i][0]); grps[el].y.push(ca[i][1]); grps[el].z.push(ca[i][2]);
+      grps[el].hover.push(`${el}${i+1}`); grps[el].labels.push(lbl);
+    }
+    for (const [el,d] of Object.entries(grps)){
+      const any=d.labels.some(l=>l);
+      traces.push({type:'scatter3d',x:d.x,y:d.y,z:d.z,
+        mode:any?'markers+text':'markers',
+        marker:{size:1,color:'rgba(0,0,0,0)'},
+        text:any?d.labels:null,textposition:'middle center',
+        textfont:{size:labelSize+4,color:'#444',family:'Arial Black,Arial,sans-serif'},
+        hovertext:d.hover,hoverinfo:'text',name:el});
+    }
+  } else {
+    // Bond lines: Lewis bonds (organic + X-type TM contacts).
+    // L-type dative bonds are NOT in this list — they appear as arrows only.
+    if (showBonds) {
+      const bc=isDark?'#111':'#888';
+      const bcD=isDark?'#333366':'#AADDFF';
+      const bcT=isDark?'#553300':'#FFCC66';
+      const bw=isDark?6:5;
+      const xs1=[],ys1=[],zs1=[],xs2=[],ys2=[],zs2=[],xs3=[],ys3=[],zs3=[];
+
+      for (const {i,j,order} of bonds) {
+        if (isHidden(i)||isHidden(j)) continue;
+        if (mlBundleKeys.has(mlBundlePairKey(i, j))) continue;
+        const p1=ca[i], p2=ca[j];
+        const ord=order||1;
+        if (ord===2) {
+          const ax=vSub(p2,p1), n=vLen(ax);
+          if (n<1e-10){xs2.push(p1[0],p2[0],null);ys2.push(p1[1],p2[1],null);zs2.push(p1[2],p2[2],null);}
+          else {
+            const perp=vScl(perpVec(vScl(ax,1/n)),0.15);
+            for (const sgn of [1,-1]){
+              const off=vScl(perp,sgn),a=vAdd(p1,off),b=vAdd(p2,off);
+              xs2.push(a[0],b[0],null);ys2.push(a[1],b[1],null);zs2.push(a[2],b[2],null);
+            }
+          }
+        } else if (ord===3) {
+          xs3.push(p1[0],p2[0],null);ys3.push(p1[1],p2[1],null);zs3.push(p1[2],p2[2],null);
+          const ax=vSub(p2,p1),n=vLen(ax);
+          if (n>1e-10){
+            const perp=vScl(perpVec(vScl(ax,1/n)),0.2);
+            for (const sgn of [1,-1]){
+              const off=vScl(perp,sgn),a=vAdd(p1,off),b=vAdd(p2,off);
+              xs3.push(a[0],b[0],null);ys3.push(a[1],b[1],null);zs3.push(a[2],b[2],null);
+            }
+          }
+        } else {
+          xs1.push(p1[0],p2[0],null); ys1.push(p1[1],p2[1],null); zs1.push(p1[2],p2[2],null);
+        }
+      }
+      if (xs1.length) traces.push({type:'scatter3d',mode:'lines',x:xs1,y:ys1,z:zs1,line:{color:bc,width:bw},hoverinfo:'none',showlegend:false});
+      if (xs2.length) traces.push({type:'scatter3d',mode:'lines',x:xs2,y:ys2,z:zs2,line:{color:bcD,width:bw},hoverinfo:'none',showlegend:false});
+      if (xs3.length) traces.push({type:'scatter3d',mode:'lines',x:xs3,y:ys3,z:zs3,line:{color:bcT,width:bw},hoverinfo:'none',showlegend:false});
+    }
+
+    // Atom spheres
+    const grps={};
+    for (let i=0;i<atoms.length;i++){
+      if (isHidden(i)) continue;
+      const el=atoms[i], lbl=getLabel(el,i);
+      if (!grps[el]) grps[el]={x:[],y:[],z:[],hover:[],labels:[]};
+      grps[el].x.push(ca[i][0]); grps[el].y.push(ca[i][1]); grps[el].z.push(ca[i][2]);
+      grps[el].hover.push(`${el}${i+1}`); grps[el].labels.push(lbl);
+    }
+    for (const [el,d] of Object.entries(grps)){
+      const pr=ATOM_PROPS[el]||DEFAULT_ATOM;
+      const color=isDark?(ATOM_DARK[el]||'#333'):pr.cpk;
+      const size=style==='wireframe'?4:Math.max(8,Math.min(30,pr.r*20));
+      const mline=isDark?{color:'#000',width:2}:style==='ball_stick'?{color:'rgba(0,0,0,0.4)',width:1}:{width:0};
+      const any=d.labels.some(l=>l);
+      traces.push({
+        type:'scatter3d',x:d.x,y:d.y,z:d.z,
+        mode:style==='wireframe'?(any?'text':'markers'):(any?'markers+text':'markers'),
+        marker:{size,color,line:mline,opacity:style==='wireframe'?0:1},
+        text:any?d.labels:null,textposition:'top center',
+        textfont:{size:labelSize,color:isDark?'#000':state.labelColor,family:'Arial,sans-serif'},
+        hovertext:d.hover,hoverinfo:'text',name:el,
+      });
+    }
+  }
+
+  // Dative arrow traces (pure L / π); σ+LP bundles drawn with even stripe spacing
+  traces.push(...buildDativeTraces(ca, dativeBonds, dativeStyleOpts));
+
+  const ax=()=>({showgrid:false,zeroline:false,showline:false,showticklabels:false,showspikes:false,showbackground:false,title:{text:''}});
+  const layout={
+    paper_bgcolor:state.bgColor,
+    scene:{bgcolor:state.bgColor,xaxis:ax(),yaxis:ax(),zaxis:ax(),
+      camera:{center:{x:0,y:0,z:0},eye:{x:1.6,y:1.6,z:1.0},up:{x:0,y:0,z:1}},
+      aspectmode:'data',dragmode:'orbit'},
+    legend:{font:{color:'#D0D0D0',size:11},bgcolor:'rgba(20,20,40,0.85)',bordercolor:'#3A3A6A',borderwidth:1},
+    margin:{l:0,r:0,t:10,b:0},autosize:true,uirevision:'mol',
+  };
+  return {traces, layout, ca};
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════════════════
+let plotInit=false;
+function visualize(){
+  if (!state.loaded) return;
+  setLoading(true,'Rendering…');
+  setTimeout(()=>{
+    try {
+      const {traces,layout}=buildFigure();
+      const el=$('plot');
+      if (!plotInit||state._newFile){
+        Plotly.purge(el);
+        Plotly.newPlot(el,traces,layout,{responsive:true,displayModeBar:true,modeBarButtonsToRemove:['toImage','sendDataToCloud'],displaylogo:false});
+        plotInit=true; state._newFile=false;
+      } else {
+        let cam={center:{x:0,y:0,z:0},eye:{x:1.6,y:1.6,z:1.0},up:{x:0,y:0,z:1}};
+        try{cam=el._fullLayout.scene.camera;}catch(e){}
+        layout.scene.camera=cam; Plotly.react(el,traces,layout);
+      }
+    } catch(e){showToast('Render error: '+e.message,'error');console.error(e);}
+    setLoading(false);
+  },20);
+}
+
+function resetCamera(){
+  if (!plotInit) return;
+  Plotly.relayout($('plot'),{'scene.camera':{center:{x:0,y:0,z:0},eye:{x:1.6,y:1.6,z:1.0},up:{x:0,y:0,z:1}}});
+}
+window.addEventListener('resize',()=>{if(plotInit)Plotly.relayout($('plot'),{autosize:true});});
+
+// ══════════════════════════════════════════════════════════════════
+//  DATIVE INFO
+// ══════════════════════════════════════════════════════════════════
+function updateDativeInfo(){
+  const db = state.dativeBonds||[];
+  const bundled = db.filter(d=>d.kind==='lp_on_covalent_ml').length;
+  const pure = db.filter(d=>d.kind!=='lp_on_covalent_ml');
+  const pi  = pure.filter(d=>d.pi_bond_pair).length;
+  const lp  = pure.filter(d=>!d.pi_bond_pair).length;
+  const el  = $('dative-info');
+  if (!db.length){el.textContent='No dative bonds found.';return;}
+  let msg = `${db.length} dative bond(s): <span style="color:#FF9500">${lp} LP</span> · <span style="color:#3399FF">${pi} π</span>`;
+  if (bundled) msg += ` · <span style="color:#cc7700">${bundled} σ+LP</span>`;
+  el.innerHTML = msg;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CONTROLS
+// ══════════════════════════════════════════════════════════════════
+function onMolStyleChange(){
+  $('symbolic-opts').style.display=$('mol-style').value==='symbolic_3d'?'':'none';
+  if(state.loaded) visualize();
+}
+function applyHideH(){
+  const fld=$('hidden-atoms');
+  if($('hide-H').checked&&state.loaded){
+    const h=state.atoms.map((a,i)=>[a,i]).filter(([a])=>a==='H').map(([,i])=>i+1);
+    fld.value=h.join(',')||'none';
+  } else {fld.value='none';}
+  if(state.loaded) visualize();
+}
+function setLabelColor(el){
+  state.labelColor=el.dataset.color;
+  document.querySelectorAll('#label-swatches .swatch').forEach(s=>s.classList.toggle('active',s===el));
+  if(state.loaded) visualize();
+}
+function setDativeColor(el){
+  state.dativeColor=el.dataset.color;
+  document.querySelectorAll('#dative-color-swatches .swatch').forEach(s=>s.classList.toggle('active',s===el));
+  if(state.loaded) visualize();
+}
+function setBgColor(el){
+  state.bgColor=el.dataset.color;
+  document.querySelectorAll('#bg-swatches .swatch').forEach(s=>s.classList.toggle('active',s===el));
+  $('bg-active-swatch').style.background=el.dataset.color;
+  $('bg-swatch-panel').style.display='none';
+  if(state.loaded) visualize();
+}
+function setBgColorCustom(hex){
+  state.bgColor=hex;
+  document.querySelectorAll('#bg-swatches .swatch').forEach(s=>s.classList.remove('active'));
+  $('bg-active-swatch').style.background=hex;
+  if(state.loaded) visualize();
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  SAVE
+// ══════════════════════════════════════════════════════════════════
+function saveImage(){
+  if(!plotInit){showToast('Nothing to save','error');return;}
+  const fmt=$('img-format').value, w=parseInt($('img-width').value)||2400;
+  const h=parseInt($('img-height').value)||1800, sc=parseInt($('img-scale').value)||3;
+  const name=(state.atoms.length?state.atoms[0]:'mol')+'_structure';
+  Plotly.toImage($('plot'),{format:fmt,width:w,height:h,scale:sc}).then(url=>{
+    const a=document.createElement('a');a.href=url;a.download=`${name}_${w}x${h}.${fmt}`;
+    a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
+    showToast(`✓ Saved .${fmt}`,'success');
+  }).catch(e=>showToast('Export error: '+e.message,'error'));
+}
+function toggleSaveSettings(){
+  const p=$('save-settings-panel'),open=p.style.display==='block';
+  p.style.display=open?'none':'block';$('save-settings-arrow').textContent=open?'▾':'▴';
+}
+function updateSaveLabel(){
+  const lbl=document.querySelector('#save-settings-toggle .vt-label');
+  if(lbl)lbl.textContent=`${($('img-format')?.value||'png').toUpperCase()} · ${$('img-scale')?.value||'3'}× · ${$('img-width')?.value||'2400'}×${$('img-height')?.value||'1800'}`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  // Background panel toggle
+  const bgD=$('bg-details'),bgP=$('bg-swatch-panel');
+  bgD.addEventListener('click',e=>{e.preventDefault();bgP.style.display=bgP.style.display==='block'?'none':'block';});
+  document.addEventListener('click',e=>{if(!bgD.contains(e.target)&&!bgP.contains(e.target))bgP.style.display='none';});
+
+  // Save panel toggle
+  const sT=$('save-settings-toggle'),sP=$('save-settings-panel');
+  document.addEventListener('click',e=>{if(!sT.contains(e.target)&&!sP.contains(e.target))sP.style.display='none';});
+
+  // Label size slider
+  const ls=$('label-size'); let _rt=null;
+  ls.addEventListener('input',()=>{
+    $('label-size-val').textContent=ls.value;
+    clearTimeout(_rt);_rt=setTimeout(()=>{if(state.loaded)visualize();},200);
+  });
+
+  // Arrow width slider
+  const aw=$('arrow-width');
+  aw.addEventListener('input',()=>{
+    $('arrow-width-val').textContent=aw.value;
+    if(state.loaded) visualize();
+  });
+
+  // Start Pyodide
+  initPyodide();
+});
+</script>
+</body>
+</html>
