@@ -142,33 +142,46 @@ section[data-testid="stSidebar"],
   margin-bottom:8px !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]{
-  align-items:stretch !important;
+  align-items:flex-start !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"] > [data-testid="column"]{
   display:flex !important;
   flex-direction:column !important;
 }
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"]{
+  flex:0 0 auto !important;
+}
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] section{
-  flex:1 1 auto;
-  min-height:88px;
+  flex:0 0 auto !important;
+  min-height:40px !important;
+  max-height:40px !important;
+  height:40px !important;
   display:flex;
   flex-direction:column;
   justify-content:center;
+  padding:0 0.35rem !important;
+  overflow:hidden;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploaderDropzone"]{
+  padding:0 !important;
+  min-height:0 !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
-  margin-top:auto;
-  margin-bottom:auto;
+  flex:0 0 auto !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"] div[data-baseweb="input"]{
+  min-height:40px !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton{
-  flex:1 1 auto;
+  flex:0 0 auto !important;
   display:flex !important;
   flex-direction:column !important;
   margin-top:0 !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton > button{
-  flex:1 1 auto;
-  min-height:88px !important;
-  height:100% !important;
+  flex:0 0 auto !important;
+  min-height:40px !important;
+  height:40px !important;
 }
 .result-card{
   background:#ffffff;
@@ -898,6 +911,7 @@ def run_analyzer_app() -> None:
         st.markdown('<span class="control-panel-marker"></span>', unsafe_allow_html=True)
         i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
         with i1:
+            st.markdown('<p class="field-label">XYZ</p>', unsafe_allow_html=True)
             xyz_file = st.file_uploader("XYZ", type=["xyz"], label_visibility="collapsed")
             if xyz_file is not None:
                 st.session_state.pop("demo_xyz_text", None)
