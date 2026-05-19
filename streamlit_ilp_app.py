@@ -286,6 +286,9 @@ div[data-testid="stCodeBlock"]{
   border:1px solid #d0dae8;
   border-radius:10px;
 }
+[data-testid="stCustomComponentV1"]{
+  margin-bottom:0 !important;
+}
 .status-line{
   margin-top:8px;
   border:1px solid #d0dae8;
@@ -865,7 +868,6 @@ def show_3d_preview(payload: dict):
         height=VIEWER_IFRAME_HEIGHT,
         scrolling=False,
     )
-    st.caption("Viewer uses original HTML renderer with ILP-derived bond/dative payload.")
 
 
 def init_auth_session() -> None:
@@ -1074,9 +1076,7 @@ def run_analyzer_app() -> None:
                 metal_adjacency_edges=metal_adj_0,
             )
 
-        st.markdown('<div class="result-card">', unsafe_allow_html=True)
         show_3d_preview(viewer_payload)
-        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
