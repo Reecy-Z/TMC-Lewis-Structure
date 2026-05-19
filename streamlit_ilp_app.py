@@ -138,38 +138,34 @@ section[data-testid="stSidebar"],
   padding:4px 10px 8px 10px;
 }
 .control-panel-marker{ display:none !important; }
-[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker){
-  background:#ffffff !important;
-  border:1px solid #d0dae8 !important;
-  border-radius:12px !important;
-  padding:8px 10px 6px 10px !important;
+[data-testid="stVerticalBlock"]:has(.control-panel-marker){
   margin-bottom:8px !important;
 }
-[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]{
   align-items:stretch !important;
 }
-[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"] > [data-testid="column"]{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"] > [data-testid="column"]{
   display:flex !important;
   flex-direction:column !important;
 }
-[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="stFileUploader"] section{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] section{
   flex:1 1 auto;
   min-height:88px;
   display:flex;
   flex-direction:column;
   justify-content:center;
 }
-[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
   margin-top:auto;
   margin-bottom:auto;
 }
-[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton{
   flex:1 1 auto;
   display:flex !important;
   flex-direction:column !important;
   margin-top:0 !important;
 }
-[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton > button{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton > button{
   flex:1 1 auto;
   min-height:88px !important;
   height:100% !important;
@@ -898,7 +894,7 @@ def run_analyzer_app() -> None:
 
     engine = load_engine()
 
-    with st.container(border=True):
+    with st.container():
         st.markdown('<span class="control-panel-marker"></span>', unsafe_allow_html=True)
         i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
         with i1:
