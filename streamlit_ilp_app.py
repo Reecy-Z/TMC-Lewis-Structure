@@ -83,41 +83,49 @@ section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
   display: none !important;
 }
 
-.orbis-topbar-wrap{
+.orbis-topbar-shell{ display:none !important; }
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) > [data-testid="stElementContainer"]:first-child{
+  display:none !important;
+  height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell){
   background: linear-gradient(135deg,#111827,#1f2937 55%,#374151);
   border-radius: 12px;
-  padding: 8px 12px 8px 14px;
+  padding: 10px 14px;
   margin-bottom: 8px;
-  color:#fff;
 }
-.orbis-topbar-wrap .orbis-title{ color:#fff; }
-.orbis-topbar-wrap .orbis-sub{ color:#fff; opacity:.68; }
-.orbis-topbar-wrap [data-testid="column"]{
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="stHorizontalBlock"]{
+  align-items: center !important;
+}
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) .orbis-title{ color:#fff; }
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) .orbis-sub{ color:#fff; opacity:.68; }
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child{
   display:flex !important;
-  align-items:center !important;
+  justify-content:flex-end !important;
 }
-.orbis-topbar-wrap [data-testid="column"]:last-child .stButton{
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child .stButton{
   margin:0 !important;
-  width:100%;
+  width:auto !important;
 }
-.orbis-topbar-wrap [data-testid="column"]:last-child .stButton > button{
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child .stButton > button{
   min-height:34px !important;
-  padding: 4px 14px !important;
+  padding: 6px 16px !important;
   font-size:12px !important;
-  background: rgba(255,255,255,.12) !important;
-  border: 1px solid rgba(255,255,255,.25) !important;
+  font-weight:600 !important;
+  background:#f1f5f9 !important;
+  color:#1e293b !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:8px !important;
+  box-shadow:0 1px 2px rgba(0,0,0,.08) !important;
 }
-.orbis-topbar-wrap [data-testid="column"]:last-child .stButton > button:hover{
-  background: rgba(255,255,255,.2) !important;
-  border-color: rgba(255,255,255,.4) !important;
+[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child .stButton > button:hover{
+  background:#fff !important;
+  border-color:#94a3b8 !important;
+  color:#0f172a !important;
 }
-.orbis-topbar-right{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:10px;
-  width:100%;
-}
+
 .orbis-left{ display:flex; align-items:center; gap:10px; }
 .orbis-icon{
   width:34px; height:34px; border-radius:10px;
@@ -899,8 +907,8 @@ def run_analyzer_app() -> None:
     if pending_demo is not None:
         _load_pending_demo_case(pending_demo)
 
-    st.markdown('<div class="orbis-topbar-wrap">', unsafe_allow_html=True)
-    top_left, top_mid, top_right = st.columns([5.2, 1.1, 0.85], gap="small")
+    st.markdown('<div class="orbis-topbar-shell"></div>', unsafe_allow_html=True)
+    top_left, top_right = st.columns([5.5, 0.9], gap="small")
     with top_left:
         st.markdown(
             """
@@ -914,18 +922,10 @@ def run_analyzer_app() -> None:
             """,
             unsafe_allow_html=True,
         )
-    with top_mid:
-        st.markdown(
-            '<div class="orbis-topbar-right">'
-            '<span class="status-chip">XYZ · Ready</span>'
-            '</div>',
-            unsafe_allow_html=True,
-        )
     with top_right:
-        if st.button("Log out", key="logout_btn", use_container_width=True):
+        if st.button("Log out", key="logout_btn", use_container_width=False):
             st.session_state.authenticated = False
             st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
 
     engine = load_engine()
 
