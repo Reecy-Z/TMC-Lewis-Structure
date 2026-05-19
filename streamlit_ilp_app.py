@@ -79,54 +79,20 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 .stApp { background: #f0f4f8; }
 [data-testid="stHeader"] { display:none; }
 #MainMenu, footer { visibility:hidden; }
-section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
-  display: none !important;
-}
 
-.orbis-topbar-shell{ display:none !important; }
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) > [data-testid="stElementContainer"]:first-child{
-  display:none !important;
-  height:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-}
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell){
+.orbis-topbar{
   background: linear-gradient(135deg,#111827,#1f2937 55%,#374151);
   border-radius: 12px;
   padding: 10px 14px;
+  color:#fff;
   margin-bottom: 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="stHorizontalBlock"]{
-  align-items: center !important;
-}
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) .orbis-title{ color:#fff; }
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) .orbis-sub{ color:#fff; opacity:.68; }
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child{
-  display:flex !important;
-  justify-content:flex-end !important;
-}
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child .stButton{
-  margin:0 !important;
-  width:auto !important;
-}
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child .stButton > button{
-  min-height:34px !important;
-  padding: 6px 16px !important;
-  font-size:12px !important;
-  font-weight:600 !important;
-  background:#f1f5f9 !important;
-  color:#1e293b !important;
-  border:1px solid #cbd5e1 !important;
-  border-radius:8px !important;
-  box-shadow:0 1px 2px rgba(0,0,0,.08) !important;
-}
-[data-testid="stVerticalBlock"]:has(.orbis-topbar-shell) [data-testid="column"]:last-child .stButton > button:hover{
-  background:#fff !important;
-  border-color:#94a3b8 !important;
-  color:#0f172a !important;
-}
-
 .orbis-left{ display:flex; align-items:center; gap:10px; }
+.orbis-topbar .orbis-title{ color:#fff; }
+.orbis-topbar .orbis-sub{ color:#fff; opacity:.68; }
 .orbis-icon{
   width:34px; height:34px; border-radius:10px;
   background:linear-gradient(135deg,rgba(45,106,79,.5),rgba(27,67,50,.6));
@@ -903,29 +869,29 @@ def _load_pending_demo_case(case: dict) -> bool:
 
 
 def run_analyzer_app() -> None:
+    if st.sidebar.button("Log out", use_container_width=True):
+        st.session_state.authenticated = False
+        st.rerun()
+
     pending_demo = st.session_state.pop("pending_demo_case", None)
     if pending_demo is not None:
         _load_pending_demo_case(pending_demo)
 
-    st.markdown('<div class="orbis-topbar-shell"></div>', unsafe_allow_html=True)
-    top_left, top_right = st.columns([5.5, 0.9], gap="small")
-    with top_left:
-        st.markdown(
-            """
-            <div class="orbis-left">
-              <div class="orbis-icon">✦</div>
-              <div>
-                <div class="orbis-title">Orbis QC</div>
-                <div class="orbis-sub">XYZ Structure Viewer + Lewis Analysis</div>
-              </div>
+    st.markdown(
+        """
+        <div class="orbis-topbar">
+          <div class="orbis-left">
+            <div class="orbis-icon">✦</div>
+            <div>
+              <div class="orbis-title">Orbis QC</div>
+              <div class="orbis-sub">XYZ Structure Viewer + Lewis Analysis</div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with top_right:
-        if st.button("Log out", key="logout_btn", use_container_width=False):
-            st.session_state.authenticated = False
-            st.rerun()
+          </div>
+          <div class="status-chip">XYZ · Ready</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     engine = load_engine()
 
