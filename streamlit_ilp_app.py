@@ -137,38 +137,39 @@ section[data-testid="stSidebar"],
   border-radius:12px;
   padding:4px 10px 8px 10px;
 }
-.control-card{
-  background:#ffffff;
-  border:1px solid #d0dae8;
-  border-radius:12px;
-  padding:8px 10px 6px 10px;
-  margin-bottom:8px;
+.control-panel-marker{ display:none !important; }
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker){
+  background:#ffffff !important;
+  border:1px solid #d0dae8 !important;
+  border-radius:12px !important;
+  padding:8px 10px 6px 10px !important;
+  margin-bottom:8px !important;
 }
-.control-card [data-testid="stHorizontalBlock"]{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]{
   align-items:stretch !important;
 }
-.control-card [data-testid="stHorizontalBlock"] > [data-testid="column"]{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"] > [data-testid="column"]{
   display:flex !important;
   flex-direction:column !important;
 }
-.control-card [data-testid="stFileUploader"] section{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="stFileUploader"] section{
   flex:1 1 auto;
   min-height:88px;
   display:flex;
   flex-direction:column;
   justify-content:center;
 }
-.control-card [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
   margin-top:auto;
   margin-bottom:auto;
 }
-.control-card [data-testid="column"]:nth-child(3) .stButton{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton{
   flex:1 1 auto;
   display:flex !important;
   flex-direction:column !important;
   margin-top:0 !important;
 }
-.control-card [data-testid="column"]:nth-child(3) .stButton > button{
+[data-testid="stVerticalBlockBorderWrapper"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton > button{
   flex:1 1 auto;
   min-height:88px !important;
   height:100% !important;
@@ -897,49 +898,49 @@ def run_analyzer_app() -> None:
 
     engine = load_engine()
 
-    st.markdown('<div class="control-card">', unsafe_allow_html=True)
-    i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
-    with i1:
-        xyz_file = st.file_uploader("XYZ", type=["xyz"], label_visibility="collapsed")
-        if xyz_file is not None:
-            st.session_state.pop("demo_xyz_text", None)
-            st.session_state.pop("demo_xyz_name", None)
-    with i2:
-        st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
-        mol_charge = st.number_input(
-            "Charge",
-            step=1,
-            format="%d",
-            label_visibility="collapsed",
-            key="mol_charge",
-            help="Total molecular charge (e.g. −1 for anions, +1 for cations).",
-        )
-    with i3:
-        st.markdown('<p class="field-label">&nbsp;</p>', unsafe_allow_html=True)
-        has_xyz = xyz_file is not None or bool(st.session_state.get("demo_xyz_text"))
-        run_btn = st.button(
-            "Run Analysis",
-            type="primary",
-            disabled=not has_xyz,
-            use_container_width=True,
-        )
-
-    st.markdown('<p class="tiny-label">Quick examples</p>', unsafe_allow_html=True)
-    ex1, ex2, ex3 = st.columns(3, gap="small")
-    for col, case in zip((ex1, ex2, ex3), DEMO_CASES):
-        with col:
-            if st.button(
-                case["label"],
-                key=f"demo_{case['id']}",
+    with st.container(border=True):
+        st.markdown('<span class="control-panel-marker"></span>', unsafe_allow_html=True)
+        i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
+        with i1:
+            xyz_file = st.file_uploader("XYZ", type=["xyz"], label_visibility="collapsed")
+            if xyz_file is not None:
+                st.session_state.pop("demo_xyz_text", None)
+                st.session_state.pop("demo_xyz_name", None)
+        with i2:
+            st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
+            mol_charge = st.number_input(
+                "Charge",
+                step=1,
+                format="%d",
+                label_visibility="collapsed",
+                key="mol_charge",
+                help="Total molecular charge (e.g. −1 for anions, +1 for cations).",
+            )
+        with i3:
+            st.markdown('<p class="field-label">&nbsp;</p>', unsafe_allow_html=True)
+            has_xyz = xyz_file is not None or bool(st.session_state.get("demo_xyz_text"))
+            run_btn = st.button(
+                "Run Analysis",
+                type="primary",
+                disabled=not has_xyz,
                 use_container_width=True,
-            ):
-                st.session_state.pending_demo_case = case
-                st.rerun()
-    if st.session_state.get("demo_load_error"):
-        st.error(st.session_state.demo_load_error)
-    if st.session_state.get("demo_xyz_name") and xyz_file is None:
-        st.caption(f"Loaded example: `{st.session_state.demo_xyz_name}`")
-    st.markdown("</div>", unsafe_allow_html=True)
+            )
+
+        st.markdown('<p class="tiny-label">Quick examples</p>', unsafe_allow_html=True)
+        ex1, ex2, ex3 = st.columns(3, gap="small")
+        for col, case in zip((ex1, ex2, ex3), DEMO_CASES):
+            with col:
+                if st.button(
+                    case["label"],
+                    key=f"demo_{case['id']}",
+                    use_container_width=True,
+                ):
+                    st.session_state.pending_demo_case = case
+                    st.rerun()
+        if st.session_state.get("demo_load_error"):
+            st.error(st.session_state.demo_load_error)
+        if st.session_state.get("demo_xyz_name") and xyz_file is None:
+            st.caption(f"Loaded example: `{st.session_state.demo_xyz_name}`")
 
     if not has_xyz:
         st.info("Upload an `.xyz` file or pick a quick example above to preview and analyze.")
