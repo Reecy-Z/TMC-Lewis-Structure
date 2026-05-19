@@ -1111,7 +1111,7 @@ def run_analyzer_app() -> None:
         except Exception as exc:
             st.warning(f"SMILES generation failed: {exc}")
 
-        st.markdown('<div class="section-head">CBC Report</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-head">Coordination</div>', unsafe_allow_html=True)
         st.code(cbc_report, language="text")
 
         if ox_summary:
