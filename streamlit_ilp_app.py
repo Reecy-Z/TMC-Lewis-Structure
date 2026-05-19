@@ -139,6 +139,13 @@ section[data-testid="stSidebar"],
 }
 .control-panel-marker,
 .control-label-row{ display:none !important; }
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stMarkdown"]:has(.control-panel-marker){
+  display:none !important;
+  height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
 [data-testid="stVerticalBlock"]:has(.control-panel-marker){
   margin-bottom:8px !important;
   gap:0 !important;
@@ -148,8 +155,17 @@ section[data-testid="stSidebar"],
   margin:0 !important;
   padding:0 !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has(.control-label-row){
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has(p.field-label):not(:has([data-testid="stFileUploader"])){
+  align-items:flex-end !important;
   margin-bottom:0 !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has(p.field-label):not(:has([data-testid="stFileUploader"])) > [data-testid="column"]{
+  display:flex !important;
+  align-items:flex-end !important;
+  justify-content:flex-start !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has(p.field-label):not(:has([data-testid="stFileUploader"])) p.field-label{
+  margin:0 0 4px 2px !important;
 }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]){
   margin-top:0 !important;
@@ -939,13 +955,10 @@ def run_analyzer_app() -> None:
     engine = load_engine()
 
     with st.container():
+        st.markdown('<span class="control-panel-marker"></span>', unsafe_allow_html=True)
         lh1, lh2, lh3 = st.columns([2.4, 0.9, 1.2], gap="small")
         with lh1:
-            st.markdown(
-                '<span class="control-panel-marker control-label-row"></span>'
-                '<p class="field-label">XYZ</p>',
-                unsafe_allow_html=True,
-            )
+            st.markdown('<p class="field-label">XYZ</p>', unsafe_allow_html=True)
         with lh2:
             st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
         with lh3:
