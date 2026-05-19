@@ -79,6 +79,13 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 .stApp { background: #f0f4f8; }
 [data-testid="stHeader"] { display:none; }
 #MainMenu, footer { visibility:hidden; }
+section[data-testid="stSidebar"],
+[data-testid="stSidebarCollapsedControl"]{
+  display:none !important;
+}
+[data-testid="stAppViewContainer"]{
+  margin-left:0 !important;
+}
 
 .orbis-topbar{
   background: linear-gradient(135deg,#111827,#1f2937 55%,#374151);
@@ -868,10 +875,6 @@ def _load_pending_demo_case(case: dict) -> bool:
 
 
 def run_analyzer_app() -> None:
-    if st.sidebar.button("Log out", use_container_width=True):
-        st.session_state.authenticated = False
-        st.rerun()
-
     pending_demo = st.session_state.pop("pending_demo_case", None)
     if pending_demo is not None:
         _load_pending_demo_case(pending_demo)
@@ -1088,7 +1091,7 @@ def run_analyzer_app() -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title=APP_TITLE, layout="wide")
+    st.set_page_config(page_title=APP_TITLE, layout="wide", initial_sidebar_state="collapsed")
     inject_styles()
     init_auth_session()
     try:
