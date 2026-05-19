@@ -1085,7 +1085,7 @@ def print_cbc_report(
     results, _neighbor_cbc = cbc_bundle
 
     if not results:
-        print("\n  (No inorganic atoms found — no CBC classification.)")
+        print("\n  (No inorganic atoms found — no ligand classification.)")
         return
 
     print()
@@ -1195,7 +1195,7 @@ def print_cbc_report(
         designation = "".join(parts) if parts else "—"
 
         print(f"\n  {sym_m}{metal_idx+1}   [{designation}]")
-        print(f"  {'Neighbour':<16} {'Avg.Dist':>9}  {'CBC':<5}  Notes")
+        print(f"  {'Neighbour':<16} {'Avg.Dist':>9}  {'Type':<5}  Notes")
         print(f"  {'-'*65}")
 
         seen_multi = {}
