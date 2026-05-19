@@ -140,58 +140,63 @@ section[data-testid="stSidebar"],
 .control-panel-marker{ display:none !important; }
 [data-testid="stVerticalBlock"]:has(.control-panel-marker){
   margin-bottom:8px !important;
+  gap:0.15rem !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]{
-  align-items:flex-start !important;
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]){
+  align-items:stretch !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"] > [data-testid="column"]{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) > [data-testid="column"]{
   display:flex !important;
   flex-direction:column !important;
+  justify-content:flex-end !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"]{
-  flex:0 0 auto !important;
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="stFileUploader"]{
+  margin:0 !important;
+  flex:0 0 40px !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] section{
-  flex:0 0 auto !important;
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="stFileUploader"] > div{
+  gap:0 !important;
+  height:100% !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="stFileUploader"] section{
+  box-sizing:border-box !important;
+  height:40px !important;
   min-height:40px !important;
-  height:auto !important;
-  max-height:none !important;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:4px 8px !important;
-  overflow:visible !important;
-}
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] small{
-  display:none !important;
-}
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploaderDropzone"]{
+  max-height:40px !important;
+  margin:0 !important;
+  padding:0 8px !important;
   display:flex !important;
   align-items:center !important;
-  padding:0 !important;
-  min-height:32px !important;
+  justify-content:flex-start !important;
+  overflow:hidden !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stFileUploader"] button{
-  min-height:32px !important;
-  height:32px !important;
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="stFileUploaderDropzone"]{
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:0 !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="stFileUploaderDropzoneInstructions"],
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="stFileUploader"] small{
+  display:none !important;
+}
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="stFileUploader"] button{
+  min-height:30px !important;
+  height:30px !important;
   padding:0 10px !important;
   font-size:12px !important;
   line-height:1 !important;
+  margin:0 !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"]{
-  flex:0 0 auto !important;
-}
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"] div[data-baseweb="input"]{
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="column"]:nth-child(2) [data-testid="stNumberInput"] div[data-baseweb="input"]{
   min-height:40px !important;
+  height:40px !important;
 }
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton{
-  flex:0 0 auto !important;
-  display:flex !important;
-  flex-direction:column !important;
-  margin-top:0 !important;
-}
-[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="column"]:nth-child(3) .stButton > button{
-  flex:0 0 auto !important;
+[data-testid="stVerticalBlock"]:has(.control-panel-marker) [data-testid="stHorizontalBlock"]:has([data-testid="stFileUploader"]) [data-testid="column"]:nth-child(3) .stButton > button{
   min-height:40px !important;
   height:40px !important;
 }
@@ -921,15 +926,21 @@ def run_analyzer_app() -> None:
 
     with st.container():
         st.markdown('<span class="control-panel-marker"></span>', unsafe_allow_html=True)
+        lh1, lh2, lh3 = st.columns([2.4, 0.9, 1.2], gap="small")
+        with lh1:
+            st.markdown('<p class="field-label">XYZ</p>', unsafe_allow_html=True)
+        with lh2:
+            st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
+        with lh3:
+            st.markdown('<p class="field-label">&nbsp;</p>', unsafe_allow_html=True)
+
         i1, i2, i3 = st.columns([2.4, 0.9, 1.2], gap="small")
         with i1:
-            st.markdown('<p class="field-label">XYZ</p>', unsafe_allow_html=True)
             xyz_file = st.file_uploader("XYZ", type=["xyz"], label_visibility="collapsed")
             if xyz_file is not None:
                 st.session_state.pop("demo_xyz_text", None)
                 st.session_state.pop("demo_xyz_name", None)
         with i2:
-            st.markdown('<p class="field-label">Charge</p>', unsafe_allow_html=True)
             mol_charge = st.number_input(
                 "Charge",
                 step=1,
@@ -939,7 +950,6 @@ def run_analyzer_app() -> None:
                 help="Total molecular charge (e.g. −1 for anions, +1 for cations).",
             )
         with i3:
-            st.markdown('<p class="field-label">&nbsp;</p>', unsafe_allow_html=True)
             has_xyz = xyz_file is not None or bool(st.session_state.get("demo_xyz_text"))
             run_btn = st.button(
                 "Run Analysis",
