@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Lewis-engine-ILP.py — single-file merge of ilp_bond_order_example.py and
-ilp_bond_order_aromatic_workflow_V2.py (logic unchanged; no cross-file import).
+Lewis-engine-ILP.py
+
 """
 
 from __future__ import annotations
 
 import itertools
+import json
 import math
 import os
 import sys
@@ -16,45 +17,65 @@ LOCAL_VENDOR = os.path.join(os.path.dirname(__file__), "_vendor")
 if os.path.isdir(LOCAL_VENDOR) and LOCAL_VENDOR not in sys.path:
     sys.path.insert(0, LOCAL_VENDOR)
 
-try:
-    import pulp
-except ImportError as exc:  # pragma: no cover - runtime guidance
-    raise SystemExit(
-        "PuLP is not installed. Install with: pip install pulp"
-    ) from exc
+import pulp
+from rdkit import Chem
 
-try:
-    from rdkit import Chem
-except ImportError:
-    Chem = None  # type: ignore[misc, assignment]
+# ---------------------------------------------------------------------------
+# ILP configuration (solve_bond_orders)
+#
+#   ILP_HARD_*    — true hard constraints; False drops them (may become infeasible
+#                   if nothing else compensates).
+#   ILP_WEIGHT_*  — objective penalties only (0 = off).
+# ---------------------------------------------------------------------------
 
-# ----- ilp_bond_order_example.py -----
+# --- Hard constraints (must hold exactly) ---
+# Hard octet: oct_plus == oct_minus == 0.
+ILP_HARD_OCTET = True
+# Σfc(ligands) + Σox(TM) − Σb_tm = mol_charge.
+ILP_HARD_MOL_CHARGE_BALANCE = True
+# Σox(TM) ≥ Σb_tm on non-η M–L only (η orders excluded). Halogen (F/Cl/Br/I) ligands are omitted.
+ILP_HARD_OX_GE_SIGMA = True
+# C with no TM neighbor in connectivity: lp = 0 (default True). solve_bond_orders retries
+# once with this rule off if the first ILP solve is infeasible; a second failure is final.
+ILP_HARD_C_LP_ONLY_TM_NEIGHBORS = True
+# η-fragment carbons to a TM (≥ETA_MIN_COORDINATING_GROUP_SIZE): lp = 0.
+ILP_HARD_ETA_CARBON_LP_ZERO = True
+
+# --- Soft objective weights (0 = disabled) ---
+ILP_WEIGHT_FORMAL_CHARGE = 100.0
+ILP_WEIGHT_AROMATIC_DEVIATION = 100.0
+ILP_WEIGHT_ENEG_NEGATIVE_FC = 10.0
+ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
+ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
+
+# Aromatic 4n+2 target: fixed n in pi_target = 4*n + 2 (default n=1 → 6 pi e per system).
+# Set to None in solve_bond_orders(..., aromatic_huckel_n=None) to restore variable k.
+AROMATIC_HUCKEL_N = 1
+
+# Soft tie-break: similar M–L contact distances on the same ligand → same σ/dative class (z_cov).
+ML_DISTANCE_CLASS_EPSILON = 0.15  # Å; w_ij = max(0, ε − |d_i − d_j|)
+
+# η fragments: ≥2 contiguous TM-bound atoms on one ligand (see _eta_carbon_atom_ids).
+ETA_MIN_COORDINATING_GROUP_SIZE = 2
 
 
+# Covalent radii: ccdc_covalent_radii.json (CCDC ChemistryLib; Z=1–118 + D). TM–L cutoffs use
+# p99_A + margin; other pairs use R_cov sum + COV_BOND_MARGIN.
+COV_BOND_MARGIN = 0.45
+COV_BOND_MARGIN_S_BLOCK = 0.40
+S_BLOCK_SYMS = frozenset({
+    "Li", "Be", "Na", "Mg", "K", "Ca", "Rb", "Sr", "Cs", "Ba",
+})
 
-# Covalent radii aligned with Lewis-engine.py (Angstrom).
-COV_R = {
-    "H": 0.31, "He": 0.28,
-    "Li": 0.25, "Be": 0.96, "B": 0.84, "C": 0.76, "N": 0.71, "O": 0.66, "F": 0.57, "Ne": 0.58,
-    "Na": 0.25, "Mg": 0.72, "Al": 1.21, "Si": 1.11, "P": 1.07, "S": 1.05, "Cl": 1.02, "Ar": 1.06,
-    "K": 0.25, "Ca": 0.25,
-    "Sc": 1.44, "Ti": 1.36, "V": 1.25, "Cr": 1.22, "Mn": 1.19, "Fe": 1.16, "Co": 1.11,
-    "Ni": 1.10, "Cu": 1.12, "Zn": 1.18,
-    "Ga": 1.22, "Ge": 1.20, "As": 1.19, "Se": 1.20, "Br": 1.20, "Kr": 1.16,
-    "Rb": 0.25, "Sr": 0.25,
-    "Y": 1.62, "Zr": 1.48, "Nb": 1.37, "Mo": 1.45, "Tc": 1.56, "Ru": 1.26, "Rh": 1.35,
-    "Pd": 1.24, "Ag": 1.45, "Cd": 1.44,
-    "In": 1.42, "Sn": 1.39, "Sb": 1.39, "Te": 1.38, "I": 1.39, "Xe": 1.40,
-    "Cs": 0.25, "Ba": 0.25,
-    "La": 1.94, "Ce": 1.83, "Pr": 1.82, "Nd": 1.81, "Pm": 1.80, "Sm": 1.80, "Eu": 1.99,
-    "Gd": 1.79, "Tb": 1.76, "Dy": 1.75, "Ho": 1.74, "Er": 1.73, "Tm": 1.72, "Yb": 1.94, "Lu": 1.72,
-    "Hf": 1.52, "Ta": 1.46, "W": 1.37, "Re": 1.31, "Os": 1.44, "Ir": 1.41,
-    "Pt": 1.36, "Au": 1.36, "Hg": 1.32,
-    "Tl": 1.45, "Pb": 1.46, "Bi": 1.48,
-}
+_CCDC_COV_RADII_JSON = os.path.join(
+    os.path.dirname(__file__), "ccdc_covalent_radii.json"
+)
 
-# Backward-compatible alias used by some existing helpers in this file.
-RADII = COV_R
+_TM_NONMETAL_LIMITS_JSON = os.path.join(
+    os.path.dirname(__file__), "tmQM_tm_nonmetal_bond_limits.json"
+)
+# TM–L connectivity cutoff: empirical p99_A + this margin (Å)
+TM_NONMETAL_P99_MARGIN_A = 0.05
 
 TM_SET = {
     "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn",
@@ -64,61 +85,40 @@ TM_SET = {
     "Ho", "Er", "Tm", "Yb", "Lu",
 }
 
-# Common TM oxidation states from tmQM_coordination_results_G_smiles.csv
-# Criteria: > 5% of per-metal bracket parses (SMILES_tmQM + SMILES_CSD_fixed).
-# Empty frozenset: no parses or no state above 5%. See tmQM_common_oxidation_states.log.
 TM_COMMON_OXIDATION_STATES = {
     "Sc": [3],
     "Ti": [3, 4],
     "V": [2, 3, 4, 5],
     "Cr": [0, 2, 3, 4, 6],
-    "Mn": [2, 3, 4, 6, 7],
+    "Mn": [1, 2, 3, 4, 6, 7],
     "Fe": [2, 3],
     "Co": [1, 2, 3],
     "Ni": [2],
     "Cu": [1, 2],
     "Zn": [2],
-    "Y": [1, 3],
+    "Y": [3],
     "Zr": [4],
     "Nb": [3, 4, 5],
-    "Mo": [2, 3, 4, 5, 6],
+    "Mo": [0, 2, 3, 4, 5, 6],
     "Tc": [2, 3, 4, 5, 6, 7],
     "Ru": [2, 3, 4, 5, 6, 7, 8],
     "Rh": [1, 3],
     "Pd": [2, 4],
     "Ag": [1],
-    "Cd": [2],
+    "Cd": [1, 2],
     "La": [3],
     "Hf": [4],
     "Ta": [3, 4, 5],
-    "W": [2, 3, 4, 5, 6],
-    "Re": [2, 3, 4, 5, 6, 7],
-    "Os": [3, 4, 5, 6, 7, 8],
+    "W": [0, 2, 3, 4, 5, 6],
+    "Re": [1, 2, 3, 4, 5, 6, 7],
+    "Os": [2, 3, 4, 5, 6, 7, 8],
     "Ir": [1, 3],
     "Pt": [2, 4],
     "Au": [1, 3],
     "Hg": [1, 2],
 }
 
-# Soft tie-break in the ILP objective: minimize Σox(TM) among feasible Lewis/charge
-# solutions. Keep small (e.g. 1) so formal-charge / aromatic terms stay primary.
-TM_OX_MINIMIZE_WEIGHT = 100.0
-
-# Heavy alkali (Na, K, …) and alkaline earth (Mg, Ca, …): same ionic limit in the ILP —
-# q = ve − bond_sum, no LP variables, no octet slack.  Matches Lewis-engine’s small
-# COV_R / cation heuristic for these metals; avoids spurious octet-8 penalties (e.g. K⁺).
-# Caveat: Mg and covalent organometallics (Grignard, etc.) are not pure M²⁺; this is a
-# deliberate simplification aligned with “ionic s-block when barely bonded”.
-ALKALI_HEAVY_IONIC = frozenset({"Na", "K", "Rb", "Cs", "Fr"})
-# Be is intentionally omitted: strongly covalent; use full lp/octet model like other non-TM.
-ALKALINE_EARTH_IONIC = frozenset({"Mg", "Ca", "Sr", "Ba", "Ra"})
-
-
-def is_ionlike_s_block_metal(sym: str) -> bool:
-    return sym in ALKALI_HEAVY_IONIC or sym in ALKALINE_EARTH_IONIC
-
-
-# Standard covalent bond capacities — aligned with Lewis-engine.py STD_CAP.
+# Standard covalent bond capacities
 STD_CAP = {
     "H": 1, "He": 0, "Li": 1, "Be": 2, "B": 3, "C": 4, "N": 3, "O": 2, "F": 1, "Ne": 0,
     "Na": 1, "Mg": 2, "Al": 3, "Si": 4, "P": 3, "S": 2, "Cl": 1, "Ar": 0,
@@ -127,7 +127,7 @@ STD_CAP = {
     "Cs": 1, "Ba": 2, "Tl": 3, "Pb": 4, "Bi": 3,
 }
 
-# Neutral-atom valence electron totals — aligned with Lewis-engine.py VALENCE.
+# Neutral-atom valence electron totals 
 VALENCE = {
     "H": 1, "He": 2,
     "Li": 1, "Be": 2, "B": 3, "C": 4, "N": 5, "O": 6, "F": 7, "Ne": 8,
@@ -135,7 +135,7 @@ VALENCE = {
     "K": 1, "Ca": 2, "Ga": 3, "Ge": 4, "As": 5, "Se": 6, "Br": 7, "Kr": 8,
     "Rb": 1, "Sr": 2, "In": 3, "Sn": 4, "Sb": 5, "Te": 6, "I": 7, "Xe": 8,
     "Cs": 1, "Ba": 2, "Tl": 3, "Pb": 4, "Bi": 5,
-    # TM: d+s electrons of neutral ground-state atom (same as Lewis-engine)
+    # TM: d+s electrons of neutral ground-state atom
     "Sc": 3, "Ti": 4, "V": 5, "Cr": 6, "Mn": 7, "Fe": 8, "Co": 9, "Ni": 10, "Cu": 11, "Zn": 12,
     "Y": 3, "Zr": 4, "Nb": 5, "Mo": 6, "Tc": 7, "Ru": 8, "Rh": 9, "Pd": 10, "Ag": 11, "Cd": 12,
     "Hf": 4, "Ta": 5, "W": 6, "Re": 7, "Os": 8, "Ir": 9, "Pt": 10, "Au": 11, "Hg": 12,
@@ -143,12 +143,13 @@ VALENCE = {
     "Dy": 12, "Ho": 13, "Er": 14, "Tm": 15, "Yb": 16, "Lu": 17,
 }
 
-# Same keys as STD_CAP; kept for scripts that still expect this name.
+# Same keys as STD_CAP;
 VALENCE_TARGET = STD_CAP
 
-# Viewer bridge expects these globals to exist.
-CORE_E = {k: 0 for k in COV_R}
-# Pauling electronegativity — aligned with Lewis-engine.py
+ALKALI_HEAVY_IONIC = frozenset({"Na", "K", "Rb", "Cs", "Fr"})
+ALKALINE_EARTH_IONIC = frozenset({"Mg", "Ca", "Sr", "Ba", "Ra"})
+
+# Pauling electronegativity
 ENEG = {
     "F": 3.98,
     "O": 3.44,
@@ -175,8 +176,100 @@ ENEG = {
     "Tl": 2.04,
 }
 
-# Neutral valence electron counts for formal charge (same as Lewis-engine VALENCE).
+# Neutral valence electron counts for formal charge.
 VALENCE_ELECTRONS = dict(VALENCE)
+
+# Halides at M: always forced to covalent M–X single bond (MLX X-type).
+TM_MONATOMIC_COV_LIGANDS = frozenset({"F", "Cl", "Br", "I"})
+
+def _load_ccdc_covalent_radii(path: str = _CCDC_COV_RADII_JSON) -> dict[str, float]:
+    """CCDC ChemistryLib Element.covalent_radius() values (Å) from ccdc_covalent_radii.json."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except OSError:
+        return {}
+    by_sym = data.get("by_symbol")
+    if not isinstance(by_sym, dict):
+        return {}
+    out: dict[str, float] = {}
+    for sym, val in by_sym.items():
+        try:
+            out[str(sym)] = float(val)
+        except (TypeError, ValueError):
+            continue
+    return out
+
+COV_R_CCDC = _load_ccdc_covalent_radii()
+CORE_E = {k: 0 for k in COV_R_CCDC}
+
+def _load_tm_nonmetal_bond_limits(path: str = _TM_NONMETAL_LIMITS_JSON) -> dict[str, float]:
+    """TM–ligand cutoff (Å): tmQM p99_A + margin, or Mercury GUI limit_A (no margin)."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except OSError:
+        return {}
+    stats = data.get("stats")
+    if not isinstance(stats, dict):
+        return {}
+    out: dict[str, float] = {}
+    margin = TM_NONMETAL_P99_MARGIN_A
+    for pair, rec in stats.items():
+        if not isinstance(rec, dict):
+            continue
+        if rec.get("source") == "mercury_gui":
+            lim = rec.get("limit_A")
+            if lim is None:
+                continue
+            try:
+                out[str(pair)] = float(lim)
+            except (TypeError, ValueError):
+                continue
+            continue
+        p99 = rec.get("p99_A")
+        if p99 is None:
+            continue
+        try:
+            out[str(pair)] = float(p99) + margin
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+TM_NONMETAL_BOND_LIMITS = _load_tm_nonmetal_bond_limits()
+
+
+def _cov_radius(sym: str) -> float | None:
+    return COV_R_CCDC.get(sym)
+
+
+def _has_cov_radius(sym: str) -> bool:
+    return _cov_radius(sym) is not None
+
+
+def is_ionlike_s_block_metal(sym: str) -> bool:
+    return sym in ALKALI_HEAVY_IONIC or sym in ALKALINE_EARTH_IONIC
+
+
+def validate_atom_symbols(atom_syms: list[str]) -> None:
+    """Raise ValueError if any symbol is missing from VALENCE or COV_R_CCDC."""
+    missing_val = sorted({s for s in atom_syms if s not in VALENCE})
+    missing_cov = sorted({s for s in atom_syms if not _has_cov_radius(s)})
+    if not missing_val and not missing_cov:
+        return
+    lines: list[str] = []
+    for sym in missing_val:
+        idxs = ", ".join(str(i + 1) for i, s in enumerate(atom_syms) if s == sym)
+        lines.append(f"{sym} (atom index: {idxs}): not in VALENCE")
+    for sym in missing_cov:
+        if sym in missing_val:
+            continue
+        idxs = ", ".join(str(i + 1) for i, s in enumerate(atom_syms) if s == sym)
+        lines.append(f"{sym} (atom index: {idxs}): no covalent radius in COV_R_CCDC")
+    raise ValueError(
+        "Unsupported element symbol(s) in XYZ:\n" + "\n".join(f"  - {ln}" for ln in lines)
+    )
 
 
 def _looks_like_xyz_atom_line(line: str) -> bool:
@@ -262,6 +355,7 @@ def read_xyz(path: str):
                 f"{path}: line {file_line_no}: non-numeric coordinates in {ln!r}"
             ) from exc
         atoms.append((k + 1, sym, x, y, z))
+    validate_atom_symbols([a[1] for a in atoms])
     return atoms
 
 
@@ -316,8 +410,41 @@ def _prune_h_to_closest_nonmetal_neighbor(atoms, edges):
     return [e for e in edges if e not in drop]
 
 
-def connectivity(atoms, factor=1.30):
-    """Match Lewis-engine style raw connectivity generation."""
+def _bond_cutoff_cov(ei, ej):
+    margin = (
+        COV_BOND_MARGIN_S_BLOCK
+        if ei in S_BLOCK_SYMS or ej in S_BLOCK_SYMS
+        else COV_BOND_MARGIN
+    )
+    return _cov_radius(ei) + _cov_radius(ej) + margin
+
+
+def _tm_nonmetal_bond_cutoff(metal: str, ligand: str) -> float | None:
+    """P99+0.05 Å limit for TM–nonmetal, or None to fall back to covalent radii."""
+    if is_tm(metal) and not is_tm(ligand):
+        return TM_NONMETAL_BOND_LIMITS.get(f"{metal}-{ligand}")
+    return None
+
+
+def _bond_cutoff(ei, ej):
+    """Distance cutoff (Å): TM–nonmetal uses tmQM P99+0.05; all other pairs use COV+margin."""
+    tm_lim = _tm_nonmetal_bond_cutoff(ei, ej)
+    if tm_lim is None:
+        tm_lim = _tm_nonmetal_bond_cutoff(ej, ei)
+    if tm_lim is not None:
+        return tm_lim
+    return _bond_cutoff_cov(ei, ej)
+
+
+def _within_cov_bond_cutoff(d, ei, ej):
+    if not _has_cov_radius(ei) or not _has_cov_radius(ej):
+        return False
+    return d < _bond_cutoff(ei, ej)
+
+
+def connectivity(atoms, factor=None):
+    """Raw connectivity: TM–nonmetal uses tmQM P99+0.05 Å; other pairs COV+0.45/0.40 Å."""
+    _ = factor  # deprecated; kept for call-site compatibility
     edges = []
     n = len(atoms)
     for i in range(n):
@@ -325,9 +452,9 @@ def connectivity(atoms, factor=1.30):
         for j in range(i + 1, n):
             aj = atoms[j]
             ei, ej = ai[1], aj[1]
-            if ei not in COV_R or ej not in COV_R:
+            if not _has_cov_radius(ei) or not _has_cov_radius(ej):
                 continue
-            cutoff = (COV_R[ei] + COV_R[ej]) * factor
+            cutoff = _bond_cutoff(ei, ej)
             if dist(ai, aj) < cutoff:
                 edges.append((ai[0], aj[0], ei, ej))
     return _prune_h_to_closest_nonmetal_neighbor(atoms, edges)
@@ -436,6 +563,20 @@ def print_octet_report(
         print()
         print("  ✓  All atoms satisfy their expected valence (octet rule OK).")
 
+    nonzero_fc = [
+        (i, f"{atom_syms[i]}{i + 1}", int(fc0[i]))
+        for i in range(len(atom_syms))
+        if i < len(fc0) and fc0[i] != 0 and not is_TM(atom_syms[i])
+    ]
+    if nonzero_fc:
+        print()
+        print("  Atoms with non-zero formal charge:")
+        for _i, label, fc_val in nonzero_fc:
+            print(f"    {label}:  fc = {fc_val:+d}")
+    else:
+        print()
+        print("  No non-zero formal charges on non-metal atoms.")
+
 
 def print_choose_block(bonds, lp_out):
     print(" $CHOOSE")
@@ -484,6 +625,9 @@ def normal_bonds(sym):
 
 
 _OXSTATE_ENEG = dict(ENEG)
+# Atoms eligible for CBC η/π cluster BFS (phospholyl, aza-Cp, etc.).
+PI_CLUSTER_SYMS = frozenset({"C", "N", "P"})
+
 _OXSTATE_ENEG.update({
     "Sc": 1.36, "Ti": 1.54, "V": 1.63, "Cr": 1.66, "Mn": 1.55, "Fe": 1.83, "Co": 1.88,
     "Ni": 1.91, "Cu": 1.90, "Zn": 1.65, "Y": 1.22, "Zr": 1.33, "Nb": 1.60, "Mo": 2.16,
@@ -491,6 +635,349 @@ _OXSTATE_ENEG.update({
     "Hf": 1.30, "Ta": 1.50, "W": 2.36, "Re": 1.90, "Os": 2.20, "Ir": 2.20,
     "Pt": 2.28, "Au": 2.54, "Hg": 2.00,
 })
+
+# Minimum Lewis bond order inside an η fragment to count as one CBC L (η²) pair.
+ILP_ETA_PI_BOND_MIN_ORDER = 2
+
+
+def _ligand_component_by_array_index(atom_syms, bo, metal_adjacency_edges=None):
+    """Array index → ligand fragment id (non-TM subgraph without counting TM–L as connectivity)."""
+    n = len(atom_syms)
+    pseudo_atoms = [(i + 1, atom_syms[i]) for i in range(n)]
+    seen = set()
+    edges_id = []
+    for (i, j), order in bo.items():
+        if order <= 0 or is_TM(atom_syms[i]) or is_TM(atom_syms[j]):
+            continue
+        key = (min(i, j), max(i, j))
+        if key in seen:
+            continue
+        seen.add(key)
+        edges_id.append((i + 1, j + 1, atom_syms[i], atom_syms[j]))
+    if metal_adjacency_edges:
+        for i, j, ei, ej in metal_adjacency_edges:
+            if is_TM(ei) ^ is_TM(ej):
+                continue
+            if is_TM(atom_syms[i]) or is_TM(atom_syms[j]):
+                continue
+            key = (min(i, j), max(i, j))
+            if key in seen:
+                continue
+            seen.add(key)
+            edges_id.append((i + 1, j + 1, atom_syms[i], atom_syms[j]))
+    by_atom_id = _nonmetal_ligand_components(pseudo_atoms, edges_id)
+    return {i: by_atom_id.get(i + 1) for i in range(n)}
+
+
+def _ligand_adjacency_from_edges(atoms_packed, edges):
+    """Non-TM ligand connectivity from raw edges (no M–L edges)."""
+    adj = defaultdict(set)
+    for i, j, ei, ej in edges:
+        if _is_tm_nm_edge(ei, ej):
+            continue
+        if is_TM(ei) or is_TM(ej):
+            continue
+        # η/π skeleton adjacency: allow C/N/P connectivity (e.g. phospholyl, N–P–N),
+        # but keep other inorganic-heavy edges out of the ligand graph.
+        if (is_inorganic(ei) or is_inorganic(ej)) and not (ei in PI_CLUSTER_SYMS and ej in PI_CLUSTER_SYMS):
+            continue
+        adj[i].add(j)
+        adj[j].add(i)
+    return adj
+
+
+def _metal_ligand_contacts_from_edges(atoms_packed, edges):
+    """(metal_atom_id, ligand_atom_id) for each inorganic–ligand contact in *edges*."""
+    pairs = []
+    for i, j, ei, ej in edges:
+        if is_TM(ei) and not is_TM(ej):
+            pairs.append((i, j))
+        elif is_TM(ej) and not is_TM(ei):
+            pairs.append((j, i))
+        elif is_inorganic(ei) and not is_TM(ej) and not is_inorganic(ej):
+            pairs.append((i, j))
+        elif is_inorganic(ej) and not is_TM(ei) and not is_inorganic(ei):
+            pairs.append((j, i))
+    return pairs
+
+
+def _eta_coordinating_groups_atom_ids(
+    metal_id, coord_ids, lig_comp, lig_adj, *, min_group_size=1
+):
+    """
+    Same as _eta_coordinating_groups but atom ids (XYZ indices); drops groups
+    smaller than *min_group_size* when that is > 1.
+    """
+    by_ligand = defaultdict(set)
+    for i in coord_ids:
+        lid = lig_comp.get(i)
+        if lid is None:
+            continue
+        by_ligand[lid].add(i)
+    groups = []
+    for lid, coord_set in by_ligand.items():
+        ligand_atoms = {i for i, l in lig_comp.items() if l == lid}
+        visited_coord = set()
+        for seed in sorted(coord_set):
+            if seed in visited_coord:
+                continue
+            queue = [seed]
+            seen = {seed}
+            comp_coord = set()
+            while queue:
+                u = queue.pop()
+                if u in coord_set:
+                    comp_coord.add(u)
+                # η candidates require CONTIGUOUS coordinating atoms on the ligand
+                # skeleton: traversal is restricted to the coordinating-atom subgraph.
+                for v in lig_adj[u]:
+                    if v in coord_set and v not in seen:
+                        seen.add(v)
+                        queue.append(v)
+            visited_coord |= comp_coord
+            if len(comp_coord) >= min_group_size:
+                groups.append(sorted(comp_coord))
+    if min_group_size <= 1:
+        for i in sorted(coord_ids):
+            if lig_comp.get(i) is None:
+                groups.append([i])
+    return groups
+
+
+def _eta_carbon_atom_ids(
+    atoms_packed,
+    edges,
+    *,
+    min_group_size=ETA_MIN_COORDINATING_GROUP_SIZE,
+):
+    """Carbon atom ids on a geometric η fragment to a transition-metal centre (is_TM)."""
+    atom_el = {i: el for i, el, *_ in atoms_packed}
+    lig_comp = _nonmetal_ligand_components(atoms_packed, edges)
+    lig_adj = _ligand_adjacency_from_edges(atoms_packed, edges)
+    metals = {i for i, el, *_ in atoms_packed if is_TM(el)}
+    eta_c = set()
+    by_metal = defaultdict(set)
+    for tm, lig in _metal_ligand_contacts_from_edges(atoms_packed, edges):
+        if tm in metals:
+            by_metal[tm].add(lig)
+    for tm, coord in by_metal.items():
+        for group in _eta_coordinating_groups_atom_ids(
+            tm, coord, lig_comp, lig_adj, min_group_size=min_group_size
+        ):
+            for aid in group:
+                if atom_el.get(aid) == "C":
+                    eta_c.add(aid)
+    return eta_c
+
+
+def _eta_ligand_atoms_by_metal(
+    atoms_packed,
+    edges,
+    *,
+    min_group_size=ETA_MIN_COORDINATING_GROUP_SIZE,
+):
+    """
+    Per transition-metal centre: ligand atom ids in geometric η fragments
+    (≥ *min_group_size* contiguous TM-bound atoms on one ligand skeleton).
+    """
+    lig_comp = _nonmetal_ligand_components(atoms_packed, edges)
+    lig_adj = _ligand_adjacency_from_edges(atoms_packed, edges)
+    metals = {i for i, el, *_ in atoms_packed if is_TM(el)}
+    out = {}
+    by_metal = defaultdict(set)
+    for tm, lig in _metal_ligand_contacts_from_edges(atoms_packed, edges):
+        if tm in metals:
+            by_metal[tm].add(lig)
+    for tm, coord in by_metal.items():
+        eta_atoms = set()
+        for group in _eta_coordinating_groups_atom_ids(
+            tm, coord, lig_comp, lig_adj, min_group_size=min_group_size
+        ):
+            eta_atoms.update(group)
+        if eta_atoms:
+            out[tm] = eta_atoms
+    return out
+
+
+def _eta_coordinating_groups(metal_idx, coord_indices, lig_comp, adj_lewis):
+    """
+    Within each ligand fragment, partition M-coordinating atoms into connected
+    groups via the ligand skeleton (paths may use non-coordinating atoms).
+    """
+    by_ligand = defaultdict(set)
+    for i in coord_indices:
+        lid = lig_comp.get(i)
+        if lid is None:
+            continue
+        by_ligand[lid].add(i)
+    groups = []
+    for lid, coord_set in by_ligand.items():
+        ligand_atoms = {i for i, l in lig_comp.items() if l == lid}
+        visited_coord = set()
+        for seed in sorted(coord_set):
+            if seed in visited_coord:
+                continue
+            queue = [seed]
+            seen = {seed}
+            comp_coord = set()
+            while queue:
+                u = queue.pop()
+                if u in coord_set:
+                    comp_coord.add(u)
+                # η candidates require CONTIGUOUS coordinating atoms on the ligand
+                # skeleton: traversal is restricted to the coordinating-atom subgraph.
+                for v in adj_lewis[u]:
+                    if v in coord_set and v not in seen:
+                        seen.add(v)
+                        queue.append(v)
+            visited_coord |= comp_coord
+            if comp_coord:
+                groups.append(sorted(comp_coord))
+    for i in sorted(coord_indices):
+        if lig_comp.get(i) is None:
+            groups.append([i])
+    return groups
+
+
+def _ilp_cbc_records_for_eta_group(
+    metal_idx,
+    group,
+    bo_ij,
+    adj_lewis,
+    lp_lewis=None,
+    *,
+    pi_min_order=None,
+):
+    """
+    η fragment: ILP bo(M–L)>0 → X; dative ends with bo(L–L')≥pi_min_order → one L pair;
+    remaining dative coordinators → single-atom L only if lp > 0 (non-η dative).
+    """
+    if pi_min_order is None:
+        pi_min_order = ILP_ETA_PI_BOND_MIN_ORDER
+    records = []
+    dative = set()
+    for i in group:
+        if bo_ij(i, metal_idx) > 0:
+            records.append(((i,), "X"))
+        else:
+            dative.add(i)
+    in_pair = set()
+    for a in sorted(dative):
+        for b in adj_lewis[a]:
+            if b not in dative or b <= a:
+                continue
+            if bo_ij(a, b) >= pi_min_order:
+                records.append(((a, b), "L"))
+                in_pair.add(a)
+                in_pair.add(b)
+    for i in sorted(dative):
+        if i not in in_pair:
+            lp_cnt = lp_lewis.get(i, 0) if lp_lewis else 0
+            if lp_cnt > 0:
+                records.append(((i,), "L"))
+    return records
+
+
+def _eta_group_internal_lp_edge_keys(
+    atoms_packed,
+    edges,
+    *,
+    min_group_size=ETA_MIN_COORDINATING_GROUP_SIZE,
+):
+    """
+    Ligand-skeleton edge keys (min, max) with both ends in the same geometric η
+    group (≥ *min_group_size* TM-bound atoms) for any transition metal centre.
+    """
+    lig_comp = _nonmetal_ligand_components(atoms_packed, edges)
+    lig_adj = _ligand_adjacency_from_edges(atoms_packed, edges)
+    metals = {i for i, el, *_ in atoms_packed if is_TM(el)}
+    keys = set()
+    for tm in metals:
+        coord = {
+            lig
+            for t, lig in _metal_ligand_contacts_from_edges(atoms_packed, edges)
+            if t == tm
+        }
+        for group in _eta_coordinating_groups_atom_ids(
+            tm, coord, lig_comp, lig_adj, min_group_size=min_group_size
+        ):
+            gset = set(group)
+            for a in group:
+                for b in lig_adj.get(a, ()):
+                    if b not in gset or a >= b:
+                        continue
+                    keys.add((a, b))
+    return sorted(keys)
+
+
+_SIGMA_AGOSTIC_H_PARENTS = frozenset({"B", "C", "Si", "Al", "Ga"})
+_DIHYDROGEN_HH_MAX = 1.15
+
+
+def _cbc_record_for_h_neighbor(
+    metal_idx,
+    h_idx,
+    atoms,
+    coords,
+    adj_lewis,
+    adj_full,
+    bo_ij,
+    *,
+    seen_hh_pairs=None,
+):
+    """
+    CBC for H in the metal coordination sphere (aligned with Lewis-engine.py):
+
+    M–H in Lewis (bo>0) → X; agostic X–H (X = B,C,…) with b_tm=0 → (X,H) L;
+    η²-H₂ → (H,H) L; protic H → X; geometric M···H only → None (skip).
+    """
+    h_nbrs = list(adj_lewis[h_idx])
+    if bo_ij(metal_idx, h_idx) > 0 or any(is_TM(atoms[k]) for k in h_nbrs):
+        return ((h_idx,), "X")
+
+    if len(h_nbrs) == 0:
+        for other_h in sorted(adj_full[metal_idx]):
+            if atoms[other_h] != "H" or other_h == h_idx:
+                continue
+            other_nbrs = list(adj_lewis[other_h])
+            if any(is_TM(atoms[k]) for k in other_nbrs):
+                continue
+            non_tm = [k for k in other_nbrs if not is_TM(atoms[k])]
+            if len(non_tm) > 1:
+                continue
+            if len(non_tm) == 1 and non_tm[0] != h_idx:
+                continue
+            if dist(coords[h_idx], coords[other_h]) >= _DIHYDROGEN_HH_MAX:
+                continue
+            pair = tuple(sorted((h_idx, other_h)))
+            if seen_hh_pairs is not None:
+                if pair in seen_hh_pairs:
+                    return None
+                seen_hh_pairs.add(pair)
+            return (pair, "L")
+    elif (
+        len(h_nbrs) == 1
+        and atoms[h_nbrs[0]] == "H"
+        and not any(is_TM(atoms[k]) for k in h_nbrs)
+    ):
+        other_h = h_nbrs[0]
+        if other_h in adj_full[metal_idx]:
+            pair = tuple(sorted((h_idx, other_h)))
+            if seen_hh_pairs is not None:
+                if pair in seen_hh_pairs:
+                    return None
+                seen_hh_pairs.add(pair)
+            return (pair, "L")
+
+    if len(h_nbrs) == 1 and atoms[h_nbrs[0]] in _SIGMA_AGOSTIC_H_PARENTS:
+        return ((h_nbrs[0], h_idx), "L")
+
+    if len(h_nbrs) == 1 and atoms[h_nbrs[0]] in ("N", "O", "S", "F", "Cl", "Br", "I"):
+        return ((h_idx,), "X")
+
+    if bo_ij(metal_idx, h_idx) == 0:
+        return None
+    return ((h_idx,), "X")
 
 
 def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency_edges=None):
@@ -544,9 +1031,9 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
             """C coordinating to TM (σ, dative, or lp); substituents on this C are backbone."""
             if atoms[c_idx] != "C":
                 return False
-            ri = COV_R.get(atoms[tm_idx], 1.5)
-            rj = COV_R.get("C", 0.77)
-            if dist(coords[c_idx], coords[tm_idx]) >= 1.55 * (ri + rj):
+            if not _within_cov_bond_cutoff(
+                dist(coords[c_idx], coords[tm_idx]), atoms[tm_idx], "C"
+            ):
                 return False
             if c_idx in tm_sigma_partners[tm_idx]:
                 return True
@@ -579,8 +1066,6 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
         bonds = []
         for i in range(len(atoms)):
             for j in range(i + 1, len(atoms)):
-                ri = COV_R.get(atoms[i], 0.77)
-                rj = COV_R.get(atoms[j], 0.77)
                 si, sj = atoms[i], atoms[j]
                 tm_i, tm_j = is_TM(si), is_TM(sj)
                 d_ij = dist(coords[i], coords[j])
@@ -588,40 +1073,26 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
                 if (tm_i and not tm_j) or (tm_j and not tm_i):
                     tm = i if tm_i else j
                     lig = j if tm_i else i
-                    sym_lig = atoms[lig]
-                    lp_count = _effective_lp(lig)
+                    sym_tm, sym_lig = atoms[tm], atoms[lig]
+                    key_ml = (min(tm, lig), max(tm, lig))
 
                     if is_terminal_co_o(lig, tm):
                         continue
-                    if is_saturated_no_lp(lig):
+                    # Keep explicit Lewis M–L σ bonds even if the ligand atom is saturated
+                    # and has no lone pairs (e.g. M–SiR3). The saturated-no-LP filter is
+                    # only meant to suppress *purely geometric* M···L contacts.
+                    if bo_lewis.get(key_ml, 0) <= 0 and is_saturated_no_lp(lig):
                         continue
+                    if not _within_cov_bond_cutoff(d_ij, sym_tm, sym_lig):
+                        continue
+                    bonds.append((i, j))
+                elif _within_cov_bond_cutoff(d_ij, si, sj):
+                    bonds.append((i, j))
 
-                    threshold_std = 1.3 * (ri + rj)
-                    if sym_lig in ("N", "O", "S", "P", "F", "Cl", "Br", "I", "Se", "Te"):
-                        if d_ij < threshold_std:
-                            bonds.append((i, j))
-                        elif lp_count >= 1 and d_ij < 1.6 * (ri + rj):
-                            if is_backbone_atom(lig, tm):
-                                pass
-                            else:
-                                if sym_lig in ("Br", "I"):
-                                    if d_ij < 1.35 * (ri + rj):
-                                        bonds.append((i, j))
-                                else:
-                                    if d_ij < 1.55 * (ri + rj):
-                                        bonds.append((i, j))
-                    elif sym_lig == "C":
-                        if d_ij < 1.15 * (ri + rj):
-                            bonds.append((i, j))
-                    else:
-                        if d_ij < threshold_std:
-                            bonds.append((i, j))
-                else:
-                    if d_ij < 1.3 * (ri + rj):
-                        bonds.append((i, j))
-
-        # Every geometric M–L with ILP b_tm=0 stays in the CBC coordination graph.
+        # Geometric M–L with b_tm=0: keep C (η/haptic graph); other elements need lp > 0.
         for tm, lig in ml_bo_zero:
+            if atoms[lig] != "C" and _effective_lp(lig) <= 0:
+                continue
             bonds.append((tm, lig))
 
         tm_indices = [i for i in range(len(atoms)) if is_TM(atoms[i])]
@@ -635,9 +1106,7 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
         for i in range(len(atoms)):
             for j in range(i + 1, len(atoms)):
                 if atoms[i] == "C" and atoms[j] == "C":
-                    ri2 = COV_R.get(atoms[i], 0.77)
-                    rj2 = COV_R.get(atoms[j], 0.77)
-                    if dist(coords[i], coords[j]) < 1.35 * (ri2 + rj2):
+                    if _within_cov_bond_cutoff(dist(coords[i], coords[j]), "C", "C"):
                         all_C_adj[i].add(j)
                         all_C_adj[j].add(i)
 
@@ -653,10 +1122,10 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
                 for c in frontier:
                     for nb in all_C_adj[c]:
                         if nb not in visited_c:
-                            ri2 = COV_R.get(atoms[tm], 0.77)
-                            rj2 = COV_R.get(atoms[nb], 0.77)
                             d_nb = dist(coords[tm], coords[nb])
-                            if d_nb < 1.3 * (ri2 + rj2):
+                            if _within_cov_bond_cutoff(
+                                d_nb, atoms[tm], atoms[nb]
+                            ):
                                 key = (min(tm, nb), max(tm, nb))
                                 if key not in bond_set:
                                     bonds.append((tm, nb))
@@ -689,9 +1158,7 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
                 key = (min(i, j), max(i, j))
                 if bo.get(key, 0) != 0:
                     continue
-                ri = COV_R.get(atoms[i], 1.5)
-                rj = COV_R.get(atoms[j], 0.77)
-                if dist(coords[i], coords[j]) < 1.55 * (ri + rj):
+                if _within_cov_bond_cutoff(dist(coords[i], coords[j]), atoms[i], atoms[j]):
                     ml_bo_zero.add((i, j))
 
     lp = dict(lp) if lp else {}
@@ -709,288 +1176,58 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
     def bo_ij(i, j):
         return bo.get((min(i, j), max(i, j)), 0)
 
-    def _pi_cluster(metal_idx, seed_idx):
-        if atoms[seed_idx] not in ("C", "N"):
-            return None
-        metal_CN = {j for j in adj_full[metal_idx] if atoms[j] in ("C", "N")}
-        if seed_idx not in metal_CN:
-            return None
-        visited = set()
-        queue = [seed_idx]
-        while queue:
-            cur = queue.pop()
-            if cur in visited:
-                continue
-            visited.add(cur)
-            for nb in adj_full[cur]:
-                if nb in metal_CN and atoms[nb] in ("C", "N") and nb not in visited:
-                    queue.append(nb)
-        return visited
+    def _neighbor_primary_from_records(atom_idx, records):
+        for tup, t in records:
+            if atom_idx in tup and t == "X":
+                return "X"
+        for tup, t in records:
+            if atom_idx in tup:
+                return t
+        return None
 
-    def _classify_pi(metal_idx, nbr_idx):
-        if atoms[nbr_idx] not in ("C", "N"):
-            return None
-        cluster = _pi_cluster(metal_idx, nbr_idx)
-        if cluster is None or len(cluster) <= 1:
-            if bo_ij(nbr_idx, metal_idx) > 0:
-                return None
-            if atoms[nbr_idx] == "C":
-                n_val_c = normal_bonds("C")
-                bond_e_c = sum(bo_ij(nbr_idx, k) for k in adj_lewis[nbr_idx])
-                lp_c = lp.get(nbr_idx, 0) if lp else 0
-                if bond_e_c >= n_val_c and lp_c == 0:
-                    return None
-                if any(atoms[k] == "O" and bo_ij(nbr_idx, k) >= 2 for k in adj_lewis[nbr_idx]):
-                    return ["L"]
-                if any(bo_ij(nbr_idx, k) > 1 for k in adj_lewis[nbr_idx]):
-                    return ["L"]
-                return None
-            if atoms[nbr_idx] == "N":
-                fc_n = fc[nbr_idx] if fc else 0
-                if fc_n < 0:
-                    all_nbrs_are_N = all(atoms[k] == "N" for k in adj_lewis[nbr_idx])
-                    if all_nbrs_are_N:
-                        return None
-                if any(bo_ij(nbr_idx, k) > 1 for k in adj_lewis[nbr_idx]):
-                    return ["L"]
-                return None
-            return None
-
-        dative_members = {j for j in cluster if bo_ij(j, metal_idx) == 0}
-        if not dative_members:
-            return None
-        if nbr_idx != min(dative_members):
-            return None
-
-        size = len(cluster)
-
-        def _is_x_type(j):
-            fc_j = fc[j] if fc else 0
-            if fc_j < 0:
-                return True
-            if bo_ij(j, metal_idx) > 0:
-                return True
-            sym_j = atoms[j]
-            exp_be = 4 if sym_j == "C" else (3 if sym_j == "N" else 2)
-            bond_e_j = sum(bo_ij(j, k) for k in adj_lewis[j])
-            return bond_e_j < exp_be
-
-        n_X_atoms = sum(1 for j in cluster if _is_x_type(j))
-        if size == 2:
-            a2, b2 = sorted(cluster)
-            pi_order = max(0, bo_ij(a2, b2) - 1)
-            if pi_order == 0:
-                return None
-            if n_X_atoms > 0:
-                pi_types = ["L", "X"]
-            elif pi_order >= 2:
-                pi_types = ["L", "L"]
-            else:
-                pi_types = ["L"]
-        elif size == 3:
-            pi_types = ["L", "X"]
-        elif size == 4:
-            pi_types = ["L", "L", "X"] if n_X_atoms > 0 else ["L", "L"]
-        elif size == 5:
-            pi_types = ["L", "L", "X"]
-        elif size == 6:
-            pi_types = ["L", "L", "L"]
-        else:
-            n_X_forced = size % 2
-            n_X_actual = max(n_X_forced, n_X_atoms)
-            n_L = (size - n_X_actual) // 2
-            pi_types = ["L"] * n_L + ["X"] * n_X_actual
-
-        rep_lp = lp.get(nbr_idx, 0) if lp else 0
-        rep_bond_to_M = bo_ij(nbr_idx, metal_idx)
-        if rep_lp > 0 and rep_bond_to_M == 0 and "X" not in pi_types:
-            pi_types = ["L"] + pi_types
-        return pi_types
-
-    def _fc_at(idx):
-        if not fc or idx < 0 or idx >= len(fc):
-            return 0
-        return fc[idx]
-
-    def _ilp_dative_sigma_ml(m_idx, lig_idx):
-        """True when the Lewis bond table has no covalent M–L order (ILP dative / omitted M–L)."""
-        return bo_ij(m_idx, lig_idx) == 0
-
-    def _dative_ml_instead_of_x(m_idx, lig_idx, lp_lig):
-        """ILP-style dative M←L: no M–L bond order but L can donate (lp or anionic)."""
-        if not _ilp_dative_sigma_ml(m_idx, lig_idx):
-            return False
-        return lp_lig > 0 or _fc_at(lig_idx) < 0
-
-    def classify_one(metal_idx, nbr_idx):
-        sym_m = atoms[metal_idx]
-        sym_n = atoms[nbr_idx]
-        if sym_n == "H":
-            h_nbrs = list(adj_lewis[nbr_idx])
-            if any(is_TM(atoms[k]) for k in h_nbrs):
-                return ["X"], None
-            return ["X"], None
-        if is_TM(sym_n):
-            en_m = _OXSTATE_ENEG.get(sym_m, 2.0)
-            en_n = _OXSTATE_ENEG.get(sym_n, 2.0)
-            return (["L"] if en_n < en_m else ["Z"]), None
-        if is_inorganic(sym_n):
-            n_val = normal_bonds(sym_n)
-            n_sub = sum(bo_ij(nbr_idx, k) for k in adj_lewis[nbr_idx] if k != metal_idx)
-            lp_lewis = lp.get(nbr_idx, 0)
-            deficit = n_val - n_sub
-            if sym_n in ("Br", "I") and n_sub == 0:
-                if _dative_ml_instead_of_x(metal_idx, nbr_idx, lp_lewis):
-                    return ["L"], None
-                return ["X"], None
-            if sym_n == "I" and n_sub >= 2 and is_TM(sym_m):
-                fc_n = fc[nbr_idx] if fc else 0
-                if fc_n > 0:
-                    return ["Z"], None
-            if sym_n in ("B", "Al", "Ga", "In") and lp_lewis == 0:
-                return ["Z"], None
-            if deficit <= 0:
-                return (["L"] if lp_lewis > 0 else ["Z"]), None
-            if deficit == 1:
-                if _dative_ml_instead_of_x(metal_idx, nbr_idx, lp_lewis):
-                    return ["L"], None
-                return ["X"], None
-            if lp_lewis > 0:
-                return (["L"] + ["X"] * (deficit - 1)), None
-            return (["X"] * deficit), None
-
-        pi = _classify_pi(metal_idx, nbr_idx)
-        if pi is not None:
-            return pi, _pi_cluster(metal_idx, nbr_idx)
-        if atoms[nbr_idx] in ("C", "N"):
-            cluster_check = _pi_cluster(metal_idx, nbr_idx)
-            if cluster_check and len(cluster_check) > 1:
-                dative_check = {j for j in cluster_check if bo_ij(j, metal_idx) == 0}
-                if dative_check and nbr_idx != min(dative_check):
-                    return [], None
-
-        sym_n = atoms[nbr_idx]
-        n_val = normal_bonds(sym_n)
-        lp_lewis = lp.get(nbr_idx, 0)
-        n_sub_organic = sum(bo_ij(nbr_idx, k) for k in adj_lewis[nbr_idx] if not is_inorganic(atoms[k]))
-        n_sub_all = sum(bo_ij(nbr_idx, k) for k in adj_lewis[nbr_idx] if k != metal_idx and not is_TM(atoms[k]))
-        deficit = n_val - n_sub_organic
-        if sym_n == "C":
-            if lp_lewis > 0:
-                return ["L"], None
-            has_CO = any(atoms[k] == "O" and bo_ij(nbr_idx, k) >= 2 for k in adj_lewis[nbr_idx])
-            if has_CO:
-                other_organic = sum(
-                    1 for k in adj_lewis[nbr_idx]
-                    if k != metal_idx and not is_inorganic(atoms[k]) and atoms[k] != "O"
-                )
-                if other_organic == 0:
-                    return ["L"], None
-            if n_sub_all <= 2:
-                return ["L"], None
-
-        if deficit <= 0:
-            if lp_lewis > 0:
-                return ["L"], None
-            return [], None
-        if deficit == 1:
-            if _dative_ml_instead_of_x(metal_idx, nbr_idx, lp_lewis):
-                return ["L"], None
-            return ["X"], None
-
-        n_sub_all_total = sum(bo_ij(nbr_idx, k) for k in adj_lewis[nbr_idx] if not is_TM(atoms[k]))
-        deficit_real = n_val - n_sub_all_total
-        if n_sub_all_total == 0 and sym_n in ("N", "O", "S", "C"):
-            return ["X"] * deficit, None
-        if deficit_real > 1 and sym_n in ("N", "O", "S", "C"):
-            return ["X"] * min(deficit_real, deficit), None
-        return ["X"], None
-
-    def _fix_symmetric_chelate_O(metal_idx, nbr_cls, atoms, bo, adj_lewis, adj_full):
+    def _fix_symmetric_chelate_O_records(metal_idx, records):
+        """Promote one chelating O from L to X when two O donors share a π-linked C backbone."""
+        nbr_cls = {}
+        for tup, t in records:
+            for a in tup:
+                nbr_cls[a] = [t]
         o_L = [
             idx for idx, types in nbr_cls.items()
-            if atoms[idx] == "O" and types == ["L"] and bo.get((min(idx, metal_idx), max(idx, metal_idx)), 0) == 0
+            if atoms[idx] == "O" and types == ["L"] and bo_ij(idx, metal_idx) == 0
         ]
-        if len(o_L) >= 2:
-            for i in range(len(o_L)):
-                for j in range(i + 1, len(o_L)):
-                    oi, oj = o_L[i], o_L[j]
-                    ci = next((k for k in adj_lewis[oi] if atoms[k] == "C" and bo.get((min(oi, k), max(oi, k)), 0) >= 2), None)
-                    cj = next((k for k in adj_lewis[oj] if atoms[k] == "C" and bo.get((min(oj, k), max(oj, k)), 0) >= 2), None)
-                    if ci is None or cj is None:
-                        continue
-                    connected = ci == cj or (cj in adj_lewis[ci]) or (ci in adj_lewis[cj])
-                    if not connected:
-                        for mid in adj_lewis[ci]:
-                            if cj in adj_lewis[mid]:
-                                connected = True
-                                break
-                    if connected:
-                        nbr_cls[max(oi, oj)] = ["X"]
-                        break
-
-    def _expand_cluster(rep_idx, cluster_types, cluster_atoms_sorted, metal_idx):
-        records = []
-        types_work = list(cluster_types)
-        n_atoms = len(cluster_atoms_sorted)
-        n_L = types_work.count("L")
-        n_L_cluster = n_atoms // 2
-        n_L_solo = n_L - n_L_cluster
-        for _ in range(n_L_solo):
-            records.append(((rep_idx,), "L"))
-
-        cluster_set = set(cluster_atoms_sorted)
-
-        def _is_x_candidate(idx):
-            fc_val = fc[idx] if fc else 0
-            if fc_val < 0:
-                return True
-            sym = atoms[idx]
-            exp_be = 4 if sym == "C" else (3 if sym == "N" else 2)
-            bond_e = sum(bo_ij(idx, k) for k in adj_lewis[idx])
-            return bond_e < exp_be
-
-        anionic = {a for a in cluster_set if _is_x_candidate(a)}
-        neutral = [a for a in cluster_atoms_sorted if a not in anionic]
-        double_pairs = []
-        used = set()
-        bond_candidates = []
-        for a in neutral:
-            for b in adj_lewis[a]:
-                if b in cluster_set and b not in anionic and b > a:
-                    order = bo_ij(a, b)
-                    bond_candidates.append((-order, a, b))
-        bond_candidates.sort()
-        for _, a, b in bond_candidates:
-            if a not in used and b not in used and len(double_pairs) < n_L_cluster:
-                double_pairs.append((a, b))
-                used.add(a)
-                used.add(b)
-        remaining = [a for a in neutral if a not in used]
-        while len(double_pairs) < n_L_cluster and len(remaining) >= 2:
-            a = remaining.pop(0)
-            partner = next((b for b in remaining if b in adj_lewis[a]), None)
-            if partner is None:
-                partner = remaining[0]
-            double_pairs.append((a, partner))
-            remaining.remove(partner)
-            used.add(a)
-            used.add(partner)
-        for a, b in double_pairs:
-            records.append(((a, b), "L"))
-        x_atoms = sorted(anionic) + [a for a in cluster_atoms_sorted if a not in used and a not in anionic]
-        for ax in x_atoms:
-            records.append(((ax,), "X"))
+        if len(o_L) < 2:
+            return records
+        for i in range(len(o_L)):
+            for j in range(i + 1, len(o_L)):
+                oi, oj = o_L[i], o_L[j]
+                ci = next(
+                    (k for k in adj_lewis[oi] if atoms[k] == "C" and bo_ij(oi, k) >= 2),
+                    None,
+                )
+                cj = next(
+                    (k for k in adj_lewis[oj] if atoms[k] == "C" and bo_ij(oj, k) >= 2),
+                    None,
+                )
+                if ci is None or cj is None:
+                    continue
+                connected = ci == cj or cj in adj_lewis[ci] or ci in adj_lewis[cj]
+                if not connected:
+                    for mid in adj_lewis[ci]:
+                        if cj in adj_lewis[mid]:
+                            connected = True
+                            break
+                if connected:
+                    flip = max(oi, oj)
+                    out = []
+                    for tup, t in records:
+                        if tup == (flip,) and t == "L":
+                            out.append((tup, "X"))
+                        else:
+                            out.append((tup, t))
+                    return out
         return records
 
-    def _cbc_primary_type(types):
-        if not types:
-            return None
-        if "X" in types:
-            return "X"
-        if "Z" in types:
-            return "Z"
-        return types[0]
+    lig_comp = _ligand_component_by_array_index(atoms, bo, metal_adjacency_edges)
 
     results = {}
     neighbor_cbc: dict[int, dict[int, str]] = {}
@@ -1006,45 +1243,53 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
         neighbours = sorted(adj_full[metal_idx])
         if not neighbours:
             continue
-        nbr_cls = {}
-        nbr_cluster = {}
-        for nbr_idx in neighbours:
-            cbc, cluster = classify_one(metal_idx, nbr_idx)
-            if cbc:
-                nbr_cls[nbr_idx] = cbc
-                if cluster and len(cluster) > 1:
-                    nbr_cluster[nbr_idx] = cluster
-        _fix_symmetric_chelate_O(metal_idx, nbr_cls, atoms, bo, adj_lewis, adj_full)
-        if not nbr_cls:
-            continue
-        neighbor_cbc[metal_idx] = {
-            nbr_idx: _cbc_primary_type(types)
-            for nbr_idx, types in nbr_cls.items()
-            if _cbc_primary_type(types) is not None
-        }
+
         interaction_records = []
-        for nbr_idx in sorted(nbr_cls.keys()):
-            types = nbr_cls[nbr_idx]
-            cluster = nbr_cluster.get(nbr_idx)
-            if cluster and len(cluster) > 1:
-                cluster_sorted = sorted(cluster)
-                records = _expand_cluster(nbr_idx, types, cluster_sorted, metal_idx)
-                interaction_records.extend(records)
+        coord_for_eta = set()
+        seen_hh_pairs = set()
+        for nbr_idx in neighbours:
+            sym_n = atoms[nbr_idx]
+            if is_TM(sym_n):
+                en_m = _OXSTATE_ENEG.get(sym_m, 2.0)
+                en_n = _OXSTATE_ENEG.get(sym_n, 2.0)
+                interaction_records.append(((nbr_idx,), "L" if en_n < en_m else "Z"))
                 continue
-            if len(types) == 1:
-                interaction_records.append(((nbr_idx,), types[0]))
-            elif len(set(types)) == 1 and len(types) > 1:
-                for t in types:
-                    interaction_records.append(((nbr_idx,), t))
-            else:
-                cluster2 = _pi_cluster(metal_idx, nbr_idx)
-                if cluster2 and len(cluster2) > 1 and nbr_idx == min(cluster2):
-                    cluster_sorted = sorted(cluster2)
-                    records = _expand_cluster(nbr_idx, types, cluster_sorted, metal_idx)
-                    interaction_records.extend(records)
-                else:
-                    for t in types:
-                        interaction_records.append(((nbr_idx,), t))
+            if sym_n == "H":
+                h_rec = _cbc_record_for_h_neighbor(
+                    metal_idx,
+                    nbr_idx,
+                    atoms,
+                    coords,
+                    adj_lewis,
+                    adj_full,
+                    bo_ij,
+                    seen_hh_pairs=seen_hh_pairs,
+                )
+                if h_rec is not None:
+                    interaction_records.append(h_rec)
+                continue
+            coord_for_eta.add(nbr_idx)
+
+        for group in _eta_coordinating_groups(
+            metal_idx, coord_for_eta, lig_comp, adj_lewis
+        ):
+            interaction_records.extend(
+                _ilp_cbc_records_for_eta_group(
+                    metal_idx, group, bo_ij, adj_lewis, lp
+                )
+            )
+
+        interaction_records = _fix_symmetric_chelate_O_records(
+            metal_idx, interaction_records
+        )
+        if not interaction_records:
+            continue
+
+        neighbor_cbc[metal_idx] = {
+            nbr_idx: _neighbor_primary_from_records(nbr_idx, interaction_records)
+            for nbr_idx in neighbours
+            if _neighbor_primary_from_records(nbr_idx, interaction_records) is not None
+        }
         results[metal_idx] = interaction_records
 
     return results, neighbor_cbc
@@ -1238,19 +1483,20 @@ def _subscript(n):
 # 1) Build raw connectivity from XYZ.
 # 2) Remove metal-nonmetal edges for ring/fused-ring detection.
 # 3) Keep only planar ring/fused-ring systems as aromatic candidates.
-# 4) Add a 4n+2 pi-electron mismatch penalty into ILP objective.
+# 4) Soft (optional): aromatic 6π via ILP_WEIGHT_AROMATIC_DEVIATION (>0 enables block).
+# 4b) Soft: similar M–L distances on a ligand → same z_cov (ILP_WEIGHT_ML_DISTANCE_CLASS).
+# 4c) Hard (optional): η-fragment carbons → lp = 0 (ILP_HARD_ETA_CARBON_LP_ZERO).
+# 4d) Hard (always): terminal CO (2-atom C+O fragment, M–L via C) → C≡O triple, M–C dative (b_tm=0).
 # 5) For O/N/S/P in aromatic systems:
 #    - if no double bond around that atom, one lone pair (2e) can contribute;
 #    - if double-bonded, pi contribution comes from double bonds (2 per double).
 # 6) For ring carbons not bonded to a transition metal: if unsaturated (any incident
 #    multiple bond or formal charge <= -1), the same optional lone-pair pi term applies.
-# 7) Hard: carbons not bonded to any TM have lp = 0 (lone pairs only on M-bound C).
-# 8) mol_charge matching (hard):
-#    Σfc(ligand atoms) + Σox(TM) − Σ(covalent M–L bond orders) = mol_charge,
-#    where each ox(TM) is chosen from TM_COMMON_OXIDATION_STATES in
-#    ilp_bond_order_example.py (ILP binary choice when several states are listed).
-# 9) Hard: Σox(TM) ≥ Σ(covalent M–L bond orders).
-# 10) Soft: minimize Σox(TM) (TM_OX_MINIMIZE_WEIGHT) when multiple ox states are feasible.
+# 7) Hard (optional): remote C → lp = 0 (ILP_HARD_C_LP_ONLY_TM_NEIGHBORS).
+# 8) Hard (optional): mol_charge = Σfc(ligands) + Σox(TM) − Σb_tm (ILP_HARD_MOL_CHARGE_BALANCE).
+# 9) Hard (optional): Σox(TM) ≥ Σb_tm on non-η M–L only (ILP_HARD_OX_GE_SIGMA); F/Cl/Br/I ligands omitted from RHS.
+# 10) Soft: minimize Σox(TM) (ILP_WEIGHT_TM_OX_MINIMIZE).
+# See ILP_HARD_* / ILP_WEIGHT_* at top of file.
 #
 # ILP uses full XYZ connectivity (raw): every TM–nonmetal contact is either
 # covalent order 1/2/3 (b_tm) or no Lewis M–L bond (b_tm=0), except monatomic
@@ -1264,8 +1510,106 @@ base = sys.modules[__name__]
 
 pulp = base.pulp
 
-# Monatomic ligands forced to covalent M–X single bond in the ILP (MLX X-type).
-TM_MONATOMIC_COV_LIGANDS = frozenset({"F", "Cl", "Br", "I", "H"})
+
+def _force_monatomic_ml_single_cov(lig_idx, atom_el, edges):
+    """
+    Monatomic ML single covalent rule: F/Cl/Br/I always; H only if isolated
+    (no non-TM neighbor).
+
+    F/Cl/Br/I: always. H: only if it has no non-TM neighbour in *edges* (isolated
+    hydride); agostic B-H/C-H (H bonded to another atom) may use b_tm=0.
+    """
+    sym = atom_el[lig_idx]
+    if sym in TM_MONATOMIC_COV_LIGANDS:
+        return True
+    if sym != "H":
+        return False
+    for i, j, _ei, _ej in edges:
+        if lig_idx not in (i, j):
+            continue
+        other = j if i == lig_idx else i
+        if not base.is_TM(atom_el[other]):
+            return False
+    return True
+
+
+def _non_tm_neighbors_in_edges(lig_idx, atom_el, edges):
+    out = []
+    for i, j, _ei, _ej in edges:
+        if lig_idx not in (i, j):
+            continue
+        other = j if i == lig_idx else i
+        if not base.is_TM(atom_el[other]):
+            out.append(other)
+    return out
+
+
+def _filter_tm_nm_keys_agostic_shadow_ligands(tm_nm_keys, atom_el, edges):
+    """
+    Drop M–X from ILP tm_nm_keys when bridging H has X–H and both M–H and M–X exist
+    in connectivity (e.g. TM–H–B with B on the coordination list). Keeps M–H only
+    so X is not forced to satisfy separate M–X b_tm / lp dative rules; H stays
+    bridging/agostic (not isolated hydride).
+    """
+    key_set = set(tm_nm_keys)
+    drop: set[tuple[int, int]] = set()
+    for tm, lig in tm_nm_keys:
+        if atom_el[lig] != "H":
+            continue
+        if _force_monatomic_ml_single_cov(lig, atom_el, edges):
+            continue
+        for x in _non_tm_neighbors_in_edges(lig, atom_el, edges):
+            if x == lig or (tm, x) not in key_set:
+                continue
+            if atom_el[x] not in _SIGMA_AGOSTIC_H_PARENTS:
+                continue
+            drop.add((tm, x))
+    if not drop:
+        return tm_nm_keys
+    return [(tm, lig) for tm, lig in tm_nm_keys if (tm, lig) not in drop]
+
+
+def _filter_tm_nm_keys_oxo_bridge_shadow_center(tm_nm_keys, atom_el, edges):
+    """
+    General O–X–O rule:
+
+    If a metal M coordinates to both O atoms in an O–X–O motif (O and X are directly
+    bonded in the ligand skeleton), then drop the geometric M···X contact from ILP
+    tm_nm_keys. This prevents the central atom X (often a borderline cutoff contact)
+    from becoming a separate M–L variable that overconstrains charge/octet bookkeeping.
+
+    Trigger condition (per metal M and center X):
+      - X is a non-TM, non-O atom in tm_nm_keys (i.e., there is a geometric M–X edge)
+      - X has at least two O neighbours in *edges* (non-TM neighbours)
+      - at least two of those O atoms are also in tm_nm_keys for the same metal M
+    """
+    key_set = set(tm_nm_keys)
+    drop: set[tuple[int, int]] = set()
+
+    lig_comp = _nonmetal_ligand_components([(i, atom_el[i], 0.0, 0.0, 0.0) for i in atom_el], edges)
+
+    for tm, x in tm_nm_keys:
+        sx = atom_el.get(x)
+        if sx is None or base.is_TM(sx) or sx == "O":
+            continue
+        o_nbrs = [
+            nb
+            for nb in _non_tm_neighbors_in_edges(x, atom_el, edges)
+            if atom_el.get(nb) == "O"
+        ]
+        if len(o_nbrs) < 2:
+            continue
+        # Require O–X–O to be on the same ligand fragment (non-TM component).
+        lid_x = lig_comp.get(x)
+        if lid_x is None:
+            continue
+        o_coord = [o for o in o_nbrs if (tm, o) in key_set and lig_comp.get(o) == lid_x]
+        if len(o_coord) >= 2:
+            drop.add((tm, x))
+
+    if not drop:
+        return tm_nm_keys
+    return [(tm, lig) for tm, lig in tm_nm_keys if (tm, lig) not in drop]
 
 
 def _remove_metal_nonmetal_edges(raw_edges):
@@ -1304,7 +1648,7 @@ def _atoms_bonded_to_tm(edge_list):
     return out
 
 
-def _tm_oxidation_ilp_vars(prob, atoms):
+def _tm_oxidation_ilp_vars(prob, atoms, *, use_discrete_states=True):
     """
     Per-TM oxidation-state variable constrained to TM_COMMON_OXIDATION_STATES[sym].
     Returns {tm_index: int constant or LpVariable}.
@@ -1314,10 +1658,18 @@ def _tm_oxidation_ilp_vars(prob, atoms):
     for i, el, *_ in atoms:
         if not base.is_TM(el):
             continue
+        if not use_discrete_states:
+            raise RuntimeError(
+                "TM oxidation states must be discrete and restricted to "
+                "TM_COMMON_OXIDATION_STATES in this build."
+            )
+
         allowed = common.get(el)
         if not allowed:
-            out[i] = pulp.LpVariable(f"ox_{i}", lowBound=0, upBound=8, cat="Integer")
-            continue
+            raise ValueError(
+                f"TM element {el!r} not found in TM_COMMON_OXIDATION_STATES; "
+                f"cannot constrain oxidation state."
+            )
         states = sorted({int(s) for s in allowed})
         if len(states) == 1:
             out[i] = states[0]
@@ -1476,7 +1828,122 @@ def aromatic_candidate_systems(atoms_packed, raw_edges, max_ring_size=12, planar
     return out
 
 
-def solve_bond_orders_aromatic(
+def _nonmetal_ligand_components(atoms, edges):
+    """
+    Map each non-TM atom id → ligand component id (connected via non–M–L edges only).
+    Intended for single-TM complexes; multiple TM still get separate ligand graphs.
+    """
+    non_tm = {a[0] for a in atoms if not base.is_TM(a[1])}
+    adj = defaultdict(set)
+    for i, j, ei, ej in edges:
+        if _is_tm_nm_edge(ei, ej):
+            continue
+        if i in non_tm and j in non_tm:
+            adj[i].add(j)
+            adj[j].add(i)
+    lig_id = {}
+    next_id = 0
+    for start in non_tm:
+        if start in lig_id:
+            continue
+        stack = [start]
+        lig_id[start] = next_id
+        while stack:
+            cur = stack.pop()
+            for nb in adj[cur]:
+                if nb not in lig_id:
+                    lig_id[nb] = next_id
+                    stack.append(nb)
+        next_id += 1
+    return lig_id
+
+
+def ligand_ml_contacts_by_component(atoms, edges):
+    """
+    After connectivity: ligand_id → list of M–L contacts on that ligand fragment.
+
+    Each contact: (tm_idx, lig_idx, distance_Å, metal_sym, lig_sym).
+    """
+    atom_el = {a[0]: a[1] for a in atoms}
+    xyz = {a[0]: (a[2], a[3], a[4]) for a in atoms}
+    lig_comp = _nonmetal_ligand_components(atoms, edges)
+    out = defaultdict(list)
+    for i, j, ei, ej in edges:
+        if not _is_tm_nm_edge(ei, ej):
+            continue
+        tm, lig = _tm_nm_orient(i, j, ei, ej)
+        if lig not in lig_comp:
+            continue
+        lid = lig_comp[lig]
+        d = dist(xyz[tm], xyz[lig])
+        out[lid].append((tm, lig, d, atom_el[tm], atom_el[lig]))
+    return dict(out)
+
+
+def _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el):
+    """
+    One (tm, c, o) per TM–C contact that is a terminal carbonyl: nonmetal component is
+    exactly {C,O}, coordination through C, and C–O exists in *edges*.
+    """
+    lig_comp = _nonmetal_ligand_components(atoms, edges)
+    out = []
+    for tm, lig in tm_nm_keys:
+        if atom_el.get(lig) != "C":
+            continue
+        lid = lig_comp.get(lig)
+        if lid is None:
+            continue
+        comp = {aid for aid, l in lig_comp.items() if l == lid}
+        if len(comp) != 2:
+            continue
+        syms = {atom_el.get(aid) for aid in comp}
+        if syms != {"C", "O"}:
+            continue
+        c_idx = lig
+        o_idx = next(aid for aid in comp if atom_el.get(aid) == "O")
+        has_co = False
+        for i, j, ei, ej in edges:
+            if {i, j} == {c_idx, o_idx} and "C" in (ei, ej) and "O" in (ei, ej):
+                has_co = True
+                break
+        if not has_co:
+            continue
+        out.append((tm, c_idx, o_idx))
+    return out
+
+
+def _ligand_ml_zcov_pair_weights(
+    atoms,
+    edges,
+    *,
+    epsilon=ML_DISTANCE_CLASS_EPSILON,
+    same_element_pair_only=True,
+):
+    """
+    Pairwise weights for soft z_cov alignment: similar contact length → same σ vs dative.
+
+    Returns [(weight, (tm, lig_a), (tm, lig_b)), ...].
+    """
+    by_ligand = ligand_ml_contacts_by_component(atoms, edges)
+    pairs = []
+    for contacts in by_ligand.values():
+        buckets = defaultdict(list)
+        for tm, lig, d, sym_m, sym_l in contacts:
+            key = (sym_m, sym_l) if same_element_pair_only else 0
+            buckets[key].append(((tm, lig), d))
+        for items in buckets.values():
+            n = len(items)
+            for i in range(n):
+                (key_a, d_a) = items[i]
+                for j in range(i + 1, n):
+                    (key_b, d_b) = items[j]
+                    w = max(0.0, float(epsilon) - abs(d_a - d_b))
+                    if w > 0.0:
+                        pairs.append((w, key_a, key_b))
+    return pairs
+
+
+def solve_bond_orders(
     atoms,
     edges,
     aromatic_systems,
@@ -1484,7 +1951,18 @@ def solve_bond_orders_aromatic(
     *,
     metal_adjacency_edges=None,
     tm_ox_minimize_weight=None,
+    aromatic_huckel_n=AROMATIC_HUCKEL_N,
+    ml_distance_class_weight=None,
+    c_lp_tm_neighbor_hard=None,
+    retry_relax_c_lp_tm=True,
+    __from_c_lp_relaxed_retry=False,
 ):
+    apply_c_lp_tm = (
+        ILP_HARD_C_LP_ONLY_TM_NEIGHBORS
+        if c_lp_tm_neighbor_hard is None
+        else bool(c_lp_tm_neighbor_hard)
+    )
+
     prob = pulp.LpProblem("BondOrderAssignmentAromatic", pulp.LpMinimize)
 
     atom_el = {i: el for i, el, *_ in atoms}
@@ -1500,6 +1978,8 @@ def solve_bond_orders_aromatic(
         if key not in seen_tm_nm:
             seen_tm_nm.add(key)
             tm_nm_keys.append(key)
+    tm_nm_keys = _filter_tm_nm_keys_agostic_shadow_ligands(tm_nm_keys, atom_el, edges)
+    tm_nm_keys = _filter_tm_nm_keys_oxo_bridge_shadow_center(tm_nm_keys, atom_el, edges)
 
     u2 = {}
     u3 = {}
@@ -1545,7 +2025,10 @@ def solve_bond_orders_aromatic(
                 tm, lig = _tm_nm_orient(a, b, ea, eb)
                 if lig != idx:
                     continue
-                terms.append(b_tm[(tm, lig)])
+                key = (tm, lig)
+                if key not in b_tm:
+                    continue  # agostic-shadowed M–X (ILP keeps M–H only)
+                terms.append(b_tm[key])
             else:
                 kk = (min(a, b), max(a, b))
                 terms.append(1 + u2[kk] + u3[kk])
@@ -1558,6 +2041,10 @@ def solve_bond_orders_aromatic(
     )
 
     lp, oct_plus, oct_minus, q, abs_q, q_neg = {}, {}, {}, {}, {}, {}
+    b_oct8_choice = {}
+    si_oct8_choice = {}
+    s_oct_choice = {}
+    p_oct_choice = {}
     for i, el, *_ in atoms:
         if base.is_tm(el) or el not in base.VALENCE_ELECTRONS:
             continue
@@ -1569,6 +2056,28 @@ def solve_bond_orders_aromatic(
         lp[i] = pulp.LpVariable(f"lp_{i}", lowBound=0, cat="Integer")
         oct_plus[i] = pulp.LpVariable(f"octp_{i}", lowBound=0, cat="Integer")
         oct_minus[i] = pulp.LpVariable(f"octm_{i}", lowBound=0, cat="Integer")
+        if el == "B":
+            # For boron: choose 6e (y=0) vs 8e (y=1) local-electron target.
+            b_oct8_choice[i] = pulp.LpVariable(f"b8_{i}", cat="Binary")
+        if (
+            el == "Si"
+            and i in tm_neighbor_atoms
+        ):
+            # For TM-bound silicon: choose 6e (y=0) vs 8e (y=1) local-electron target.
+            # (Models silylene-like :SiR2 donation while preserving hard-octet.)
+            si_oct8_choice[i] = pulp.LpVariable(f"si8_{i}", cat="Binary")
+        if el == "S":
+            # For sulfur: allow 8e/10e/12e expanded-octet targets (equal preference).
+            y10 = pulp.LpVariable(f"s10_{i}", cat="Binary")
+            y12 = pulp.LpVariable(f"s12_{i}", cat="Binary")
+            prob += y10 + y12 <= 1
+            s_oct_choice[i] = (y10, y12)
+        if el == "P":
+            # For phosphorus: allow 8e/10e/12e expanded-octet targets (equal preference).
+            y10 = pulp.LpVariable(f"p10_{i}", cat="Binary")
+            y12 = pulp.LpVariable(f"p12_{i}", cat="Binary")
+            prob += y10 + y12 <= 1
+            p_oct_choice[i] = (y10, y12)
 
     for i, el, *_ in atoms:
         if i not in q:
@@ -1581,12 +2090,24 @@ def solve_bond_orders_aromatic(
             prob += abs_q[i] >= -q[i]
             prob += q_neg[i] >= -q[i]
             continue
-        oct_target = 2 if el in ("H", "Li") else 8
+        if el == "B" and i in b_oct8_choice:
+            oct_target = 6 + 2 * b_oct8_choice[i]
+        elif el == "Si" and i in si_oct8_choice:
+            oct_target = 6 + 2 * si_oct8_choice[i]
+        elif el == "S" and i in s_oct_choice:
+            y10, y12 = s_oct_choice[i]
+            oct_target = 8 + 2 * y10 + 4 * y12
+        elif el == "P" and i in p_oct_choice:
+            y10, y12 = p_oct_choice[i]
+            oct_target = 8 + 2 * y10 + 4 * y12
+        else:
+            oct_target = 2 if el in ("H", "Li") else 8
         local_e = 2 * lp[i] + 2 * bond_sum
         assigned_e = 2 * lp[i] + bond_sum
         prob += local_e - oct_target == oct_plus[i] - oct_minus[i]
-        prob += oct_plus[i] == 0
-        prob += oct_minus[i] == 0
+        if ILP_HARD_OCTET:
+            prob += oct_plus[i] == 0
+            prob += oct_minus[i] == 0
         prob += q[i] == ve - assigned_e
         prob += abs_q[i] >= q[i]
         prob += abs_q[i] >= -q[i]
@@ -1607,163 +2128,248 @@ def solve_bond_orders_aromatic(
 
     for i, j, ei, ej in ilp_edges:
         key = (min(i, j), max(i, j))
-        if ei == "H" or ej == "H":
+        if (ei == "H" or ej == "H"):
             prob += u3[key] == 0
             continue
-        if base.is_TM(ei) or base.is_TM(ej):
+        if (base.is_TM(ei) or base.is_TM(ej)):
             prob += u3[key] == 0
             continue
-        if heavy_deg[i] > 2 or heavy_deg[j] > 2:
+        if (heavy_deg[i] > 2 or heavy_deg[j] > 2):
             prob += u3[key] == 0
 
-    # Monatomic F/Cl/Br/I/H: fix covalent single bond; still in ILP for q/lp.
+    # Monatomic ML single covalent rule:
+    # - F/Cl/Br/I at TM are forced to a covalent single bond (b_tm=1).
+    # - H is forced only when isolated (no non-TM neighbor).
     for tm, lig in tm_nm_keys:
-        if atom_el[lig] not in TM_MONATOMIC_COV_LIGANDS:
+        if not _force_monatomic_ml_single_cov(lig, atom_el, edges):
             continue
         prob += z_cov_tm[(tm, lig)] == 1
         prob += u2_tm[(tm, lig)] == 0
         prob += u3_tm[(tm, lig)] == 0
 
+    # Terminal CO (2-atom C+O fragment, M–L through C): C≡O triple; M–C dative (b_tm=0).
+    terminal_cos = _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el)
+    co_triple_done = set()
+    for tm, c_idx, o_idx in terminal_cos:
+        kk = (min(c_idx, o_idx), max(c_idx, o_idx))
+        if kk not in u2:
+            raise RuntimeError(
+                f"Terminal CO: C–O edge {kk} not in ILP edge set (check connectivity)"
+            )
+        if kk not in co_triple_done:
+            prob += u2[kk] == 1
+            prob += u3[kk] == 1
+            co_triple_done.add(kk)
+        prob += b_tm[(tm, c_idx)] == 0
+
     # --- Aromatic 4n+2 penalty ---
     aromatic_dev_terms = []
-    for sys_idx, sys_atoms in enumerate(aromatic_systems):
-        # pi_e = 2 * (#internal double-bond EDGES in system) + 2 * (hetero / ring-C LP contributions)
-        # Count double bonds by EDGE (once per bond), not by per-atom incidence.
-        sys_atom_set = set(sys_atoms)
-        sys_edges = sorted(
-            {
-                (min(a, b), max(a, b))
-                for i in sys_atoms
-                for a, b in inc_edges.get(i, [])
-                if (a in sys_atom_set and b in sys_atom_set)
-            }
-        )
-        internal_double_edges = pulp.lpSum(
-            u2[(a, b)] for a, b in sys_edges
-        ) if sys_edges else 0
-        internal_triple_edges = pulp.lpSum(
-            u3[(a, b)] for a, b in sys_edges
-        ) if sys_edges else 0
+    if ILP_WEIGHT_AROMATIC_DEVIATION > 0:
+        for sys_idx, sys_atoms in enumerate(aromatic_systems):
+            # pi_e = 2 * (#internal double-bond EDGES) + 2 per ring atom with LP not on a ring double bond.
+            # Count double bonds by EDGE (once per bond), not by per-atom incidence.
+            sys_atom_set = set(sys_atoms)
+            sys_edges = sorted(
+                {
+                    (min(a, b), max(a, b))
+                    for i in sys_atoms
+                    for a, b in inc_edges.get(i, [])
+                    if (a in sys_atom_set and b in sys_atom_set)
+                }
+            )
+            internal_double_edges = pulp.lpSum(
+                u2[(a, b)] for a, b in sys_edges
+            ) if sys_edges else 0
+            internal_triple_edges = pulp.lpSum(
+                u3[(a, b)] for a, b in sys_edges
+            ) if sys_edges else 0
 
-        double_present = {}
-        lp_pair = {}
-        for i in sys_atoms:
-            dsum = pulp.lpSum(
-                u2[(min(a, b), max(a, b))] for a, b in inc_edges.get(i, [])
-                if (a in sys_atom_set and b in sys_atom_set)
-            ) if inc_edges.get(i) else 0
-            dp = pulp.LpVariable(f"sys{sys_idx}_dblp_{i}", cat="Binary")
-            double_present[i] = dp
-            deg = max(1, len([1 for a, b in inc_edges.get(i, []) if a in sys_atom_set and b in sys_atom_set]))
-            prob += dsum >= dp
-            prob += dsum <= deg * dp
-
-            if atom_el[i] in ("O", "N", "S", "P") and i in lp:
-                lpb = pulp.LpVariable(f"sys{sys_idx}_lppair_{i}", cat="Binary")
-                lp_pair[i] = lpb
-                prob += lp[i] >= lpb
-                prob += lpb <= 1 - dp
-            elif atom_el[i] == "C" and i in lp and i not in tm_neighbor_atoms:
-                # Like O/N/S/P: optional 2e from one LP toward pi, only if no internal
-                # double from this atom in the system (dp), and only if "unsaturated":
-                # any incident multiple bond in the full graph, or q <= -1.
-                mult_inc = (
-                    pulp.lpSum(
-                        u2[(min(a, b), max(a, b))] + u3[(min(a, b), max(a, b))]
+            double_present = {}
+            lp_pair = {}
+            for i in sys_atoms:
+                dsum = pulp.lpSum(
+                    u2[(min(a, b), max(a, b))] for a, b in inc_edges.get(i, [])
+                    if (a in sys_atom_set and b in sys_atom_set)
+                ) if inc_edges.get(i) else 0
+                dp = pulp.LpVariable(f"sys{sys_idx}_dblp_{i}", cat="Binary")
+                double_present[i] = dp
+                deg = max(
+                    1,
+                    len([
+                        1
                         for a, b in inc_edges.get(i, [])
-                    )
-                    if inc_edges.get(i)
-                    else 0
+                        if a in sys_atom_set and b in sys_atom_set
+                    ]),
                 )
-                mult_any = pulp.LpVariable(f"sys{sys_idx}_multany_{i}", cat="Binary")
-                max_mult = 2 * max(1, len(inc_edges.get(i, [])))
-                prob += mult_inc >= mult_any
-                prob += mult_inc <= max_mult * mult_any
-                neg_c = pulp.LpVariable(f"sys{sys_idx}_negc_{i}", cat="Binary")
-                prob += q[i] <= -1 + 5 * (1 - neg_c)
-                prob += q[i] >= -4 * neg_c
-                unsat = pulp.LpVariable(f"sys{sys_idx}_unsat_{i}", cat="Binary")
-                prob += mult_any + neg_c <= 2 * unsat
-                prob += mult_any + neg_c >= unsat
-                lpb = pulp.LpVariable(f"sys{sys_idx}_lppair_{i}", cat="Binary")
-                lp_pair[i] = lpb
-                prob += lp[i] >= lpb
-                prob += lpb <= 1 - dp
-                prob += lpb <= unsat
+                prob += dsum >= dp
+                prob += dsum <= deg * dp
+
+                if i in lp:
+                    lpb = pulp.LpVariable(f"sys{sys_idx}_lppair_{i}", cat="Binary")
+                    lp_pair[i] = lpb
+                    prob += lp[i] >= lpb
+                    prob += lpb <= 1 - dp
+                else:
+                    lp_pair[i] = 0
+
+            pi_e = (
+                2 * (internal_double_edges - internal_triple_edges)
+                + 4 * internal_triple_edges
+                + pulp.lpSum(2 * lp_pair[i] for i in sys_atoms)
+            )
+            dev_p = pulp.LpVariable(f"sys{sys_idx}_devp", lowBound=0, cat="Integer")
+            dev_m = pulp.LpVariable(f"sys{sys_idx}_devm", lowBound=0, cat="Integer")
+            if aromatic_huckel_n is not None:
+                pi_target = 4 * int(aromatic_huckel_n) + 2
+                prob += pi_e - pi_target == dev_p - dev_m
             else:
-                lp_pair[i] = 0
+                max_pi = max(2, 4 * len(sys_atoms))
+                kmax = max(0, (max_pi - 2) // 4)
+                k = pulp.LpVariable(
+                    f"sys{sys_idx}_k", lowBound=0, upBound=kmax, cat="Integer"
+                )
+                prob += pi_e - (4 * k + 2) == dev_p - dev_m
+            aromatic_dev_terms.append(dev_p + dev_m)
 
-        # A double bond contributes 2 pi electrons; a triple contributes 4 (two pi bonds).
-        pi_e = (
-            2 * (internal_double_edges - internal_triple_edges)
-            + 4 * internal_triple_edges
-            + pulp.lpSum(2 * lp_pair[i] for i in sys_atoms)
-        )
-        max_pi = max(2, 4 * len(sys_atoms))
-        kmax = max(0, (max_pi - 2) // 4)
-        k = pulp.LpVariable(f"sys{sys_idx}_k", lowBound=0, upBound=kmax, cat="Integer")
-        dev_p = pulp.LpVariable(f"sys{sys_idx}_devp", lowBound=0, cat="Integer")
-        dev_m = pulp.LpVariable(f"sys{sys_idx}_devm", lowBound=0, cat="Integer")
-        prob += pi_e - (4 * k + 2) == dev_p - dev_m
-        aromatic_dev_terms.append(dev_p + dev_m)
-
-    # Molecular charge: Σfc(ligands) + Σox(TM) − Σ(covalent M–L orders) = mol_charge.
-    # ox(TM) ∈ TM_COMMON_OXIDATION_STATES; b_tm=0 when no Lewis M–L bond.
-    tm_ox_vars = _tm_oxidation_ilp_vars(prob, atoms)
-    sigma_cov_ml = (
+    tm_ox_vars = _tm_oxidation_ilp_vars(prob, atoms, use_discrete_states=True)
+    sigma_cov_ml_all = (
         pulp.lpSum(b_tm[k] for k in tm_nm_keys) if tm_nm_keys else 0
     )
+    eta_lig_by_metal = _eta_ligand_atoms_by_metal(atoms, edges)
+    sigma_cov_ml_non_eta_terms = [
+        b_tm[(tm, lig)]
+        for tm, lig in tm_nm_keys
+        if lig not in eta_lig_by_metal.get(tm, ())
+        # F/Cl/Br/I: forced covalent b_tm in ILP; omit from ox≥σ so halide complexes stay feasible.
+        and atom_el[lig] not in TM_MONATOMIC_COV_LIGANDS
+    ]
+    sigma_cov_ml_non_eta = (
+        pulp.lpSum(sigma_cov_ml_non_eta_terms) if sigma_cov_ml_non_eta_terms else 0
+    )
+
+    # Hard: dative-only M–L (b_tm == 0) requires lp >= 1 on the ligand atom, except:
+    #   • η/haptic atoms (lp == 0 allowed);
+    #   • bridging/agostic H (non-TM neighbour in edges).
+    # M–X dropped from tm_nm_keys when X is agostic parent of bridging H (M–H–X).
+    for tm, lig in tm_nm_keys:
+        if lig in eta_lig_by_metal.get(tm, ()):
+            continue
+        if lig not in lp:
+            continue
+        if atom_el[lig] == "H" and not _force_monatomic_ml_single_cov(lig, atom_el, edges):
+            continue
+        # b_tm ∈ {0,1,2,3}. Enforce lp>=1 when b_tm==0, else lp>=0.
+        prob += lp[lig] >= 1 - b_tm[(tm, lig)]
+
     ligand_q_sum = pulp.lpSum(q[i] for i in q) if q else 0
     tm_ox_sum = pulp.lpSum(
         v if not isinstance(v, int) else v for v in tm_ox_vars.values()
     )
-    prob += ligand_q_sum + tm_ox_sum - sigma_cov_ml == mol_charge
+    if ILP_HARD_MOL_CHARGE_BALANCE:
+        prob += ligand_q_sum + tm_ox_sum - sigma_cov_ml_all == mol_charge
 
-    if tm_ox_vars:
-        prob += tm_ox_sum >= sigma_cov_ml
-
-    total_abs_q_all = pulp.lpSum(abs_q.values()) if abs_q else 0
-    absq_match_abs = pulp.LpVariable("absq_match_abs", lowBound=0, cat="Integer")
-    prob += absq_match_abs >= total_abs_q_all - abs(mol_charge)
-    prob += absq_match_abs >= abs(mol_charge) - total_abs_q_all
+    if ILP_HARD_OX_GE_SIGMA and tm_ox_vars:
+        prob += tm_ox_sum >= sigma_cov_ml_non_eta
 
     octet_penalty = pulp.lpSum(oct_plus.values()) + pulp.lpSum(oct_minus.values())
     formal_charge_penalty = pulp.lpSum(abs_q.values()) if abs_q else 0
     tm_nm_high_order = (
         pulp.lpSum(u2_tm[k] + u3_tm[k] for k in tm_nm_keys) if tm_nm_keys else 0
     )
-    double_bond_penalty = pulp.lpSum(
-        u2[(min(i, j), max(i, j))] + u3[(min(i, j), max(i, j))] for i, j, *_ in ilp_edges
-    ) + tm_nm_high_order
     eneg_neg_charge_penalty = pulp.lpSum(
         max(0.0, 4.0 - base.ENEG.get(el, 2.0)) * q_neg[i]
         for i, el, *_ in atoms if i in q_neg
     )
     aromatic_penalty = pulp.lpSum(aromatic_dev_terms) if aromatic_dev_terms else 0
 
-    ox_min_w = TM_OX_MINIMIZE_WEIGHT if tm_ox_minimize_weight is None else tm_ox_minimize_weight
-    tm_ox_penalty = pulp.lpSum(
-        v for v in tm_ox_vars.values() if not isinstance(v, int)
-    ) if tm_ox_vars else 0
-
-    for i, el, *_ in atoms:
-        if el == "C" and i in lp and i not in tm_neighbor_atoms:
-            prob += lp[i] == 0
-
-    prob += (
-        100 * formal_charge_penalty
-        # + 100 * absq_match_abs
-        # + 100 * double_bond_penalty
-        + 10 * eneg_neg_charge_penalty
-        + 100 * aromatic_penalty
-        + ox_min_w * tm_ox_penalty
+    eta_internal_keys = _eta_group_internal_lp_edge_keys(atoms, edges)
+    eta_group_u2_sum = (
+        pulp.lpSum(u2[k] for k in eta_internal_keys if k in u2)
+        if eta_internal_keys
+        else 0
     )
+
+    ml_zcov_terms = []
+    for pidx, (w_ij, key_a, key_b) in enumerate(
+        _ligand_ml_zcov_pair_weights(atoms, edges)
+    ):
+        if key_a not in z_cov_tm or key_b not in z_cov_tm:
+            continue
+        za, zb = z_cov_tm[key_a], z_cov_tm[key_b]
+        diff = pulp.LpVariable(f"mlzc_{pidx}", cat="Binary")
+        prob += diff >= za - zb
+        prob += diff >= zb - za
+        ml_zcov_terms.append(w_ij * diff)
+    ml_zcov_penalty = pulp.lpSum(ml_zcov_terms) if ml_zcov_terms else 0
+
+    ml_zcov_w = (
+        ILP_WEIGHT_ML_DISTANCE_CLASS
+        if ml_distance_class_weight is None
+        else ml_distance_class_weight
+    )
+    # Note: we intentionally do NOT add a "minimize TM oxidation state" soft objective
+    # (tm_ox_penalty). TM oxidation variables remain present for hard constraints.
+
+    if apply_c_lp_tm:
+        for i, el, *_ in atoms:
+            if el == "C" and i in lp and i not in tm_neighbor_atoms:
+                prob += lp[i] == 0
+
+    if ILP_HARD_ETA_CARBON_LP_ZERO:
+        for i in _eta_carbon_atom_ids(atoms, edges):
+            if i in lp:
+                prob += lp[i] == 0
+
+    objective_terms = []
+    if ILP_WEIGHT_FORMAL_CHARGE > 0:
+        objective_terms.append(ILP_WEIGHT_FORMAL_CHARGE * formal_charge_penalty)
+    if ILP_WEIGHT_ENEG_NEGATIVE_FC > 0:
+        objective_terms.append(ILP_WEIGHT_ENEG_NEGATIVE_FC * eneg_neg_charge_penalty)
+    if ILP_WEIGHT_AROMATIC_DEVIATION > 0:
+        objective_terms.append(ILP_WEIGHT_AROMATIC_DEVIATION * aromatic_penalty)
+    if ml_zcov_w > 0:
+        objective_terms.append(ml_zcov_w * ml_zcov_penalty)
+    if ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS > 0 and eta_internal_keys:
+        objective_terms.append(
+            -ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS * eta_group_u2_sum
+        )
+
+    if not objective_terms:
+        raise RuntimeError("ILP objective is empty: enable at least one ILP_WEIGHT_* term")
+    prob += pulp.lpSum(objective_terms)
 
     status = prob.solve(pulp.PULP_CBC_CMD(msg=False))
     if pulp.LpStatus[status] not in ("Optimal", "Integer Feasible"):
+        if (
+            retry_relax_c_lp_tm
+            and c_lp_tm_neighbor_hard is None
+            and ILP_HARD_C_LP_ONLY_TM_NEIGHBORS
+            and apply_c_lp_tm
+        ):
+            return solve_bond_orders(
+                atoms,
+                edges,
+                aromatic_systems,
+                mol_charge=mol_charge,
+                metal_adjacency_edges=metal_adjacency_edges,
+                tm_ox_minimize_weight=tm_ox_minimize_weight,
+                aromatic_huckel_n=aromatic_huckel_n,
+                ml_distance_class_weight=ml_distance_class_weight,
+                c_lp_tm_neighbor_hard=False,
+                retry_relax_c_lp_tm=False,
+                __from_c_lp_relaxed_retry=True,
+            )
+        extra = ""
+        if __from_c_lp_relaxed_retry:
+            extra = (
+                " (still infeasible after retrying without "
+                "ILP_HARD_C_LP_ONLY_TM_NEIGHBORS / remote-C lp=0)"
+            )
         raise RuntimeError(
             f"ILP failed: {pulp.LpStatus[status]} "
-            "(check mol_charge, connectivity, and LP/octet balance on donors)"
+            "(check mol_charge, η-carbon lp=0 vs ring anion/aromatic 6π, connectivity, "
+            "and LP/octet balance on donors)"
+            + extra
         )
 
     bonds = []
@@ -1811,20 +2417,37 @@ def _ml_bo_zero_from_adj(bo0, metal_adjacency_edges, n_atoms):
     return out
 
 
-def _expand_eta_dative_ligands(metal_idx, l_seeds, ml_bo_zero, atoms, adj_lewis):
+def _expand_eta_dative_ligands(
+    metal_idx,
+    l_seeds,
+    ml_bo_zero,
+    atoms,
+    adj_lewis,
+    *,
+    coord_indices=None,
+    lig_comp=None,
+):
     """
-    All M–L (b_tm=0) C/N ligands in the same C/N component as any CBC L seed (η ring).
+    All M–L (b_tm=0) contacts in the same η coordinating group as any CBC L seed.
     """
     metal_contacts = {lig for (tm, lig) in ml_bo_zero if tm == metal_idx}
     seeds = [a for a in l_seeds if a in metal_contacts]
     if not seeds:
         return set()
+    if coord_indices is not None and lig_comp is not None:
+        out = set()
+        for group in _eta_coordinating_groups(
+            metal_idx, coord_indices, lig_comp, adj_lewis
+        ):
+            if any(s in group for s in seeds):
+                out.update(i for i in group if (metal_idx, i) in ml_bo_zero)
+        return out
     visited = set(seeds)
     queue = list(seeds)
     while queue:
         cur = queue.pop()
         for nb in adj_lewis[cur]:
-            if nb not in metal_contacts or atoms[nb] not in ("C", "N"):
+            if nb not in metal_contacts:
                 continue
             if nb not in visited:
                 visited.add(nb)
@@ -1872,6 +2495,7 @@ def infer_dative_ml_pairs_cbc(
         fc0 = [fc.get(k, 0) for k in range(n_atoms)]
 
     ml_bo_zero = _ml_bo_zero_from_adj(bo0, adjacency, n_atoms)
+    lig_comp = _ligand_component_by_array_index(atoms, bo0, adjacency)
 
     cbc, _neighbor_cbc = classify_cbc_ligands(
         atoms,
@@ -1884,6 +2508,16 @@ def infer_dative_ml_pairs_cbc(
 
     def bo_ij(m, lig):
         return bo0.get((min(m, lig), max(m, lig)), 0)
+
+    coord_by_metal = defaultdict(set)
+    for tm, lig in ml_bo_zero:
+        coord_by_metal[tm].add(lig)
+    for tm, lig, ei, ej in adjacency:
+        if not is_TM(ei) ^ is_TM(ej):
+            continue
+        tmi = _array_idx(tm, n_atoms)
+        ligi = _array_idx(lig, n_atoms)
+        coord_by_metal[tmi].add(ligi)
 
     out = []
     seen = set()
@@ -1898,7 +2532,13 @@ def infer_dative_ml_pairs_cbc(
         dative_ligs = set(l_seeds)
         if l_seeds:
             dative_ligs |= _expand_eta_dative_ligands(
-                metal_idx, l_seeds, ml_bo_zero, atoms, adj_lewis
+                metal_idx,
+                l_seeds,
+                ml_bo_zero,
+                atoms,
+                adj_lewis,
+                coord_indices=coord_by_metal.get(metal_idx, ()),
+                lig_comp=lig_comp,
             )
 
         for lig in sorted(dative_ligs):
@@ -2181,8 +2821,8 @@ def print_tm_oxidation_sigma_report(
             status = f"⚠ WARNING: oxidation state {ox_state} not in common oxidation states {ref}"
 
         print(
-            f"  {label}:  oxidation state = {ox_state}   "
-            f"[{mol_charge} − ({ligands_sum}) + σ={sigma_sum}]"
+            f"  {label}:  oxidation state = {ox_state} = "
+            f"[{mol_charge} − ({ligands_sum}) + (σ={sigma_sum})]"
         )
         print(f"           {status}")
         print()
@@ -2199,7 +2839,7 @@ def main():
     raw = base.connectivity(atoms)
     aromatic_systems = aromatic_candidate_systems(atoms, raw)
 
-    bonds, lp_out, fc_out = solve_bond_orders_aromatic(
+    bonds, lp_out, fc_out = solve_bond_orders(
         atoms, raw, aromatic_systems, mol_charge=charge, metal_adjacency_edges=raw
     )
     atom_syms = [a[1] for a in atoms]
