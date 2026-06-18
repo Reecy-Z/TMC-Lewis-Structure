@@ -346,16 +346,6 @@ def parse_xyz_text(xyz_text: str):
     return atoms, coords
 
 
-def ensure_unknown_elements(backend, atoms):
-    unknown = sorted(set(a for a in atoms if a not in backend.VALENCE))
-    for u in unknown:
-        backend.VALENCE[u] = 4
-        backend.CORE_E[u] = 0
-        backend.COV_R[u] = 0.77
-        backend.STD_CAP[u] = 4
-        backend.ENEG[u] = 2.55
-
-
 def unsupported_transition_metals(engine, atoms: list[str]) -> list[str]:
     """Symbols present in XYZ that look like TMs but are not in engine.TM_SET."""
     tm_set = getattr(engine, "TM_SET", frozenset())
@@ -410,7 +400,7 @@ def run_aromatic_workflow_in_memory(engine, atoms, coords, mol_charge):
     aromatic_systems = engine.aromatic_candidate_systems(atoms_packed, raw_edges)
 
     try:
-        bonds, lp_out, fc_out = engine.solve_bond_orders_aromatic(
+        bonds, lp_out, fc_out = engine.solve_bond_orders(
             atoms_packed,
             raw_edges,
             aromatic_systems,
@@ -590,6 +580,31 @@ def _ml_bundle_bond_keys(dative_bonds):
     return keys
 
 
+def format_octet_report(
+    engine,
+    atoms,
+    coords,
+    bo,
+    lp,
+    fc,
+    *,
+    metal_adjacency_edges=None,
+) -> str:
+    """Octet check + non-metal formal charges (same text as Lewis-engine-ILP CLI)."""
+    lp_full = {i: lp.get(i, 0) for i in range(len(atoms))}
+    out = io.StringIO()
+    with contextlib.redirect_stdout(out):
+        engine.print_octet_report(
+            atoms,
+            bo,
+            lp_full,
+            fc,
+            metal_adjacency_edges=metal_adjacency_edges,
+            coords=coords,
+        )
+    return out.getvalue().strip()
+
+
 def format_cbc_report(
     backend, atoms, coords, bo, lp, fc, charge, *, metal_adjacency_edges=None
 ):
@@ -750,6 +765,27 @@ def build_viewer_payload(
     }
 
 
+def build_connectivity_viewer_payload(atoms, coords, raw_edges) -> dict:
+    """Step-1 connectivity only: every raw edge as order=1; M–L as normal bond lines."""
+    bonds_list = []
+    seen: set[tuple[int, int]] = set()
+    for i, j, _ei, _ej in raw_edges:
+        a, b = int(i) - 1, int(j) - 1
+        key = (min(a, b), max(a, b))
+        if key in seen:
+            continue
+        seen.add(key)
+        bonds_list.append({"i": a, "j": b, "order": 1})
+    return {
+        "atoms": atoms,
+        "coords": coords,
+        "bonds": bonds_list,
+        "dative_bonds": [],
+        "formal_charges": [0] * len(atoms),
+        "view_mode": "connectivity",
+    }
+
+
 def show_3d_preview(payload: dict):
     if not VIEWER_FILE.exists():
         st.error(f"Required viewer file missing: `{VIEWER_FILE.name}`")
@@ -807,7 +843,14 @@ def show_3d_preview(payload: dict):
     const fileInfo = document.getElementById('file-info');
     if (fileInfo) fileInfo.textContent = '';
     const visInfo = document.getElementById('vis-info');
-    if (visInfo) visInfo.textContent = 'ILP backend data loaded from Streamlit.';
+    const isConn = payload.view_mode === 'connectivity';
+    if (visInfo) {{
+      visInfo.textContent = isConn
+        ? 'Step-1 connectivity (all single bonds; M–L shown as lines).'
+        : 'ILP Lewis structure loaded from Streamlit.';
+    }}
+    const dativeSection = document.getElementById('dative-section');
+    if (dativeSection) dativeSection.style.display = isConn ? 'none' : '';
     const placeholderHint = document.querySelector('#viewer-placeholder .placeholder-hint');
     if (placeholderHint) placeholderHint.textContent = 'Structure is provided by Streamlit ILP backend.';
   }}
@@ -825,8 +868,15 @@ def show_3d_preview(payload: dict):
     if (placeholder) placeholder.style.display = 'none';
     const modeChip = document.getElementById('mode-chip');
     if (modeChip) {{
-      modeChip.textContent = `XYZ · ${{state.atoms.length}} atoms`;
+      modeChip.textContent = payload.view_mode === 'connectivity'
+        ? `Connectivity · ${{state.atoms.length}} atoms`
+        : `Lewis · ${{state.atoms.length}} atoms`;
       modeChip.className = 'ok';
+    }}
+    const fileInfo = document.getElementById('file-info');
+    if (fileInfo) {{
+      fileInfo.textContent = `${{state.bonds.length}} bonds`
+        + (payload.view_mode === 'connectivity' ? ' (step 1)' : ` · ${{state.dativeBonds.length}} dative`);
     }}
     if (typeof updateDativeInfo === 'function') updateDativeInfo();
     visualize();
@@ -1015,7 +1065,7 @@ def run_analyzer_app() -> None:
             xyz_text = st.session_state.demo_xyz_text
         atoms, coords = parse_xyz_text(xyz_text)
         validate_transition_metals(engine, atoms)
-        ensure_unknown_elements(engine, atoms)
+        engine.validate_atom_symbols(atoms)
 
         atoms_packed = [
             (i + 1, atoms[i], coords[i][0], coords[i][1], coords[i][2])
@@ -1048,6 +1098,15 @@ def run_analyzer_app() -> None:
             )
             choose_block = format_choose_block(bo, lp)
             metal_adj_0 = metal_adjacency_array_indices(engine, atoms, coords)
+            octet_report = format_octet_report(
+                engine,
+                atoms,
+                coords,
+                bo,
+                lp,
+                fc,
+                metal_adjacency_edges=metal_adj_0,
+            )
             cbc_report, cbc_bundle = format_cbc_report(
                 engine, atoms, coords, bo, lp, fc, int(mol_charge),
                 metal_adjacency_edges=metal_adj_0,
@@ -1068,6 +1127,19 @@ def run_analyzer_app() -> None:
 
         show_3d_preview(viewer_payload)
 
+        connectivity_payload = build_connectivity_viewer_payload(atoms, coords, raw_edges)
+        st.markdown(
+            '<div class="section-head">Connectivity Preview (Step 1)</div>',
+            unsafe_allow_html=True,
+        )
+        st.caption(
+            "Distance-based `connectivity()` only: each contact is a single bond line, "
+            "including M–L. No ILP bond orders, CBC, or dative arrows."
+        )
+        n_conn = len(connectivity_payload["bonds"])
+        st.caption(f"{n_conn} connectivity edge(s) from Lewis-engine step 1.")
+        show_3d_preview(connectivity_payload)
+
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
         c1.metric("Atoms", len(atoms))
@@ -1081,6 +1153,9 @@ def run_analyzer_app() -> None:
 
         st.markdown('<div class="section-head">$CHOOSE</div>', unsafe_allow_html=True)
         st.code(choose_block, language="text")
+
+        st.markdown('<div class="section-head">Octet / Valence</div>', unsafe_allow_html=True)
+        st.code(octet_report, language="text")
 
         st.markdown('<div class="section-head">SMILES</div>', unsafe_allow_html=True)
         try:
@@ -1113,7 +1188,8 @@ def run_analyzer_app() -> None:
 
         export_text = (
             f"Read {len(atoms)} atoms  (charge={int(mol_charge)})\n\n"
-            f"{choose_block}\n"
+            f"{choose_block}\n\n"
+            f"{octet_report}\n"
         )
         try:
             export_text += f"\nSMILES:\n{smiles_txt}\n"
@@ -1136,7 +1212,12 @@ def run_analyzer_app() -> None:
     except IlpSolveError as exc:
         show_ilp_solve_error(exc)
     except ValueError as exc:
-        st.error(f"Invalid XYZ input: {exc}")
+        msg = str(exc)
+        if msg.startswith("Unsupported element symbol"):
+            st.error("Unsupported element symbol in XYZ")
+            st.markdown(msg)
+        else:
+            st.error(f"Invalid XYZ input: {exc}")
     except Exception as exc:
         if "ILP failed" in str(exc):
             show_ilp_solve_error(exc)

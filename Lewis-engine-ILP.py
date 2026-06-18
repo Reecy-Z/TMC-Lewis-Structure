@@ -35,8 +35,7 @@ ILP_HARD_OCTET = True
 ILP_HARD_MOL_CHARGE_BALANCE = True
 # Σox(TM) ≥ Σb_tm on non-η M–L only (η orders excluded). Halogen (F/Cl/Br/I) ligands are omitted.
 ILP_HARD_OX_GE_SIGMA = True
-# C with no TM neighbor in connectivity: lp = 0 (default True). solve_bond_orders retries
-# once with this rule off if the first ILP solve is infeasible; a second failure is final.
+# C with no TM neighbor in connectivity: prefer lp = 0 (soft penalty when enabled).
 ILP_HARD_C_LP_ONLY_TM_NEIGHBORS = True
 # η-fragment carbons to a TM (≥ETA_MIN_COORDINATING_GROUP_SIZE): lp = 0.
 ILP_HARD_ETA_CARBON_LP_ZERO = True
@@ -47,6 +46,7 @@ ILP_WEIGHT_AROMATIC_DEVIATION = 100.0
 ILP_WEIGHT_ENEG_NEGATIVE_FC = 10.0
 ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
 ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
+ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 100.0
 
 # Aromatic 4n+2 target: fixed n in pi_target = 4*n + 2 (default n=1 → 6 pi e per system).
 # Set to None in solve_bond_orders(..., aromatic_huckel_n=None) to restore variable k.
@@ -57,6 +57,9 @@ ML_DISTANCE_CLASS_EPSILON = 0.15  # Å; w_ij = max(0, ε − |d_i − d_j|)
 
 # η fragments: ≥2 contiguous TM-bound atoms on one ligand (see _eta_carbon_atom_ids).
 ETA_MIN_COORDINATING_GROUP_SIZE = 2
+
+# CBC wall-time limit for prob.solve inside solve_bond_orders (0 = no limit).
+SOLVE_BOND_ORDERS_CBC_TIME_LIMIT_SEC = 10.0
 
 
 # Covalent radii: ccdc_covalent_radii.json (CCDC ChemistryLib; Z=1–118 + D). TM–L cutoffs use
@@ -1956,6 +1959,7 @@ def solve_bond_orders(
     c_lp_tm_neighbor_hard=None,
     retry_relax_c_lp_tm=True,
     __from_c_lp_relaxed_retry=False,
+    solve_time_limit_sec=SOLVE_BOND_ORDERS_CBC_TIME_LIMIT_SEC,
 ):
     apply_c_lp_tm = (
         ILP_HARD_C_LP_ONLY_TM_NEIGHBORS
@@ -2042,6 +2046,7 @@ def solve_bond_orders(
 
     lp, oct_plus, oct_minus, q, abs_q, q_neg = {}, {}, {}, {}, {}, {}
     b_oct8_choice = {}
+    c_oct8_choice = {}
     si_oct8_choice = {}
     s_oct_choice = {}
     p_oct_choice = {}
@@ -2059,6 +2064,9 @@ def solve_bond_orders(
         if el == "B":
             # For boron: choose 6e (y=0) vs 8e (y=1) local-electron target.
             b_oct8_choice[i] = pulp.LpVariable(f"b8_{i}", cat="Binary")
+        if el == "C" and i in tm_neighbor_atoms:
+            # For TM-bound carbon (carbene / related): allow 6e vs 8e local-electron targets.
+            c_oct8_choice[i] = pulp.LpVariable(f"c8_{i}", cat="Binary")
         if (
             el == "Si"
             and i in tm_neighbor_atoms
@@ -2092,6 +2100,8 @@ def solve_bond_orders(
             continue
         if el == "B" and i in b_oct8_choice:
             oct_target = 6 + 2 * b_oct8_choice[i]
+        elif el == "C" and i in c_oct8_choice:
+            oct_target = 6 + 2 * c_oct8_choice[i]
         elif el == "Si" and i in si_oct8_choice:
             oct_target = 6 + 2 * si_oct8_choice[i]
         elif el == "S" and i in s_oct_choice:
@@ -2240,8 +2250,6 @@ def solve_bond_orders(
         b_tm[(tm, lig)]
         for tm, lig in tm_nm_keys
         if lig not in eta_lig_by_metal.get(tm, ())
-        # F/Cl/Br/I: forced covalent b_tm in ILP; omit from ox≥σ so halide complexes stay feasible.
-        and atom_el[lig] not in TM_MONATOMIC_COV_LIGANDS
     ]
     sigma_cov_ml_non_eta = (
         pulp.lpSum(sigma_cov_ml_non_eta_terms) if sigma_cov_ml_non_eta_terms else 0
@@ -2310,10 +2318,14 @@ def solve_bond_orders(
     # Note: we intentionally do NOT add a "minimize TM oxidation state" soft objective
     # (tm_ox_penalty). TM oxidation variables remain present for hard constraints.
 
+    remote_c_lp_violation = {}
     if apply_c_lp_tm:
         for i, el, *_ in atoms:
             if el == "C" and i in lp and i not in tm_neighbor_atoms:
-                prob += lp[i] == 0
+                # Elastic remote-C lp=0: allow lp>0 but penalize it heavily.
+                v = pulp.LpVariable(f"rcv_{i}", lowBound=0, cat="Integer")
+                remote_c_lp_violation[i] = v
+                prob += lp[i] <= v
 
     if ILP_HARD_ETA_CARBON_LP_ZERO:
         for i in _eta_carbon_atom_ids(atoms, edges):
@@ -2327,6 +2339,11 @@ def solve_bond_orders(
         objective_terms.append(ILP_WEIGHT_ENEG_NEGATIVE_FC * eneg_neg_charge_penalty)
     if ILP_WEIGHT_AROMATIC_DEVIATION > 0:
         objective_terms.append(ILP_WEIGHT_AROMATIC_DEVIATION * aromatic_penalty)
+    if ILP_WEIGHT_REMOTE_C_LP_VIOLATION > 0 and remote_c_lp_violation:
+        objective_terms.append(
+            ILP_WEIGHT_REMOTE_C_LP_VIOLATION
+            * pulp.lpSum(remote_c_lp_violation.values())
+        )
     if ml_zcov_w > 0:
         objective_terms.append(ml_zcov_w * ml_zcov_penalty)
     if ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS > 0 and eta_internal_keys:
@@ -2338,38 +2355,27 @@ def solve_bond_orders(
         raise RuntimeError("ILP objective is empty: enable at least one ILP_WEIGHT_* term")
     prob += pulp.lpSum(objective_terms)
 
-    status = prob.solve(pulp.PULP_CBC_CMD(msg=False))
-    if pulp.LpStatus[status] not in ("Optimal", "Integer Feasible"):
+    cbc_opts: dict = {"msg": False}
+    if solve_time_limit_sec is not None and float(solve_time_limit_sec) > 0:
+        cbc_opts["timeLimit"] = float(solve_time_limit_sec)
+    status = prob.solve(pulp.PULP_CBC_CMD(**cbc_opts))
+    st = pulp.LpStatus[status]
+    if st not in ("Optimal", "Integer Feasible"):
+        # Infeasible / Unbounded are model issues, not wall-clock timeout.
+        _timeout_like = {"Not Solved", "Undefined"}
         if (
-            retry_relax_c_lp_tm
-            and c_lp_tm_neighbor_hard is None
-            and ILP_HARD_C_LP_ONLY_TM_NEIGHBORS
-            and apply_c_lp_tm
+            solve_time_limit_sec
+            and float(solve_time_limit_sec) > 0
+            and st in _timeout_like
         ):
-            return solve_bond_orders(
-                atoms,
-                edges,
-                aromatic_systems,
-                mol_charge=mol_charge,
-                metal_adjacency_edges=metal_adjacency_edges,
-                tm_ox_minimize_weight=tm_ox_minimize_weight,
-                aromatic_huckel_n=aromatic_huckel_n,
-                ml_distance_class_weight=ml_distance_class_weight,
-                c_lp_tm_neighbor_hard=False,
-                retry_relax_c_lp_tm=False,
-                __from_c_lp_relaxed_retry=True,
-            )
-        extra = ""
-        if __from_c_lp_relaxed_retry:
-            extra = (
-                " (still infeasible after retrying without "
-                "ILP_HARD_C_LP_ONLY_TM_NEIGHBORS / remote-C lp=0)"
+            raise RuntimeError(
+                f"ILP timeout: solve_bond_orders hit CBC timeLimit "
+                f"{float(solve_time_limit_sec):g}s (status {st})"
             )
         raise RuntimeError(
-            f"ILP failed: {pulp.LpStatus[status]} "
+            f"ILP failed: {st} "
             "(check mol_charge, η-carbon lp=0 vs ring anion/aromatic 6π, connectivity, "
-            "and LP/octet balance on donors)"
-            + extra
+            "remote-C lp preference, and LP/octet balance on donors)"
         )
 
     bonds = []
@@ -2386,6 +2392,21 @@ def solve_bond_orders(
     bonds.sort()
     lp_out = {i: int(round(pulp.value(v))) for i, v in lp.items()}
     fc_out = {i: int(round(pulp.value(v))) for i, v in q.items()}
+
+    # Stash remote-C lp violations for printing by the CLI.
+    base.LAST_REMOTE_C_LP_VIOLATIONS = []
+    if remote_c_lp_violation:
+        viol = sorted(
+            (
+                i,
+                atom_el.get(i, "?"),
+                lp_out.get(i, 0),
+                int(round(pulp.value(remote_c_lp_violation[i]))),
+            )
+            for i in remote_c_lp_violation
+            if lp_out.get(i, 0) > 0
+        )
+        base.LAST_REMOTE_C_LP_VIOLATIONS = viol
     for tm_i, ox_v in tm_ox_vars.items():
         if isinstance(ox_v, int):
             fc_out[tm_i] = ox_v
@@ -2864,6 +2885,11 @@ def main():
         atom_syms, bo0, lp_full, fc0,
         metal_adjacency_edges=metal_adj_0, coords=coords,
     )
+    viol = getattr(base, "LAST_REMOTE_C_LP_VIOLATIONS", None) or []
+    if viol:
+        items = ", ".join(f"{sym}{i}(lp={lpv},v={vv})" for i, sym, lpv, vv in viol[:25])
+        more = "" if len(viol) <= 25 else f" ... +{len(viol) - 25} more"
+        print(f"  ⚠ remote-C lp>0 used (elastic): {items}{more}")
 
     lp_by_arr = {k: lp_out.get(a[0], 0) for k, a in enumerate(atoms)}
     cbc_bundle = classify_cbc_ligands(

@@ -82,6 +82,7 @@
   .swatch{width:20px;height:20px;border-radius:4px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .1s}
   .swatch:hover{transform:scale(1.15)}
   .swatch.active{border-color:var(--fga)}
+  .bg-checker{background:repeating-conic-gradient(#b0b8c4 0% 25%,#e8ecf0 0% 50%) 50%/10px 10px}
   .slider-group{display:flex;align-items:center;gap:7px}
   .slider-val{font-family:var(--mono);font-size:11px;color:var(--fga);min-width:28px;text-align:right;font-weight:600}
   input[type="range"]{-webkit-appearance:none;height:4px;background:#cbd5e1;border-radius:2px;outline:none;cursor:pointer}
@@ -190,6 +191,7 @@
         <div class="swatch" style="background:#1b2a3a" data-color="#1b2a3a" onclick="setBgColor(this)" title="Navy"></div>
         <div class="swatch" style="background:#1a2a1a" data-color="#1a2a1a" onclick="setBgColor(this)" title="Forest"></div>
         <div class="swatch" style="background:#2a2a2a" data-color="#2a2a2a" onclick="setBgColor(this)" title="Charcoal"></div>
+        <div class="swatch bg-checker" data-color="transparent" onclick="setBgColor(this)" title="Transparent"></div>
         <div class="swatch" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);border:1px solid #555;position:relative;overflow:hidden" title="Custom" onclick="document.getElementById('bg-custom-input').click()">
           <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;text-shadow:0 0 3px #000;font-weight:700">+</span>
         </div>
@@ -221,6 +223,9 @@
           <input type="text" id="img-width" value="2400" style="flex:1;min-width:0;padding:3px 5px;font-size:10px" oninput="updateSaveLabel()">
           <span style="font-size:10px;color:var(--dim)">×</span>
           <input type="text" id="img-height" value="1800" style="flex:1;min-width:0;padding:3px 5px;font-size:10px" oninput="updateSaveLabel()">
+        </div>
+        <div style="font-size:9px;color:var(--dim);font-family:var(--mono);line-height:1.45">
+          Export height is adjusted to match the live 3D viewport aspect so the frame is not cropped.
         </div>
       </div>
     </div>
@@ -268,7 +273,7 @@
         <div class="ctrl-row" style="margin-bottom:4px">
           <span class="ctrl-label">Label size</span>
           <div class="slider-group">
-            <input type="range" id="label-size" min="8" max="28" value="12" style="width:80px">
+            <input type="range" id="label-size" min="8" max="50" value="12" style="width:80px">
             <span class="slider-val" id="label-size-val">12</span>
           </div>
         </div>
@@ -396,6 +401,7 @@ const state = {
   bgColor: '#dfe7df', labelColor: '#ffffff', dativeColor: '#FF9500',
   pyReady: false, lewisCode: null,
   _newFile: false,
+  sceneCamera: null,
 };
 
 // ══════════════════════════════════════════════════════════════════
@@ -405,6 +411,26 @@ const $ = id => document.getElementById(id);
 function showToast(msg,type=''){const t=$('toast');t.textContent=msg;t.className='show '+type;setTimeout(()=>t.className='',3000)}
 function setLoading(on,txt='Rendering…'){$('loading').classList.toggle('show',on);$('loading-text').textContent=txt}
 function toggleSection(hdr){const a=hdr.querySelector('.section-arrow'),b=hdr.parentElement.querySelector('.section-body');a.classList.toggle('closed');b.classList.toggle('hidden')}
+
+function defaultSceneCamera(){
+  return {center:{x:0,y:0,z:0},eye:{x:1.6,y:1.6,z:1.0},up:{x:0,y:0,z:1}};
+}
+function getSceneCamera(){
+  const el=$('plot');
+  try{
+    const cam=el._fullLayout?.scene?.camera;
+    if(cam?.eye) return JSON.parse(JSON.stringify(cam));
+  }catch(e){}
+  return state.sceneCamera||defaultSceneCamera();
+}
+function syncSceneCamera(){
+  if(!plotInit) return;
+  state.sceneCamera=getSceneCamera();
+}
+function attachPlotCameraListener(el){
+  el._plotlyCameraHandler=()=>syncSceneCamera();
+  el.on('plotly_relayout',el._plotlyCameraHandler);
+}
 
 // ══════════════════════════════════════════════════════════════════
 //  PYODIDE INITIALISATION
@@ -1127,9 +1153,10 @@ function buildFigure() {
   traces.push(...buildDativeTraces(ca, dativeBonds, dativeStyleOpts));
 
   const ax=()=>({showgrid:false,zeroline:false,showline:false,showticklabels:false,showspikes:false,showbackground:false,title:{text:''}});
+  const plotBg=plotlyBgColor(state.bgColor);
   const layout={
-    paper_bgcolor:state.bgColor,
-    scene:{bgcolor:state.bgColor,xaxis:ax(),yaxis:ax(),zaxis:ax(),
+    paper_bgcolor:plotBg,
+    scene:{bgcolor:plotBg,xaxis:ax(),yaxis:ax(),zaxis:ax(),
       camera:{center:{x:0,y:0,z:0},eye:{x:1.6,y:1.6,z:1.0},up:{x:0,y:0,z:1}},
       aspectmode:'data',dragmode:'orbit'},
     legend:{font:{color:'#D0D0D0',size:11},bgcolor:'rgba(20,20,40,0.85)',bordercolor:'#3A3A6A',borderwidth:1},
@@ -1153,10 +1180,12 @@ function visualize(){
         Plotly.purge(el);
         Plotly.newPlot(el,traces,layout,{responsive:true,displayModeBar:true,modeBarButtonsToRemove:['toImage','sendDataToCloud'],displaylogo:false});
         plotInit=true; state._newFile=false;
+        attachPlotCameraListener(el);
+        syncSceneCamera();
       } else {
-        let cam={center:{x:0,y:0,z:0},eye:{x:1.6,y:1.6,z:1.0},up:{x:0,y:0,z:1}};
-        try{cam=el._fullLayout.scene.camera;}catch(e){}
-        layout.scene.camera=cam; Plotly.react(el,traces,layout);
+        layout.scene.camera=getSceneCamera();
+        Plotly.react(el,traces,layout);
+        syncSceneCamera();
       }
     } catch(e){showToast('Render error: '+e.message,'error');console.error(e);}
     setLoading(false);
@@ -1165,7 +1194,7 @@ function visualize(){
 
 function resetCamera(){
   if (!plotInit) return;
-  Plotly.relayout($('plot'),{'scene.camera':{center:{x:0,y:0,z:0},eye:{x:1.6,y:1.6,z:1.0},up:{x:0,y:0,z:1}}});
+  Plotly.relayout($('plot'),{'scene.camera':defaultSceneCamera()}).then(syncSceneCamera);
 }
 window.addEventListener('resize',()=>{if(plotInit)Plotly.relayout($('plot'),{autosize:true});});
 
@@ -1210,33 +1239,118 @@ function setDativeColor(el){
   document.querySelectorAll('#dative-color-swatches .swatch').forEach(s=>s.classList.toggle('active',s===el));
   if(state.loaded) visualize();
 }
+function isBgTransparent(c){return c==='transparent';}
+function plotlyBgColor(c){return isBgTransparent(c)?'rgba(0,0,0,0)':c;}
+function applyViewerBg(c){
+  $('viewer').style.background=isBgTransparent(c)?'':'';
+  $('viewer').classList.toggle('bg-checker',isBgTransparent(c));
+}
+function updateBgActiveSwatch(c){
+  const el=$('bg-active-swatch');
+  el.classList.toggle('bg-checker',isBgTransparent(c));
+  el.style.background=isBgTransparent(c)?'':c;
+}
 function setBgColor(el){
   state.bgColor=el.dataset.color;
   document.querySelectorAll('#bg-swatches .swatch').forEach(s=>s.classList.toggle('active',s===el));
-  $('bg-active-swatch').style.background=el.dataset.color;
+  updateBgActiveSwatch(state.bgColor);
+  applyViewerBg(state.bgColor);
   $('bg-swatch-panel').style.display='none';
   if(state.loaded) visualize();
 }
 function setBgColorCustom(hex){
   state.bgColor=hex;
   document.querySelectorAll('#bg-swatches .swatch').forEach(s=>s.classList.remove('active'));
-  $('bg-active-swatch').style.background=hex;
+  updateBgActiveSwatch(hex);
+  applyViewerBg(hex);
   if(state.loaded) visualize();
 }
 
 // ══════════════════════════════════════════════════════════════════
 //  SAVE
 // ══════════════════════════════════════════════════════════════════
+function getPlotPixelSize(){
+  const el=$('plot');
+  const w=el?.clientWidth||el?.offsetWidth||800;
+  const h=el?.clientHeight||el?.offsetHeight||600;
+  return {w:Math.max(w,100),h:Math.max(h,100)};
+}
+
+/** Match export aspect to on-screen #plot so Plotly 3D does not clip left/right. */
+function resolveExportDimensions(){
+  const sc=parseInt($('img-scale').value)||3;
+  const baseW=parseInt($('img-width').value)||2400;
+  let baseH=parseInt($('img-height').value)||1800;
+  const {w:dispW,h:dispH}=getPlotPixelSize();
+  const displayAspect=dispW/dispH;
+  let heightAdjusted=false;
+  if(Math.abs(baseW/baseH-displayAspect)>0.02){
+    baseH=Math.max(100,Math.round(baseW/displayAspect));
+    heightAdjusted=true;
+  }
+  return {
+    width:baseW,
+    height:baseH,
+    scale:sc,
+    displayAspect,
+    exportAspect:baseW/baseH,
+    heightAdjusted,
+    outW:baseW*sc,
+    outH:baseH*sc,
+  };
+}
+
+function exportExtraZoom(){
+  const style=$('mol-style')?.value||'';
+  const labelSize=parseInt($('label-size')?.value,10)||12;
+  let z=1.1;
+  if(style==='symbolic_3d') z=1.18+Math.min(labelSize,50)/50*0.22;
+  return z;
+}
+
+function cameraForExport(cam,displayAspect,exportAspect,extraZoom){
+  const center=cam.center||{x:0,y:0,z:0};
+  const eye=cam.eye||{x:1.6,y:1.6,z:1.0};
+  const ex=eye.x-center.x, ey=eye.y-center.y, ez=eye.z-center.z;
+  let zoom=extraZoom||1;
+  if(displayAspect>0&&exportAspect>0&&displayAspect>exportAspect){
+    zoom*=Math.sqrt(displayAspect/exportAspect);
+  }
+  return {
+    center:{x:center.x,y:center.y,z:center.z},
+    up:cam.up||{x:0,y:0,z:1},
+    eye:{x:center.x+ex*zoom,y:center.y+ey*zoom,z:center.z+ez*zoom},
+  };
+}
+
 function saveImage(){
   if(!plotInit){showToast('Nothing to save','error');return;}
-  const fmt=$('img-format').value, w=parseInt($('img-width').value)||2400;
-  const h=parseInt($('img-height').value)||1800, sc=parseInt($('img-scale').value)||3;
+  const fmt=$('img-format').value;
+  const dims=resolveExportDimensions();
+  if(isBgTransparent(state.bgColor)&&fmt==='jpeg'){
+    showToast('JPEG cannot be transparent; use PNG','info');return;
+  }
+  const el=$('plot');
+  const camView=getSceneCamera();
+  const camExp=cameraForExport(camView,dims.displayAspect,dims.exportAspect,exportExtraZoom());
   const name=(state.atoms.length?state.atoms[0]:'mol')+'_structure';
-  Plotly.toImage($('plot'),{format:fmt,width:w,height:h,scale:sc}).then(url=>{
-    const a=document.createElement('a');a.href=url;a.download=`${name}_${w}x${h}.${fmt}`;
-    a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
-    showToast(`✓ Saved .${fmt}`,'success');
-  }).catch(e=>showToast('Export error: '+e.message,'error'));
+  const restore=()=>Plotly.relayout(el,{'scene.camera':camView}).then(syncSceneCamera);
+  Plotly.relayout(el,{'scene.camera':camExp}).then(()=>
+    Plotly.toImage(el,{format:fmt,width:dims.width,height:dims.height,scale:dims.scale})
+  ).then(url=>{
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`${name}_${dims.outW}x${dims.outH}.${fmt}`;
+    a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    const msg=dims.heightAdjusted
+      ? `✓ Saved .${fmt} (${dims.outW}×${dims.outH}, viewport aspect)`
+      : `✓ Saved .${fmt}`;
+    showToast(msg,'success');
+  }).catch(e=>showToast('Export error: '+e.message,'error'))
+    .finally(()=>{restore().catch(()=>{});});
 }
 function toggleSaveSettings(){
   const p=$('save-settings-panel'),open=p.style.display==='block';
@@ -1244,7 +1358,9 @@ function toggleSaveSettings(){
 }
 function updateSaveLabel(){
   const lbl=document.querySelector('#save-settings-toggle .vt-label');
-  if(lbl)lbl.textContent=`${($('img-format')?.value||'png').toUpperCase()} · ${$('img-scale')?.value||'3'}× · ${$('img-width')?.value||'2400'}×${$('img-height')?.value||'1800'}`;
+  if(!lbl) return;
+  const dims=resolveExportDimensions();
+  lbl.textContent=`${($('img-format')?.value||'png').toUpperCase()} · ${dims.scale}× · ${dims.outW}×${dims.outH}`;
 }
 
 // ══════════════════════════════════════════════════════════════════
