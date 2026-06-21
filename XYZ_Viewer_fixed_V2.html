@@ -559,82 +559,6 @@ def _get_lewis_json(xyz_text, charge_val=0):
                 "pi_bond_pair": pi_bond_pair
             })
 
-    DONOR_ONS = {"O", "N", "S"}
-    _ANG_MIN, _ANG_MAX = 170.0, 190.0
-
-    def _bo_ij(i, j):
-        return bo.get((min(i, j), max(i, j)), 0)
-
-    def _angle_center(a_idx, center_idx, c_idx):
-        ax, ay, az = coords[a_idx]
-        bx, by, bz = coords[center_idx]
-        cx, cy, cz = coords[c_idx]
-        v1 = (ax - bx, ay - by, az - bz)
-        v2 = (cx - bx, cy - by, cz - bz)
-        n1 = math.sqrt(v1[0]**2 + v1[1]**2 + v1[2]**2)
-        n2 = math.sqrt(v2[0]**2 + v2[1]**2 + v2[2]**2)
-        if n1 < 1e-10 or n2 < 1e-10:
-            return None
-        cosang = max(-1.0, min(1.0, (v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2])/(n1*n2)))
-        return math.degrees(math.acos(cosang))
-
-    def _draw_supplemental(tm, lig, ml_order):
-        if lp.get(lig, 0) < 1:
-            return False
-        if ml_order == 2:
-            return True
-        if ml_order != 1:
-            return False
-        for nbr in range(len(atoms)):
-            if nbr in (lig, tm) or is_TM(atoms[nbr]):
-                continue
-            if _bo_ij(lig, nbr) < 2:
-                continue
-            ang = _angle_center(tm, lig, nbr)
-            if ang is not None and _ANG_MIN <= ang <= _ANG_MAX:
-                return True
-        return False
-
-    seen_sup = set()
-    for (i, j), order in sorted(bo.items()):
-        if order <= 0:
-            continue
-        si, sj = atoms[i], atoms[j]
-        if is_TM(si) and not is_TM(sj):
-            tm, lig = i, j
-        elif is_TM(sj) and not is_TM(si):
-            tm, lig = j, i
-        else:
-            continue
-        if atoms[lig] not in DONOR_ONS:
-            continue
-        key = (min(tm, lig), max(tm, lig))
-        if key in l_pairs or key in seen_sup:
-            continue
-        if not _draw_supplemental(tm, lig, int(order)):
-            continue
-        dative_bonds.append({
-            "donor_atoms": [lig],
-            "acceptor": tm,
-            "pi_bond_pair": None,
-            "kind": "lp_on_covalent_ml",
-            "covalent_order": int(order),
-        })
-        seen_sup.add(key)
-
-    bundle_keys = set()
-    for d in dative_bonds:
-        if d.get("kind") != "lp_on_covalent_ml":
-            continue
-        lig = d["donor_atoms"][0]
-        tm = d["acceptor"]
-        bundle_keys.add((min(tm, lig), max(tm, lig)))
-    bonds_list = [
-        b
-        for b in bonds_list
-        if (min(b["i"], b["j"]), max(b["i"], b["j"])) not in bundle_keys
-    ]
-
     return json.dumps({
         "atoms": atoms, "coords": coords,
         "bonds": bonds_list, "dative_bonds": dative_bonds,
@@ -827,130 +751,14 @@ function parseFilter(str,n){
 // ══════════════════════════════════════════════════════════════════
 //  DATIVE ARROW TRACES
 // ══════════════════════════════════════════════════════════════════
-function mlBundlePairKey(i, j) {
-  return i < j ? `${i},${j}` : `${j},${i}`;
-}
-
-function mlBundleKeysFromDative(dativeBonds) {
-  const keys = new Set();
-  for (const d of dativeBonds) {
-    if (d.kind !== 'lp_on_covalent_ml') continue;
-    const donors = d.donor_atoms || [];
-    if (donors.length !== 1) continue;
-    keys.add(mlBundlePairKey(donors[0], d.acceptor));
-  }
-  return keys;
-}
-
-/** Even stripe offsets for n lines (matches double/triple covalent spacing). */
-function bondStripeOffsets(n) {
-  if (n === 2) return [-0.15, 0.15];
-  if (n === 3) return [-0.2, 0, 0.2];
-  const half = 0.2;
-  if (n <= 1) return [0];
-  const out = [];
-  for (let k = 0; k < n; k++) out.push(-half + (2 * half * k) / (n - 1));
-  return out;
-}
-
-function buildBundledCovalentDativeTraces(ca, d, styleOpts) {
-  const {isDark, bc, bcD, bcT, bw, color, shaftW, CONE_FRAC} = styleOpts;
-  const lig = d.donor_atoms[0];
-  const tm = d.acceptor;
-  const order = Math.min(3, Math.max(1, d.covalent_order || 1));
-  const pDonor = ca[lig];
-  const pMetal = ca[tm];
-  if (!pDonor || !pMetal) return [];
-
-  const nTotal = order + 1;
-  const stripes = bondStripeOffsets(nTotal);
-  const axis = vSub(pMetal, pDonor);
-  const nLen = vLen(axis);
-  if (nLen < 1e-10) return [];
-  const perp = vScl(perpVec(vScl(axis, 1 / nLen)), 1);
-  const covColor = order >= 3 ? bcT : order >= 2 ? bcD : bc;
-  const traces = [];
-
-  for (let k = 0; k < order; k++) {
-    const off = vScl(perp, stripes[k]);
-    const a = vAdd(pDonor, off);
-    const b = vAdd(pMetal, off);
-    traces.push({
-      type: 'scatter3d',
-      mode: 'lines',
-      x: [a[0], b[0], null],
-      y: [a[1], b[1], null],
-      z: [a[2], b[2], null],
-      line: {color: covColor, width: bw},
-      hoverinfo: 'none',
-      showlegend: false,
-    });
-  }
-
-  const offA = vScl(perp, stripes[order]);
-  const pOrigin = vAdd(pDonor, offA);
-  const pAcceptor = vAdd(pMetal, offA);
-  const axisA = vSub(pAcceptor, pOrigin);
-  const len = vLen(axisA);
-  if (len < 1e-6) return traces;
-  const axisN = vScl(axisA, 1 / len);
-  const coneLen = Math.min(CONE_FRAC * len, 0.6);
-  const pConeBase = vSub(pAcceptor, vScl(axisN, coneLen));
-
-  traces.push({
-    type: 'scatter3d',
-    mode: 'lines',
-    x: [pOrigin[0], pConeBase[0], null],
-    y: [pOrigin[1], pConeBase[1], null],
-    z: [pOrigin[2], pConeBase[2], null],
-    line: {color, width: shaftW},
-    hoverinfo: 'none',
-    showlegend: false,
-  });
-  traces.push({
-    type: 'cone',
-    x: [pAcceptor[0]],
-    y: [pAcceptor[1]],
-    z: [pAcceptor[2]],
-    u: [axisN[0]],
-    v: [axisN[1]],
-    w: [axisN[2]],
-    sizemode: 'absolute',
-    sizeref: coneLen * 0.9,
-    colorscale: [[0, color], [1, color]],
-    showscale: false,
-    hovertext: [`σ+LP → M (order ${order}, atom ${lig + 1})`],
-    hoverinfo: 'text',
-    name: 'σ+LP → M',
-    showlegend: false,
-    anchor: 'tip',
-  });
-  return traces;
-}
-
-function buildDativeTraces(ca, dativeBonds, styleOpts) {
+function buildDativeTraces(ca, dativeBonds) {
   if (!$('show-dative').checked) return [];
   const color = state.dativeColor;
   const shaftW = parseInt($('arrow-width').value) || 4;
   const CONE_FRAC = 0.28;
   const traces = [];
-  const bundledOpts = styleOpts || {
-    isDark: false,
-    bc: '#888',
-    bcD: '#AADDFF',
-    bcT: '#FFCC66',
-    bw: 5,
-    color,
-    shaftW,
-    CONE_FRAC,
-  };
 
   for (const d of dativeBonds) {
-    if (d.kind === 'lp_on_covalent_ml') {
-      traces.push(...buildBundledCovalentDativeTraces(ca, d, bundledOpts));
-      continue;
-    }
-
     const {donor_atoms, acceptor, pi_bond_pair} = d;
     const pAcceptor = ca[acceptor];
     if (!pAcceptor) continue;
@@ -1039,17 +847,6 @@ function buildFigure() {
   };
 
   const traces = [];
-  const mlBundleKeys = mlBundleKeysFromDative(dativeBonds);
-  const dativeStyleOpts = {
-    isDark,
-    bc: isDark ? '#111' : '#888',
-    bcD: isDark ? '#333366' : '#AADDFF',
-    bcT: isDark ? '#553300' : '#FFCC66',
-    bw: isDark ? 6 : 5,
-    color: state.dativeColor,
-    shaftW: parseInt($('arrow-width').value) || 4,
-    CONE_FRAC: 0.28,
-  };
 
   if (isSymbolic) {
     const symH = $('sym3d-show-H')?.checked??false;
@@ -1091,7 +888,6 @@ function buildFigure() {
 
       for (const {i,j,order} of bonds) {
         if (isHidden(i)||isHidden(j)) continue;
-        if (mlBundleKeys.has(mlBundlePairKey(i, j))) continue;
         const p1=ca[i], p2=ca[j];
         const ord=order||1;
         if (ord===2) {
@@ -1149,8 +945,8 @@ function buildFigure() {
     }
   }
 
-  // Dative arrow traces (pure L / π); σ+LP bundles drawn with even stripe spacing
-  traces.push(...buildDativeTraces(ca, dativeBonds, dativeStyleOpts));
+  // Dative arrow traces (pure L / π)
+  traces.push(...buildDativeTraces(ca, dativeBonds));
 
   const ax=()=>({showgrid:false,zeroline:false,showline:false,showticklabels:false,showspikes:false,showbackground:false,title:{text:''}});
   const plotBg=plotlyBgColor(state.bgColor);
@@ -1203,15 +999,11 @@ window.addEventListener('resize',()=>{if(plotInit)Plotly.relayout($('plot'),{aut
 // ══════════════════════════════════════════════════════════════════
 function updateDativeInfo(){
   const db = state.dativeBonds||[];
-  const bundled = db.filter(d=>d.kind==='lp_on_covalent_ml').length;
-  const pure = db.filter(d=>d.kind!=='lp_on_covalent_ml');
-  const pi  = pure.filter(d=>d.pi_bond_pair).length;
-  const lp  = pure.filter(d=>!d.pi_bond_pair).length;
+  const pi  = db.filter(d=>d.pi_bond_pair).length;
+  const lp  = db.filter(d=>!d.pi_bond_pair).length;
   const el  = $('dative-info');
   if (!db.length){el.textContent='No dative bonds found.';return;}
-  let msg = `${db.length} dative bond(s): <span style="color:#FF9500">${lp} LP</span> · <span style="color:#3399FF">${pi} π</span>`;
-  if (bundled) msg += ` · <span style="color:#cc7700">${bundled} σ+LP</span>`;
-  el.innerHTML = msg;
+  el.innerHTML = `${db.length} dative bond(s): <span style="color:#FF9500">${lp} LP</span> · <span style="color:#3399FF">${pi} π</span>`;
 }
 
 // ══════════════════════════════════════════════════════════════════

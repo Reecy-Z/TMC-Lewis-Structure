@@ -378,13 +378,22 @@ def show_unsupported_tm_error(exc: UnsupportedTransitionMetalError) -> None:
     )
 
 
-def show_ilp_solve_error(exc: IlpSolveError | RuntimeError) -> None:
-    st.error("ILP could not find a valid Lewis structure")
+def show_ilp_solve_error(
+    exc: IlpSolveError | RuntimeError,
+    *,
+    atoms=None,
+    coords=None,
+    raw_edges=None,
+) -> None:
+    st.error(
+        "ILP could not find a valid Lewis structure — only initial connectivity is shown below."
+    )
     st.warning(
         "Try adjusting the **total molecular charge** (Mol Charge) and/or the **XYZ geometry** "
         "(bond lengths, connectivity, metal–ligand contacts), then run the analysis again."
     )
-    st.caption(f"Solver detail: {exc}")
+    if atoms is not None and coords is not None and raw_edges is not None:
+        show_connectivity_preview(atoms, coords, raw_edges, show_captions=False)
 
 
 def run_aromatic_workflow_in_memory(engine, atoms, coords, mol_charge):
@@ -473,111 +482,6 @@ def metal_adjacency_array_indices(backend, atoms, coords):
         tm, lig = (i, j) if backend.is_TM(ei) else (j, i)
         out.append((idx_to_pos[tm], idx_to_pos[lig], ei, ej))
     return out
-
-
-_VIEWER_SUPPLEMENTAL_DONORS = frozenset({"O", "N", "S"})
-_SUPPLEMENTAL_ANGLE_MIN_DEG = 170.0
-_SUPPLEMENTAL_ANGLE_MAX_DEG = 190.0
-
-
-def _bo_ij(bo, i, j):
-    return bo.get((min(i, j), max(i, j)), 0)
-
-
-def _angle_at_center_deg(coords, a_idx, center_idx, c_idx):
-    """Angle at center_idx (degrees) between vectors center→a and center→c."""
-    ax, ay, az = coords[a_idx]
-    bx, by, bz = coords[center_idx]
-    cx, cy, cz = coords[c_idx]
-    v1 = (ax - bx, ay - by, az - bz)
-    v2 = (cx - bx, cy - by, cz - bz)
-    n1 = math.sqrt(v1[0] ** 2 + v1[1] ** 2 + v1[2] ** 2)
-    n2 = math.sqrt(v2[0] ** 2 + v2[1] ** 2 + v2[2] ** 2)
-    if n1 < 1e-10 or n2 < 1e-10:
-        return None
-    cosang = max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / (n1 * n2)))
-    return math.degrees(math.acos(cosang))
-
-
-def should_draw_supplemental_dative_arrow(
-    atoms, coords, bo, lig, tm, ml_order, backend, *, lp=None
-):
-    """
-    O/N/S covalent M–L with lp >= 1: draw extra arrow if
-      (1) M–L bond order is 2, or
-      (2) M–L is single AND some non-metal neighbor of lig is double-bonded to lig
-          AND ∠(TM–lig–neighbor) is in [170°, 190°].
-    """
-    if (lp or {}).get(lig, 0) < 1:
-        return False
-    if ml_order == 2:
-        return True
-    if ml_order != 1:
-        return False
-    n = len(atoms)
-    for nbr in range(n):
-        if nbr in (lig, tm):
-            continue
-        if backend.is_TM(atoms[nbr]):
-            continue
-        if _bo_ij(bo, lig, nbr) < 2:
-            continue
-        ang = _angle_at_center_deg(coords, tm, lig, nbr)
-        if ang is not None and _SUPPLEMENTAL_ANGLE_MIN_DEG <= ang <= _SUPPLEMENTAL_ANGLE_MAX_DEG:
-            return True
-    return False
-
-
-def supplemental_dative_on_covalent_ml(
-    atoms, coords, bo, lp, backend, *, pure_l_pairs=None
-):
-    """Build lp_on_covalent_ml dative entries for the 3D viewer (see should_draw_*)."""
-    pure_l_pairs = pure_l_pairs or set()
-    out = []
-    seen = set()
-    for (i, j), order in bo.items():
-        if order <= 0:
-            continue
-        si, sj = atoms[i], atoms[j]
-        if backend.is_TM(si) and not backend.is_TM(sj):
-            tm, lig = i, j
-        elif backend.is_TM(sj) and not backend.is_TM(si):
-            tm, lig = j, i
-        else:
-            continue
-        if atoms[lig] not in _VIEWER_SUPPLEMENTAL_DONORS:
-            continue
-        key = (min(tm, lig), max(tm, lig))
-        if key in pure_l_pairs or key in seen:
-            continue
-        if not should_draw_supplemental_dative_arrow(
-            atoms, coords, bo, lig, tm, int(order), backend, lp=lp
-        ):
-            continue
-        out.append(
-            {
-                "donor_atoms": [lig],
-                "acceptor": tm,
-                "pi_bond_pair": None,
-                "kind": "lp_on_covalent_ml",
-                "covalent_order": int(order),
-            }
-        )
-        seen.add(key)
-    return out
-
-
-def _ml_bundle_bond_keys(dative_bonds):
-    keys = set()
-    for d in dative_bonds:
-        if d.get("kind") != "lp_on_covalent_ml":
-            continue
-        donors = d.get("donor_atoms") or []
-        if len(donors) != 1:
-            continue
-        lig, tm = donors[0], d["acceptor"]
-        keys.add((min(lig, tm), max(lig, tm)))
-    return keys
 
 
 def format_octet_report(
@@ -720,19 +624,12 @@ def build_viewer_payload(
                 }
             )
 
-    dative_bonds.extend(
-        supplemental_dative_on_covalent_ml(
-            atoms, coords, bo, lp, backend, pure_l_pairs=l_pairs
-        )
-    )
-    bundle_keys = _ml_bundle_bond_keys(dative_bonds)
-
     bonds_list = []
     bo_keys = set()
     for (i, j), order in sorted(bo.items()):
         key = (min(i, j), max(i, j))
         bo_keys.add(key)
-        if key in l_pairs or key in bundle_keys:
+        if key in l_pairs:
             continue
         bonds_list.append({"i": i, "j": j, "order": order})
 
@@ -751,9 +648,6 @@ def build_viewer_payload(
                 x_counts[key] = x_counts.get(key, 0) + 1
 
     for (i, j), count in x_counts.items():
-        key = (min(i, j), max(i, j))
-        if key in bundle_keys:
-            continue
         bonds_list.append({"i": i, "j": j, "order": min(count, 3)})
 
     return {
@@ -784,6 +678,37 @@ def build_connectivity_viewer_payload(atoms, coords, raw_edges) -> dict:
         "formal_charges": [0] * len(atoms),
         "view_mode": "connectivity",
     }
+
+
+def show_connectivity_preview(
+    atoms,
+    coords,
+    raw_edges,
+    *,
+    show_captions: bool = True,
+    collapsible: bool = False,
+) -> None:
+    connectivity_payload = build_connectivity_viewer_payload(atoms, coords, raw_edges)
+
+    def render_body() -> None:
+        if show_captions:
+            st.caption(
+                "Distance-based `connectivity()` only: each contact is a single bond line, "
+                "including M–L. No ILP bond orders, CBC, or dative arrows."
+            )
+            n_conn = len(connectivity_payload["bonds"])
+            st.caption(f"{n_conn} connectivity edge(s) from Lewis-engine step 1.")
+        show_3d_preview(connectivity_payload)
+
+    if collapsible:
+        with st.expander("Connectivity Preview", expanded=False):
+            render_body()
+    else:
+        st.markdown(
+            '<div class="section-head">Connectivity Preview</div>',
+            unsafe_allow_html=True,
+        )
+        render_body()
 
 
 def show_3d_preview(payload: dict):
@@ -1127,18 +1052,7 @@ def run_analyzer_app() -> None:
 
         show_3d_preview(viewer_payload)
 
-        connectivity_payload = build_connectivity_viewer_payload(atoms, coords, raw_edges)
-        st.markdown(
-            '<div class="section-head">Connectivity Preview (Step 1)</div>',
-            unsafe_allow_html=True,
-        )
-        st.caption(
-            "Distance-based `connectivity()` only: each contact is a single bond line, "
-            "including M–L. No ILP bond orders, CBC, or dative arrows."
-        )
-        n_conn = len(connectivity_payload["bonds"])
-        st.caption(f"{n_conn} connectivity edge(s) from Lewis-engine step 1.")
-        show_3d_preview(connectivity_payload)
+        show_connectivity_preview(atoms, coords, raw_edges, collapsible=True)
 
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
@@ -1210,7 +1124,7 @@ def run_analyzer_app() -> None:
     except UnsupportedTransitionMetalError as exc:
         show_unsupported_tm_error(exc)
     except IlpSolveError as exc:
-        show_ilp_solve_error(exc)
+        show_ilp_solve_error(exc, atoms=atoms, coords=coords, raw_edges=raw_edges)
     except ValueError as exc:
         msg = str(exc)
         if msg.startswith("Unsupported element symbol"):
@@ -1220,7 +1134,7 @@ def run_analyzer_app() -> None:
             st.error(f"Invalid XYZ input: {exc}")
     except Exception as exc:
         if "ILP failed" in str(exc):
-            show_ilp_solve_error(exc)
+            show_ilp_solve_error(exc, atoms=atoms, coords=coords, raw_edges=raw_edges)
         else:
             st.error(f"Analysis failed: {exc}")
 

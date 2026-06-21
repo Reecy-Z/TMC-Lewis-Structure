@@ -34,7 +34,7 @@ ILP_HARD_OCTET = True
 # Σfc(ligands) + Σox(TM) − Σb_tm = mol_charge.
 ILP_HARD_MOL_CHARGE_BALANCE = True
 # Σox(TM) ≥ Σb_tm on non-η M–L only (η orders excluded). Halogen (F/Cl/Br/I) ligands are omitted.
-ILP_HARD_OX_GE_SIGMA = True
+ILP_HARD_OX_GE_SIGMA = False
 # C with no TM neighbor in connectivity: prefer lp = 0 (soft penalty when enabled).
 ILP_HARD_C_LP_ONLY_TM_NEIGHBORS = True
 # η-fragment carbons to a TM (≥ETA_MIN_COORDINATING_GROUP_SIZE): lp = 0.
@@ -46,11 +46,27 @@ ILP_WEIGHT_AROMATIC_DEVIATION = 100.0
 ILP_WEIGHT_ENEG_NEGATIVE_FC = 10.0
 ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
 ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
-ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 100.0
+ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
-# Aromatic 4n+2 target: fixed n in pi_target = 4*n + 2 (default n=1 → 6 pi e per system).
-# Set to None in solve_bond_orders(..., aromatic_huckel_n=None) to restore variable k.
-AROMATIC_HUCKEL_N = 1
+# Conjugated aromatic π targets by system atom count m (see _aromatic_pi_target_expr).
+# Tuple (low, high): ILP binary picks high when two common counts exist; (n, None) is fixed.
+AROMATIC_PI_BY_RING_SIZE: dict[int, tuple[int, int | None]] = {
+    3: (2, None),
+    4: (2, 6),
+    5: (6, None),
+    6: (6, None),
+    7: (6, None),
+    8: (10, None),
+    9: (10, None),
+    10: (10, None),
+    11: (10, 14),
+    12: (10, 14),
+    13: (14, None),
+    14: (14, None),
+    15: (14, 18),
+    16: (18, None),
+    18: (18, None),
+}
 
 # Soft tie-break: similar M–L contact distances on the same ligand → same σ/dative class (z_cov).
 ML_DISTANCE_CLASS_EPSILON = 0.15  # Å; w_ij = max(0, ε − |d_i − d_j|)
@@ -94,20 +110,20 @@ TM_COMMON_OXIDATION_STATES = {
     "V": [2, 3, 4, 5],
     "Cr": [0, 2, 3, 4, 6],
     "Mn": [1, 2, 3, 4, 6, 7],
-    "Fe": [2, 3],
+    "Fe": [0, 2, 3, 4],
     "Co": [1, 2, 3],
-    "Ni": [2],
-    "Cu": [1, 2],
+    "Ni": [0, 2, 4],
+    "Cu": [1, 2, 3],
     "Zn": [2],
     "Y": [3],
     "Zr": [4],
     "Nb": [3, 4, 5],
     "Mo": [0, 2, 3, 4, 5, 6],
-    "Tc": [2, 3, 4, 5, 6, 7],
+    "Tc": [1, 2, 3, 4, 5, 6, 7],
     "Ru": [2, 3, 4, 5, 6, 7, 8],
     "Rh": [1, 3],
     "Pd": [2, 4],
-    "Ag": [1],
+    "Ag": [1, 3],
     "Cd": [1, 2],
     "La": [3],
     "Hf": [4],
@@ -115,7 +131,7 @@ TM_COMMON_OXIDATION_STATES = {
     "W": [0, 2, 3, 4, 5, 6],
     "Re": [1, 2, 3, 4, 5, 6, 7],
     "Os": [2, 3, 4, 5, 6, 7, 8],
-    "Ir": [1, 3],
+    "Ir": [1, 3, 5],
     "Pt": [2, 4],
     "Au": [1, 3],
     "Hg": [1, 2],
@@ -184,6 +200,14 @@ VALENCE_ELECTRONS = dict(VALENCE)
 
 # Halides at M: always forced to covalent M–X single bond (MLX X-type).
 TM_MONATOMIC_COV_LIGANDS = frozenset({"F", "Cl", "Br", "I"})
+
+# P may use 10e/12e expanded octet only when bonded to at least one of these (connectivity).
+_P_EXPANDED_OCTET_NEIGHBOR_SYMS = frozenset({"O", "N", "S", "F", "Cl", "Br", "I"})
+# S may use 10e/12e expanded octet only when bonded to at least one of these.
+_S_EXPANDED_OCTET_NEIGHBOR_SYMS = frozenset({"O", "N", "F", "Cl", "Br", "I"})
+# Cl/Br/I may use 10e/12e/14e when bonded to O, N, or a different halogen.
+_HEAVY_HALOGEN_EXPANDED_OCTET_SYMS = frozenset({"Cl", "Br", "I"})
+_ALL_HALOGEN_SYMS = frozenset({"F", "Cl", "Br", "I"})
 
 def _load_ccdc_covalent_radii(path: str = _CCDC_COV_RADII_JSON) -> dict[str, float]:
     """CCDC ChemistryLib Element.covalent_radius() values (Å) from ccdc_covalent_radii.json."""
@@ -413,6 +437,79 @@ def _prune_h_to_closest_nonmetal_neighbor(atoms, edges):
     return [e for e in edges if e not in drop]
 
 
+def _prune_carbon_over_coordination(atoms, edges, max_degree=4):
+    """
+    If a carbon has more than *max_degree* connectivity neighbors, drop the farthest edge
+    (by distance) repeatedly until its degree is at most *max_degree*.
+    """
+    if not edges or max_degree < 1:
+        return edges
+    atom_el = {a[0]: a[1] for a in atoms}
+    edge_list = list(edges)
+
+    def _edge_dist(i, j):
+        return dist(atoms[i - 1], atoms[j - 1])
+
+    while True:
+        inc_c = defaultdict(list)
+        for e in edge_list:
+            i, j = e[0], e[1]
+            if atom_el.get(i) == "C":
+                inc_c[i].append(e)
+            if atom_el.get(j) == "C":
+                inc_c[j].append(e)
+
+        over = [c for c, inc in inc_c.items() if len(inc) > max_degree]
+        if not over:
+            break
+
+        c_idx = max(over, key=lambda c: (len(inc_c[c]), c))
+        drop_edge = max(
+            inc_c[c_idx],
+            key=lambda e: (_edge_dist(e[0], e[1]), max(e[0], e[1]), min(e[0], e[1])),
+        )
+        edge_list.remove(drop_edge)
+
+    return edge_list
+
+
+def _prune_si_over_coordination(atoms, edges, max_degree=4):
+    """
+    If a silicon has more than *max_degree* connectivity neighbors (any element),
+    drop the farthest edge (by distance) repeatedly until its degree is at most
+    *max_degree*.
+    """
+    if not edges or max_degree < 1:
+        return edges
+    atom_el = {a[0]: a[1] for a in atoms}
+    edge_list = list(edges)
+
+    def _edge_dist(i, j):
+        return dist(atoms[i - 1], atoms[j - 1])
+
+    while True:
+        inc_si = defaultdict(list)
+        for e in edge_list:
+            i, j = e[0], e[1]
+            if atom_el.get(i) == "Si":
+                inc_si[i].append(e)
+            if atom_el.get(j) == "Si":
+                inc_si[j].append(e)
+
+        over = [si for si, inc in inc_si.items() if len(inc) > max_degree]
+        if not over:
+            break
+
+        si_idx = max(over, key=lambda si: (len(inc_si[si]), si))
+        drop_edge = max(
+            inc_si[si_idx],
+            key=lambda e: (_edge_dist(e[0], e[1]), max(e[0], e[1]), min(e[0], e[1])),
+        )
+        edge_list.remove(drop_edge)
+
+    return edge_list
+
+
 def _bond_cutoff_cov(ei, ej):
     margin = (
         COV_BOND_MARGIN_S_BLOCK
@@ -460,7 +557,10 @@ def connectivity(atoms, factor=None):
             cutoff = _bond_cutoff(ei, ej)
             if dist(ai, aj) < cutoff:
                 edges.append((ai[0], aj[0], ei, ej))
-    return _prune_h_to_closest_nonmetal_neighbor(atoms, edges)
+    edges = _prune_h_to_closest_nonmetal_neighbor(atoms, edges)
+    edges = _prune_carbon_over_coordination(atoms, edges)
+    edges = _prune_aromatic_non_eta_tm_c_contacts(atoms, edges)
+    return _prune_si_over_coordination(atoms, edges)
 
 
 def check_octet_violations(
@@ -1486,10 +1586,12 @@ def _subscript(n):
 # 1) Build raw connectivity from XYZ.
 # 2) Remove metal-nonmetal edges for ring/fused-ring detection.
 # 3) Keep only planar ring/fused-ring systems as aromatic candidates.
-# 4) Soft (optional): aromatic 6π via ILP_WEIGHT_AROMATIC_DEVIATION (>0 enables block).
+# 4) Soft (optional): aromatic π via ILP_WEIGHT_AROMATIC_DEVIATION; target from
+#    AROMATIC_PI_BY_RING_SIZE (m atoms → π count; binary if two options).
 # 4b) Soft: similar M–L distances on a ligand → same z_cov (ILP_WEIGHT_ML_DISTANCE_CLASS).
 # 4c) Hard (optional): η-fragment carbons → lp = 0 (ILP_HARD_ETA_CARBON_LP_ZERO).
 # 4d) Hard (always): terminal CO (2-atom C+O fragment, M–L via C) → C≡O triple, M–C dative (b_tm=0).
+# 4e) Hard (always): SCN arm (S–C–N, 3 atoms) → S=C=N (both double bonds).
 # 5) For O/N/S/P in aromatic systems:
 #    - if no double bond around that atom, one lone pair (2e) can contribute;
 #    - if double-bonded, pi contribution comes from double bonds (2 per double).
@@ -1545,6 +1647,47 @@ def _non_tm_neighbors_in_edges(lig_idx, atom_el, edges):
         if not base.is_TM(atom_el[other]):
             out.append(other)
     return out
+
+
+def _p_allows_expanded_octet(p_idx, atom_el, edges) -> bool:
+    """True if P has a connectivity neighbor in O/N/S/halogen."""
+    for i, j, _ei, _ej in edges:
+        if p_idx not in (i, j):
+            continue
+        other = j if i == p_idx else i
+        if atom_el.get(other) in _P_EXPANDED_OCTET_NEIGHBOR_SYMS:
+            return True
+    return False
+
+
+def _s_allows_expanded_octet(s_idx, atom_el, edges) -> bool:
+    """True if S has a connectivity neighbor in O/N/halogen."""
+    for i, j, _ei, _ej in edges:
+        if s_idx not in (i, j):
+            continue
+        other = j if i == s_idx else i
+        if atom_el.get(other) in _S_EXPANDED_OCTET_NEIGHBOR_SYMS:
+            return True
+    return False
+
+
+def _heavy_halogen_allows_expanded_octet(x_idx, x_sym, atom_el, edges) -> bool:
+    """
+    True if Cl/Br/I has a connectivity neighbor that is O, N, or a halogen
+    other than *x_sym* (same-halogen contacts do not qualify).
+    """
+    if x_sym not in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS:
+        return False
+    for i, j, _ei, _ej in edges:
+        if x_idx not in (i, j):
+            continue
+        other = j if i == x_idx else i
+        osym = atom_el.get(other)
+        if osym in ("O", "N"):
+            return True
+        if osym in _ALL_HALOGEN_SYMS and osym != x_sym:
+            return True
+    return False
 
 
 def _filter_tm_nm_keys_agostic_shadow_ligands(tm_nm_keys, atom_el, edges):
@@ -1831,6 +1974,75 @@ def aromatic_candidate_systems(atoms_packed, raw_edges, max_ring_size=12, planar
     return out
 
 
+def _prune_aromatic_non_eta_tm_c_contacts(atoms, edges):
+    """
+    Drop TM–C connectivity when C is in a conjugated aromatic candidate system,
+    has exactly three non-metal connectivity neighbors, and is not part of a
+    geometric η fragment (≥ETA_MIN_COORDINATING_GROUP_SIZE contiguous TM-bound
+    atoms on the ligand skeleton).
+
+    Example: benzene CH with only one ring C within the TM distance cutoff —
+    likely a spurious π contact, not η⁶ coordination.
+    """
+    if not edges:
+        return edges
+
+    aromatic_atoms = set()
+    for sys_atoms in aromatic_candidate_systems(atoms, edges):
+        aromatic_atoms.update(sys_atoms)
+    if not aromatic_atoms:
+        return edges
+
+    eta_by_metal = _eta_ligand_atoms_by_metal(atoms, edges)
+    atom_el = {a[0]: a[1] for a in atoms}
+    non_tm_nbr_count = defaultdict(set)
+    for i, j, _ei, _ej in edges:
+        if not is_tm(atom_el.get(j, "")):
+            non_tm_nbr_count[i].add(j)
+        if not is_tm(atom_el.get(i, "")):
+            non_tm_nbr_count[j].add(i)
+
+    drop = set()
+    for i, j, ei, ej in edges:
+        if not _is_tm_nm_edge(ei, ej):
+            continue
+        tm, lig = _tm_nm_orient(i, j, ei, ej)
+        if atom_el.get(lig) != "C":
+            continue
+        if lig not in aromatic_atoms:
+            continue
+        if len(non_tm_nbr_count[lig]) != 3:
+            continue
+        if lig in eta_by_metal.get(tm, ()):
+            continue
+        drop.add((i, j, ei, ej))
+    if not drop:
+        return edges
+    return [e for e in edges if e not in drop]
+
+
+def _aromatic_pi_target_expr(prob, sys_idx: int, n_atoms: int):
+    """
+    Target π-electron count for a conjugated aromatic system with *n_atoms* ring atoms.
+
+    Uses AROMATIC_PI_BY_RING_SIZE; ambiguous sizes get one binary (low vs high).
+    Unknown sizes fall back to variable k with pi = 4*k + 2 (Hückel 4n+2).
+    """
+    spec = AROMATIC_PI_BY_RING_SIZE.get(n_atoms)
+    if spec is None:
+        max_pi = max(2, 4 * n_atoms)
+        kmax = max(0, (max_pi - 2) // 4)
+        k = pulp.LpVariable(
+            f"sys{sys_idx}_k", lowBound=0, upBound=kmax, cat="Integer"
+        )
+        return 4 * k + 2
+    low, high = spec
+    if high is None:
+        return low
+    pick_hi = pulp.LpVariable(f"sys{sys_idx}_pihi", cat="Binary")
+    return low + (high - low) * pick_hi
+
+
 def _nonmetal_ligand_components(atoms, edges):
     """
     Map each non-TM atom id → ligand component id (connected via non–M–L edges only).
@@ -1915,6 +2127,39 @@ def _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el):
     return out
 
 
+def _scn_fragment_s_c_n_triples(atoms, edges, atom_el):
+    """
+    SCN arm: exactly {S, C, N}, edges S–C and C–N (no S–N).
+    Metal attachment at S and/or N is allowed (e.g. thiolate bridges S–C–N–M).
+    """
+    lig_comp = _nonmetal_ligand_components(atoms, edges)
+    by_lid = defaultdict(set)
+    for aid, lid in lig_comp.items():
+        by_lid[lid].add(aid)
+
+    out = []
+    for comp in by_lid.values():
+        if len(comp) != 3:
+            continue
+        if {atom_el.get(aid) for aid in comp} != {"S", "C", "N"}:
+            continue
+        s_idx = next(aid for aid in comp if atom_el.get(aid) == "S")
+        c_idx = next(aid for aid in comp if atom_el.get(aid) == "C")
+        n_idx = next(aid for aid in comp if atom_el.get(aid) == "N")
+        has_sc = has_cn = has_sn = False
+        for i, j, ei, ej in edges:
+            pair = {i, j}
+            if pair == {s_idx, c_idx} and "S" in (ei, ej) and "C" in (ei, ej):
+                has_sc = True
+            if pair == {c_idx, n_idx} and "C" in (ei, ej) and "N" in (ei, ej):
+                has_cn = True
+            if pair == {s_idx, n_idx}:
+                has_sn = True
+        if has_sc and has_cn and not has_sn:
+            out.append((s_idx, c_idx, n_idx))
+    return out
+
+
 def _ligand_ml_zcov_pair_weights(
     atoms,
     edges,
@@ -1954,7 +2199,7 @@ def solve_bond_orders(
     *,
     metal_adjacency_edges=None,
     tm_ox_minimize_weight=None,
-    aromatic_huckel_n=AROMATIC_HUCKEL_N,
+    aromatic_huckel_n=None,
     ml_distance_class_weight=None,
     c_lp_tm_neighbor_hard=None,
     retry_relax_c_lp_tm=True,
@@ -2050,6 +2295,7 @@ def solve_bond_orders(
     si_oct8_choice = {}
     s_oct_choice = {}
     p_oct_choice = {}
+    halogen_oct_choice = {}
     for i, el, *_ in atoms:
         if base.is_tm(el) or el not in base.VALENCE_ELECTRONS:
             continue
@@ -2074,18 +2320,27 @@ def solve_bond_orders(
             # For TM-bound silicon: choose 6e (y=0) vs 8e (y=1) local-electron target.
             # (Models silylene-like :SiR2 donation while preserving hard-octet.)
             si_oct8_choice[i] = pulp.LpVariable(f"si8_{i}", cat="Binary")
-        if el == "S":
-            # For sulfur: allow 8e/10e/12e expanded-octet targets (equal preference).
+        if el == "S" and _s_allows_expanded_octet(i, atom_el, edges):
+            # 8e/10e/12e only when a neighbor is O, N, or halogen; else fixed 8e below.
             y10 = pulp.LpVariable(f"s10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"s12_{i}", cat="Binary")
             prob += y10 + y12 <= 1
             s_oct_choice[i] = (y10, y12)
-        if el == "P":
-            # For phosphorus: allow 8e/10e/12e expanded-octet targets (equal preference).
+        if el == "P" and _p_allows_expanded_octet(i, atom_el, edges):
+            # 8e/10e/12e only when a neighbor is O, N, S, or halogen; else fixed 8e below.
             y10 = pulp.LpVariable(f"p10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"p12_{i}", cat="Binary")
             prob += y10 + y12 <= 1
             p_oct_choice[i] = (y10, y12)
+        if el in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS and _heavy_halogen_allows_expanded_octet(
+            i, el, atom_el, edges
+        ):
+            # 8e/10e/12e/14e when neighbor is O, N, or different halogen.
+            y10 = pulp.LpVariable(f"x10_{i}", cat="Binary")
+            y12 = pulp.LpVariable(f"x12_{i}", cat="Binary")
+            y14 = pulp.LpVariable(f"x14_{i}", cat="Binary")
+            prob += y10 + y12 + y14 <= 1
+            halogen_oct_choice[i] = (y10, y12, y14)
 
     for i, el, *_ in atoms:
         if i not in q:
@@ -2110,6 +2365,9 @@ def solve_bond_orders(
         elif el == "P" and i in p_oct_choice:
             y10, y12 = p_oct_choice[i]
             oct_target = 8 + 2 * y10 + 4 * y12
+        elif el in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS and i in halogen_oct_choice:
+            y10, y12, y14 = halogen_oct_choice[i]
+            oct_target = 8 + 2 * y10 + 4 * y12 + 6 * y14
         else:
             oct_target = 2 if el in ("H", "Li") else 8
         local_e = 2 * lp[i] + 2 * bond_sum
@@ -2172,6 +2430,23 @@ def solve_bond_orders(
             co_triple_done.add(kk)
         prob += b_tm[(tm, c_idx)] == 0
 
+    # SCN arm (S–C–N fragment): S=C=N (S–C and C–N double bonds).
+    scn_triples = _scn_fragment_s_c_n_triples(atoms, edges, atom_el)
+    scn_edge_done = set()
+    for s_idx, c_idx, n_idx in scn_triples:
+        sc_kk = (min(s_idx, c_idx), max(s_idx, c_idx))
+        cn_kk = (min(c_idx, n_idx), max(c_idx, n_idx))
+        for kk, label in ((sc_kk, "S–C"), (cn_kk, "C–N")):
+            if kk not in u2:
+                raise RuntimeError(
+                    f"SCN ligand: {label} edge {kk} not in ILP edge set (check connectivity)"
+                )
+            if kk in scn_edge_done:
+                continue
+            prob += u2[kk] == 1
+            prob += u3[kk] == 0
+            scn_edge_done.add(kk)
+
     # --- Aromatic 4n+2 penalty ---
     aromatic_dev_terms = []
     if ILP_WEIGHT_AROMATIC_DEVIATION > 0:
@@ -2231,14 +2506,9 @@ def solve_bond_orders(
             dev_m = pulp.LpVariable(f"sys{sys_idx}_devm", lowBound=0, cat="Integer")
             if aromatic_huckel_n is not None:
                 pi_target = 4 * int(aromatic_huckel_n) + 2
-                prob += pi_e - pi_target == dev_p - dev_m
             else:
-                max_pi = max(2, 4 * len(sys_atoms))
-                kmax = max(0, (max_pi - 2) // 4)
-                k = pulp.LpVariable(
-                    f"sys{sys_idx}_k", lowBound=0, upBound=kmax, cat="Integer"
-                )
-                prob += pi_e - (4 * k + 2) == dev_p - dev_m
+                pi_target = _aromatic_pi_target_expr(prob, sys_idx, len(sys_atoms))
+            prob += pi_e - pi_target == dev_p - dev_m
             aromatic_dev_terms.append(dev_p + dev_m)
 
     tm_ox_vars = _tm_oxidation_ilp_vars(prob, atoms, use_discrete_states=True)
