@@ -106,8 +106,8 @@ TM_SET = {
 
 TM_COMMON_OXIDATION_STATES = {
     "Sc": [3],
-    "Ti": [3, 4],
-    "V": [2, 3, 4, 5],
+    "Ti": [2, 3, 4],
+    "V": [1, 2, 3, 4, 5],
     "Cr": [0, 2, 3, 4, 6],
     "Mn": [1, 2, 3, 4, 6, 7],
     "Fe": [0, 2, 3, 4],
@@ -117,22 +117,22 @@ TM_COMMON_OXIDATION_STATES = {
     "Zn": [2],
     "Y": [3],
     "Zr": [4],
-    "Nb": [3, 4, 5],
+    "Nb": [1, 3, 4, 5],
     "Mo": [0, 2, 3, 4, 5, 6],
     "Tc": [1, 2, 3, 4, 5, 6, 7],
-    "Ru": [2, 3, 4, 5, 6, 7, 8],
+    "Ru": [0, 2, 3, 4, 5, 6, 7, 8],
     "Rh": [1, 3],
-    "Pd": [2, 4],
+    "Pd": [0, 2, 4],
     "Ag": [1, 3],
     "Cd": [1, 2],
     "La": [3],
     "Hf": [4],
-    "Ta": [3, 4, 5],
+    "Ta": [1, 3, 4, 5],
     "W": [0, 2, 3, 4, 5, 6],
     "Re": [1, 2, 3, 4, 5, 6, 7],
     "Os": [2, 3, 4, 5, 6, 7, 8],
     "Ir": [1, 3, 5],
-    "Pt": [2, 4],
+    "Pt": [0, 2, 4],
     "Au": [1, 3],
     "Hg": [1, 2],
 }
@@ -201,11 +201,12 @@ VALENCE_ELECTRONS = dict(VALENCE)
 # Halides at M: always forced to covalent M–X single bond (MLX X-type).
 TM_MONATOMIC_COV_LIGANDS = frozenset({"F", "Cl", "Br", "I"})
 
-# P may use 10e/12e expanded octet only when bonded to at least one of these (connectivity).
+# P/As may use 10e/12e expanded octet only when bonded to at least one of these (connectivity).
 _P_EXPANDED_OCTET_NEIGHBOR_SYMS = frozenset({"O", "N", "S", "F", "Cl", "Br", "I"})
+_AS_EXPANDED_OCTET_NEIGHBOR_SYMS = _P_EXPANDED_OCTET_NEIGHBOR_SYMS
 # S may use 10e/12e expanded octet only when bonded to at least one of these.
 _S_EXPANDED_OCTET_NEIGHBOR_SYMS = frozenset({"O", "N", "F", "Cl", "Br", "I"})
-# Cl/Br/I may use 10e/12e/14e when bonded to O, N, or a different halogen.
+# Cl/Br/I may use 10e/12e/14e when bonded to O, N, or any halogen (incl. same element).
 _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS = frozenset({"Cl", "Br", "I"})
 _ALL_HALOGEN_SYMS = frozenset({"F", "Cl", "Br", "I"})
 
@@ -1671,10 +1672,21 @@ def _s_allows_expanded_octet(s_idx, atom_el, edges) -> bool:
     return False
 
 
+def _as_allows_expanded_octet(as_idx, atom_el, edges) -> bool:
+    """True if As has a connectivity neighbor in O/N/S/halogen."""
+    for i, j, _ei, _ej in edges:
+        if as_idx not in (i, j):
+            continue
+        other = j if i == as_idx else i
+        if atom_el.get(other) in _AS_EXPANDED_OCTET_NEIGHBOR_SYMS:
+            return True
+    return False
+
+
 def _heavy_halogen_allows_expanded_octet(x_idx, x_sym, atom_el, edges) -> bool:
     """
-    True if Cl/Br/I has a connectivity neighbor that is O, N, or a halogen
-    other than *x_sym* (same-halogen contacts do not qualify).
+    True if Cl/Br/I has a connectivity neighbor that is O, N, or any halogen
+    (including another atom of the same element, e.g. Cl–Cl).
     """
     if x_sym not in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS:
         return False
@@ -1685,7 +1697,7 @@ def _heavy_halogen_allows_expanded_octet(x_idx, x_sym, atom_el, edges) -> bool:
         osym = atom_el.get(other)
         if osym in ("O", "N"):
             return True
-        if osym in _ALL_HALOGEN_SYMS and osym != x_sym:
+        if osym in _ALL_HALOGEN_SYMS:
             return True
     return False
 
@@ -2295,6 +2307,7 @@ def solve_bond_orders(
     si_oct8_choice = {}
     s_oct_choice = {}
     p_oct_choice = {}
+    as_oct_choice = {}
     halogen_oct_choice = {}
     for i, el, *_ in atoms:
         if base.is_tm(el) or el not in base.VALENCE_ELECTRONS:
@@ -2332,10 +2345,16 @@ def solve_bond_orders(
             y12 = pulp.LpVariable(f"p12_{i}", cat="Binary")
             prob += y10 + y12 <= 1
             p_oct_choice[i] = (y10, y12)
+        if el == "As" and _as_allows_expanded_octet(i, atom_el, edges):
+            # 8e/10e/12e only when a neighbor is O, N, S, or halogen; else fixed 8e below.
+            y10 = pulp.LpVariable(f"as10_{i}", cat="Binary")
+            y12 = pulp.LpVariable(f"as12_{i}", cat="Binary")
+            prob += y10 + y12 <= 1
+            as_oct_choice[i] = (y10, y12)
         if el in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS and _heavy_halogen_allows_expanded_octet(
             i, el, atom_el, edges
         ):
-            # 8e/10e/12e/14e when neighbor is O, N, or different halogen.
+            # 8e/10e/12e/14e when neighbor is O, N, or any halogen (incl. same element).
             y10 = pulp.LpVariable(f"x10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"x12_{i}", cat="Binary")
             y14 = pulp.LpVariable(f"x14_{i}", cat="Binary")
@@ -2364,6 +2383,9 @@ def solve_bond_orders(
             oct_target = 8 + 2 * y10 + 4 * y12
         elif el == "P" and i in p_oct_choice:
             y10, y12 = p_oct_choice[i]
+            oct_target = 8 + 2 * y10 + 4 * y12
+        elif el == "As" and i in as_oct_choice:
+            y10, y12 = as_oct_choice[i]
             oct_target = 8 + 2 * y10 + 4 * y12
         elif el in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS and i in halogen_oct_choice:
             y10, y12, y14 = halogen_oct_choice[i]
