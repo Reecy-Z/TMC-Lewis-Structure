@@ -1,0 +1,965 @@
+{
+  "meta": {
+    "source": "CCDC ChemistryLib.Element.covalent_radius()",
+    "ccdc_python_api_version": "3.7.0",
+    "n_elements": 119,
+    "unit": "Angstrom"
+  },
+  "by_symbol": {
+    "H": 0.23,
+    "D": 0.23,
+    "He": 0.2,
+    "Li": 1.28,
+    "Be": 0.35,
+    "B": 0.83,
+    "C": 0.68,
+    "N": 0.68,
+    "O": 0.68,
+    "F": 0.64,
+    "Ne": 0.68,
+    "Na": 1.66,
+    "Mg": 1.41,
+    "Al": 1.21,
+    "Si": 1.2,
+    "P": 1.05,
+    "S": 1.02,
+    "Cl": 0.99,
+    "Ar": 1.61,
+    "K": 2.03,
+    "Ca": 1.76,
+    "Sc": 1.7,
+    "Ti": 1.6,
+    "V": 1.53,
+    "Cr": 1.39,
+    "Mn": 1.61,
+    "Fe": 1.52,
+    "Co": 1.26,
+    "Ni": 1.24,
+    "Cu": 1.32,
+    "Zn": 1.22,
+    "Ga": 1.22,
+    "Ge": 1.17,
+    "As": 1.21,
+    "Se": 1.22,
+    "Br": 1.21,
+    "Kr": 1.45,
+    "Rb": 2.2,
+    "Sr": 1.95,
+    "Y": 1.9,
+    "Zr": 1.75,
+    "Nb": 1.64,
+    "Mo": 1.54,
+    "Tc": 1.47,
+    "Ru": 1.46,
+    "Rh": 1.42,
+    "Pd": 1.39,
+    "Ag": 1.45,
+    "Cd": 1.44,
+    "In": 1.42,
+    "Sn": 1.39,
+    "Sb": 1.39,
+    "Te": 1.47,
+    "I": 1.4,
+    "Xe": 1.62,
+    "Cs": 2.44,
+    "Ba": 2.15,
+    "La": 2.07,
+    "Ce": 2.04,
+    "Pr": 2.03,
+    "Nd": 2.01,
+    "Pm": 1.99,
+    "Sm": 1.98,
+    "Eu": 1.98,
+    "Gd": 1.96,
+    "Tb": 1.94,
+    "Dy": 1.92,
+    "Ho": 1.92,
+    "Er": 1.89,
+    "Tm": 1.9,
+    "Yb": 1.87,
+    "Lu": 1.87,
+    "Hf": 1.75,
+    "Ta": 1.7,
+    "W": 1.62,
+    "Re": 1.51,
+    "Os": 1.44,
+    "Ir": 1.41,
+    "Pt": 1.36,
+    "Au": 1.36,
+    "Hg": 1.32,
+    "Tl": 1.45,
+    "Pb": 1.46,
+    "Bi": 1.48,
+    "Po": 1.4,
+    "At": 1.5,
+    "Rn": 1.5,
+    "Fr": 2.6,
+    "Ra": 2.21,
+    "Ac": 2.15,
+    "Th": 2.06,
+    "Pa": 2.0,
+    "U": 1.96,
+    "Np": 1.9,
+    "Pu": 1.87,
+    "Am": 1.8,
+    "Cm": 1.69,
+    "Bk": 1.54,
+    "Cf": 1.83,
+    "Es": 1.5,
+    "Fm": 1.5,
+    "Md": 1.5,
+    "No": 1.5,
+    "Lr": 1.5,
+    "Rf": 2.0,
+    "Db": 2.0,
+    "Sg": 2.0,
+    "Bh": 2.0,
+    "Hs": 2.0,
+    "Mt": 2.0,
+    "Ds": 2.0,
+    "Rg": 2.0,
+    "Cn": 2.0,
+    "Nh": 2.0,
+    "Fl": 2.0,
+    "Mc": 2.0,
+    "Lv": 2.0,
+    "Ts": 2.0,
+    "Og": 2.0
+  },
+  "by_atomic_number": {
+    "1": 0.23,
+    "2": 0.2,
+    "3": 1.28,
+    "4": 0.35,
+    "5": 0.83,
+    "6": 0.68,
+    "7": 0.68,
+    "8": 0.68,
+    "9": 0.64,
+    "10": 0.68,
+    "11": 1.66,
+    "12": 1.41,
+    "13": 1.21,
+    "14": 1.2,
+    "15": 1.05,
+    "16": 1.02,
+    "17": 0.99,
+    "18": 1.61,
+    "19": 2.03,
+    "20": 1.76,
+    "21": 1.7,
+    "22": 1.6,
+    "23": 1.53,
+    "24": 1.39,
+    "25": 1.61,
+    "26": 1.52,
+    "27": 1.26,
+    "28": 1.24,
+    "29": 1.32,
+    "30": 1.22,
+    "31": 1.22,
+    "32": 1.17,
+    "33": 1.21,
+    "34": 1.22,
+    "35": 1.21,
+    "36": 1.45,
+    "37": 2.2,
+    "38": 1.95,
+    "39": 1.9,
+    "40": 1.75,
+    "41": 1.64,
+    "42": 1.54,
+    "43": 1.47,
+    "44": 1.46,
+    "45": 1.42,
+    "46": 1.39,
+    "47": 1.45,
+    "48": 1.44,
+    "49": 1.42,
+    "50": 1.39,
+    "51": 1.39,
+    "52": 1.47,
+    "53": 1.4,
+    "54": 1.62,
+    "55": 2.44,
+    "56": 2.15,
+    "57": 2.07,
+    "58": 2.04,
+    "59": 2.03,
+    "60": 2.01,
+    "61": 1.99,
+    "62": 1.98,
+    "63": 1.98,
+    "64": 1.96,
+    "65": 1.94,
+    "66": 1.92,
+    "67": 1.92,
+    "68": 1.89,
+    "69": 1.9,
+    "70": 1.87,
+    "71": 1.87,
+    "72": 1.75,
+    "73": 1.7,
+    "74": 1.62,
+    "75": 1.51,
+    "76": 1.44,
+    "77": 1.41,
+    "78": 1.36,
+    "79": 1.36,
+    "80": 1.32,
+    "81": 1.45,
+    "82": 1.46,
+    "83": 1.48,
+    "84": 1.4,
+    "85": 1.5,
+    "86": 1.5,
+    "87": 2.6,
+    "88": 2.21,
+    "89": 2.15,
+    "90": 2.06,
+    "91": 2.0,
+    "92": 1.96,
+    "93": 1.9,
+    "94": 1.87,
+    "95": 1.8,
+    "96": 1.69,
+    "97": 1.54,
+    "98": 1.83,
+    "99": 1.5,
+    "100": 1.5,
+    "101": 1.5,
+    "102": 1.5,
+    "103": 1.5,
+    "104": 2.0,
+    "105": 2.0,
+    "106": 2.0,
+    "107": 2.0,
+    "108": 2.0,
+    "109": 2.0,
+    "110": 2.0,
+    "111": 2.0,
+    "112": 2.0,
+    "113": 2.0,
+    "114": 2.0,
+    "115": 2.0,
+    "116": 2.0,
+    "117": 2.0,
+    "118": 2.0
+  },
+  "elements": [
+    {
+      "symbol": "H",
+      "atomic_number": 1,
+      "ccdc_code": 2,
+      "covalent_radius_A": 0.23
+    },
+    {
+      "symbol": "D",
+      "atomic_number": 1,
+      "ccdc_code": 27,
+      "covalent_radius_A": 0.23
+    },
+    {
+      "symbol": "He",
+      "atomic_number": 2,
+      "ccdc_code": 39,
+      "covalent_radius_A": 0.2
+    },
+    {
+      "symbol": "Li",
+      "atomic_number": 3,
+      "ccdc_code": 49,
+      "covalent_radius_A": 1.28
+    },
+    {
+      "symbol": "Be",
+      "atomic_number": 4,
+      "ccdc_code": 13,
+      "covalent_radius_A": 0.35
+    },
+    {
+      "symbol": "B",
+      "atomic_number": 5,
+      "ccdc_code": 11,
+      "covalent_radius_A": 0.83
+    },
+    {
+      "symbol": "C",
+      "atomic_number": 6,
+      "ccdc_code": 1,
+      "covalent_radius_A": 0.68
+    },
+    {
+      "symbol": "N",
+      "atomic_number": 7,
+      "ccdc_code": 56,
+      "covalent_radius_A": 0.68
+    },
+    {
+      "symbol": "O",
+      "atomic_number": 8,
+      "ccdc_code": 64,
+      "covalent_radius_A": 0.68
+    },
+    {
+      "symbol": "F",
+      "atomic_number": 9,
+      "ccdc_code": 32,
+      "covalent_radius_A": 0.64
+    },
+    {
+      "symbol": "Ne",
+      "atomic_number": 10,
+      "ccdc_code": 60,
+      "covalent_radius_A": 0.68
+    },
+    {
+      "symbol": "Na",
+      "atomic_number": 11,
+      "ccdc_code": 57,
+      "covalent_radius_A": 1.66
+    },
+    {
+      "symbol": "Mg",
+      "atomic_number": 12,
+      "ccdc_code": 53,
+      "covalent_radius_A": 1.41
+    },
+    {
+      "symbol": "Al",
+      "atomic_number": 13,
+      "ccdc_code": 5,
+      "covalent_radius_A": 1.21
+    },
+    {
+      "symbol": "Si",
+      "atomic_number": 14,
+      "ccdc_code": 85,
+      "covalent_radius_A": 1.2
+    },
+    {
+      "symbol": "P",
+      "atomic_number": 15,
+      "ccdc_code": 66,
+      "covalent_radius_A": 1.05
+    },
+    {
+      "symbol": "S",
+      "atomic_number": 16,
+      "ccdc_code": 81,
+      "covalent_radius_A": 1.02
+    },
+    {
+      "symbol": "Cl",
+      "atomic_number": 17,
+      "ccdc_code": 21,
+      "covalent_radius_A": 0.99
+    },
+    {
+      "symbol": "Ar",
+      "atomic_number": 18,
+      "ccdc_code": 7,
+      "covalent_radius_A": 1.61
+    },
+    {
+      "symbol": "K",
+      "atomic_number": 19,
+      "ccdc_code": 46,
+      "covalent_radius_A": 2.03
+    },
+    {
+      "symbol": "Ca",
+      "atomic_number": 20,
+      "ccdc_code": 17,
+      "covalent_radius_A": 1.76
+    },
+    {
+      "symbol": "Sc",
+      "atomic_number": 21,
+      "ccdc_code": 83,
+      "covalent_radius_A": 1.7
+    },
+    {
+      "symbol": "Ti",
+      "atomic_number": 22,
+      "ccdc_code": 94,
+      "covalent_radius_A": 1.6
+    },
+    {
+      "symbol": "V",
+      "atomic_number": 23,
+      "ccdc_code": 98,
+      "covalent_radius_A": 1.53
+    },
+    {
+      "symbol": "Cr",
+      "atomic_number": 24,
+      "ccdc_code": 24,
+      "covalent_radius_A": 1.39
+    },
+    {
+      "symbol": "Mn",
+      "atomic_number": 25,
+      "ccdc_code": 54,
+      "covalent_radius_A": 1.61
+    },
+    {
+      "symbol": "Fe",
+      "atomic_number": 26,
+      "ccdc_code": 33,
+      "covalent_radius_A": 1.52
+    },
+    {
+      "symbol": "Co",
+      "atomic_number": 27,
+      "ccdc_code": 23,
+      "covalent_radius_A": 1.26
+    },
+    {
+      "symbol": "Ni",
+      "atomic_number": 28,
+      "ccdc_code": 61,
+      "covalent_radius_A": 1.24
+    },
+    {
+      "symbol": "Cu",
+      "atomic_number": 29,
+      "ccdc_code": 26,
+      "covalent_radius_A": 1.32
+    },
+    {
+      "symbol": "Zn",
+      "atomic_number": 30,
+      "ccdc_code": 105,
+      "covalent_radius_A": 1.22
+    },
+    {
+      "symbol": "Ga",
+      "atomic_number": 31,
+      "ccdc_code": 36,
+      "covalent_radius_A": 1.22
+    },
+    {
+      "symbol": "Ge",
+      "atomic_number": 32,
+      "ccdc_code": 38,
+      "covalent_radius_A": 1.17
+    },
+    {
+      "symbol": "As",
+      "atomic_number": 33,
+      "ccdc_code": 8,
+      "covalent_radius_A": 1.21
+    },
+    {
+      "symbol": "Se",
+      "atomic_number": 34,
+      "ccdc_code": 84,
+      "covalent_radius_A": 1.22
+    },
+    {
+      "symbol": "Br",
+      "atomic_number": 35,
+      "ccdc_code": 16,
+      "covalent_radius_A": 1.21
+    },
+    {
+      "symbol": "Kr",
+      "atomic_number": 36,
+      "ccdc_code": 47,
+      "covalent_radius_A": 1.45
+    },
+    {
+      "symbol": "Rb",
+      "atomic_number": 37,
+      "ccdc_code": 76,
+      "covalent_radius_A": 2.2
+    },
+    {
+      "symbol": "Sr",
+      "atomic_number": 38,
+      "ccdc_code": 88,
+      "covalent_radius_A": 1.95
+    },
+    {
+      "symbol": "Y",
+      "atomic_number": 39,
+      "ccdc_code": 102,
+      "covalent_radius_A": 1.9
+    },
+    {
+      "symbol": "Zr",
+      "atomic_number": 40,
+      "ccdc_code": 106,
+      "covalent_radius_A": 1.75
+    },
+    {
+      "symbol": "Nb",
+      "atomic_number": 41,
+      "ccdc_code": 58,
+      "covalent_radius_A": 1.64
+    },
+    {
+      "symbol": "Mo",
+      "atomic_number": 42,
+      "ccdc_code": 55,
+      "covalent_radius_A": 1.54
+    },
+    {
+      "symbol": "Tc",
+      "atomic_number": 43,
+      "ccdc_code": 91,
+      "covalent_radius_A": 1.47
+    },
+    {
+      "symbol": "Ru",
+      "atomic_number": 44,
+      "ccdc_code": 80,
+      "covalent_radius_A": 1.46
+    },
+    {
+      "symbol": "Rh",
+      "atomic_number": 45,
+      "ccdc_code": 78,
+      "covalent_radius_A": 1.42
+    },
+    {
+      "symbol": "Pd",
+      "atomic_number": 46,
+      "ccdc_code": 69,
+      "covalent_radius_A": 1.39
+    },
+    {
+      "symbol": "Ag",
+      "atomic_number": 47,
+      "ccdc_code": 4,
+      "covalent_radius_A": 1.45
+    },
+    {
+      "symbol": "Cd",
+      "atomic_number": 48,
+      "ccdc_code": 18,
+      "covalent_radius_A": 1.44
+    },
+    {
+      "symbol": "In",
+      "atomic_number": 49,
+      "ccdc_code": 44,
+      "covalent_radius_A": 1.42
+    },
+    {
+      "symbol": "Sn",
+      "atomic_number": 50,
+      "ccdc_code": 87,
+      "covalent_radius_A": 1.39
+    },
+    {
+      "symbol": "Sb",
+      "atomic_number": 51,
+      "ccdc_code": 82,
+      "covalent_radius_A": 1.39
+    },
+    {
+      "symbol": "Te",
+      "atomic_number": 52,
+      "ccdc_code": 92,
+      "covalent_radius_A": 1.47
+    },
+    {
+      "symbol": "I",
+      "atomic_number": 53,
+      "ccdc_code": 43,
+      "covalent_radius_A": 1.4
+    },
+    {
+      "symbol": "Xe",
+      "atomic_number": 54,
+      "ccdc_code": 101,
+      "covalent_radius_A": 1.62
+    },
+    {
+      "symbol": "Cs",
+      "atomic_number": 55,
+      "ccdc_code": 25,
+      "covalent_radius_A": 2.44
+    },
+    {
+      "symbol": "Ba",
+      "atomic_number": 56,
+      "ccdc_code": 12,
+      "covalent_radius_A": 2.15
+    },
+    {
+      "symbol": "La",
+      "atomic_number": 57,
+      "ccdc_code": 48,
+      "covalent_radius_A": 2.07
+    },
+    {
+      "symbol": "Ce",
+      "atomic_number": 58,
+      "ccdc_code": 19,
+      "covalent_radius_A": 2.04
+    },
+    {
+      "symbol": "Pr",
+      "atomic_number": 59,
+      "ccdc_code": 72,
+      "covalent_radius_A": 2.03
+    },
+    {
+      "symbol": "Nd",
+      "atomic_number": 60,
+      "ccdc_code": 59,
+      "covalent_radius_A": 2.01
+    },
+    {
+      "symbol": "Pm",
+      "atomic_number": 61,
+      "ccdc_code": 70,
+      "covalent_radius_A": 1.99
+    },
+    {
+      "symbol": "Sm",
+      "atomic_number": 62,
+      "ccdc_code": 86,
+      "covalent_radius_A": 1.98
+    },
+    {
+      "symbol": "Eu",
+      "atomic_number": 63,
+      "ccdc_code": 31,
+      "covalent_radius_A": 1.98
+    },
+    {
+      "symbol": "Gd",
+      "atomic_number": 64,
+      "ccdc_code": 37,
+      "covalent_radius_A": 1.96
+    },
+    {
+      "symbol": "Tb",
+      "atomic_number": 65,
+      "ccdc_code": 90,
+      "covalent_radius_A": 1.94
+    },
+    {
+      "symbol": "Dy",
+      "atomic_number": 66,
+      "ccdc_code": 28,
+      "covalent_radius_A": 1.92
+    },
+    {
+      "symbol": "Ho",
+      "atomic_number": 67,
+      "ccdc_code": 42,
+      "covalent_radius_A": 1.92
+    },
+    {
+      "symbol": "Er",
+      "atomic_number": 68,
+      "ccdc_code": 29,
+      "covalent_radius_A": 1.89
+    },
+    {
+      "symbol": "Tm",
+      "atomic_number": 69,
+      "ccdc_code": 96,
+      "covalent_radius_A": 1.9
+    },
+    {
+      "symbol": "Yb",
+      "atomic_number": 70,
+      "ccdc_code": 103,
+      "covalent_radius_A": 1.87
+    },
+    {
+      "symbol": "Lu",
+      "atomic_number": 71,
+      "ccdc_code": 50,
+      "covalent_radius_A": 1.87
+    },
+    {
+      "symbol": "Hf",
+      "atomic_number": 72,
+      "ccdc_code": 40,
+      "covalent_radius_A": 1.75
+    },
+    {
+      "symbol": "Ta",
+      "atomic_number": 73,
+      "ccdc_code": 89,
+      "covalent_radius_A": 1.7
+    },
+    {
+      "symbol": "W",
+      "atomic_number": 74,
+      "ccdc_code": 99,
+      "covalent_radius_A": 1.62
+    },
+    {
+      "symbol": "Re",
+      "atomic_number": 75,
+      "ccdc_code": 77,
+      "covalent_radius_A": 1.51
+    },
+    {
+      "symbol": "Os",
+      "atomic_number": 76,
+      "ccdc_code": 65,
+      "covalent_radius_A": 1.44
+    },
+    {
+      "symbol": "Ir",
+      "atomic_number": 77,
+      "ccdc_code": 45,
+      "covalent_radius_A": 1.41
+    },
+    {
+      "symbol": "Pt",
+      "atomic_number": 78,
+      "ccdc_code": 73,
+      "covalent_radius_A": 1.36
+    },
+    {
+      "symbol": "Au",
+      "atomic_number": 79,
+      "ccdc_code": 10,
+      "covalent_radius_A": 1.36
+    },
+    {
+      "symbol": "Hg",
+      "atomic_number": 80,
+      "ccdc_code": 41,
+      "covalent_radius_A": 1.32
+    },
+    {
+      "symbol": "Tl",
+      "atomic_number": 81,
+      "ccdc_code": 95,
+      "covalent_radius_A": 1.45
+    },
+    {
+      "symbol": "Pb",
+      "atomic_number": 82,
+      "ccdc_code": 68,
+      "covalent_radius_A": 1.46
+    },
+    {
+      "symbol": "Bi",
+      "atomic_number": 83,
+      "ccdc_code": 14,
+      "covalent_radius_A": 1.48
+    },
+    {
+      "symbol": "Po",
+      "atomic_number": 84,
+      "ccdc_code": 71,
+      "covalent_radius_A": 1.4
+    },
+    {
+      "symbol": "At",
+      "atomic_number": 85,
+      "ccdc_code": 9,
+      "covalent_radius_A": 1.5
+    },
+    {
+      "symbol": "Rn",
+      "atomic_number": 86,
+      "ccdc_code": 79,
+      "covalent_radius_A": 1.5
+    },
+    {
+      "symbol": "Fr",
+      "atomic_number": 87,
+      "ccdc_code": 35,
+      "covalent_radius_A": 2.6
+    },
+    {
+      "symbol": "Ra",
+      "atomic_number": 88,
+      "ccdc_code": 75,
+      "covalent_radius_A": 2.21
+    },
+    {
+      "symbol": "Ac",
+      "atomic_number": 89,
+      "ccdc_code": 3,
+      "covalent_radius_A": 2.15
+    },
+    {
+      "symbol": "Th",
+      "atomic_number": 90,
+      "ccdc_code": 93,
+      "covalent_radius_A": 2.06
+    },
+    {
+      "symbol": "Pa",
+      "atomic_number": 91,
+      "ccdc_code": 67,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "U",
+      "atomic_number": 92,
+      "ccdc_code": 97,
+      "covalent_radius_A": 1.96
+    },
+    {
+      "symbol": "Np",
+      "atomic_number": 93,
+      "ccdc_code": 63,
+      "covalent_radius_A": 1.9
+    },
+    {
+      "symbol": "Pu",
+      "atomic_number": 94,
+      "ccdc_code": 74,
+      "covalent_radius_A": 1.87
+    },
+    {
+      "symbol": "Am",
+      "atomic_number": 95,
+      "ccdc_code": 6,
+      "covalent_radius_A": 1.8
+    },
+    {
+      "symbol": "Cm",
+      "atomic_number": 96,
+      "ccdc_code": 22,
+      "covalent_radius_A": 1.69
+    },
+    {
+      "symbol": "Bk",
+      "atomic_number": 97,
+      "ccdc_code": 15,
+      "covalent_radius_A": 1.54
+    },
+    {
+      "symbol": "Cf",
+      "atomic_number": 98,
+      "ccdc_code": 20,
+      "covalent_radius_A": 1.83
+    },
+    {
+      "symbol": "Es",
+      "atomic_number": 99,
+      "ccdc_code": 30,
+      "covalent_radius_A": 1.5
+    },
+    {
+      "symbol": "Fm",
+      "atomic_number": 100,
+      "ccdc_code": 34,
+      "covalent_radius_A": 1.5
+    },
+    {
+      "symbol": "Md",
+      "atomic_number": 101,
+      "ccdc_code": 52,
+      "covalent_radius_A": 1.5
+    },
+    {
+      "symbol": "No",
+      "atomic_number": 102,
+      "ccdc_code": 62,
+      "covalent_radius_A": 1.5
+    },
+    {
+      "symbol": "Lr",
+      "atomic_number": 103,
+      "ccdc_code": 51,
+      "covalent_radius_A": 1.5
+    },
+    {
+      "symbol": "Rf",
+      "atomic_number": 104,
+      "ccdc_code": 108,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Db",
+      "atomic_number": 105,
+      "ccdc_code": 109,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Sg",
+      "atomic_number": 106,
+      "ccdc_code": 110,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Bh",
+      "atomic_number": 107,
+      "ccdc_code": 111,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Hs",
+      "atomic_number": 108,
+      "ccdc_code": 112,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Mt",
+      "atomic_number": 109,
+      "ccdc_code": 113,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Ds",
+      "atomic_number": 110,
+      "ccdc_code": 114,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Rg",
+      "atomic_number": 111,
+      "ccdc_code": 115,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Cn",
+      "atomic_number": 112,
+      "ccdc_code": 116,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Nh",
+      "atomic_number": 113,
+      "ccdc_code": 117,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Fl",
+      "atomic_number": 114,
+      "ccdc_code": 118,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Mc",
+      "atomic_number": 115,
+      "ccdc_code": 119,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Lv",
+      "atomic_number": 116,
+      "ccdc_code": 120,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Ts",
+      "atomic_number": 117,
+      "ccdc_code": 121,
+      "covalent_radius_A": 2.0
+    },
+    {
+      "symbol": "Og",
+      "atomic_number": 118,
+      "ccdc_code": 122,
+      "covalent_radius_A": 2.0
+    }
+  ]
+}
