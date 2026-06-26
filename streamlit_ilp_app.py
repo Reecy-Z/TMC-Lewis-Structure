@@ -416,6 +416,23 @@ def run_aromatic_workflow_in_memory(engine, atoms, coords, mol_charge):
             mol_charge=int(mol_charge),
             metal_adjacency_edges=raw_edges,
         )
+        bonds, lp_out, fc_out, _carbene_labels = engine.apply_heterocyclic_carbene_corrections(
+            atoms_packed,
+            bonds,
+            lp_out,
+            fc_out,
+            aromatic_systems,
+            raw_edges,
+            mol_charge=int(mol_charge),
+        )
+        bonds, lp_out, fc_out = engine.apply_eta_covalent_pi_corrections(
+            atoms_packed,
+            bonds,
+            lp_out,
+            fc_out,
+            mol_charge=int(mol_charge),
+            metal_adjacency_edges=raw_edges,
+        )
     except RuntimeError as exc:
         if "ILP failed" in str(exc):
             raise IlpSolveError(str(exc)) from exc

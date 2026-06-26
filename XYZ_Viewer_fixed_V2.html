@@ -278,6 +278,13 @@
           </div>
         </div>
         <div class="ctrl-row" style="margin-bottom:4px">
+          <span class="ctrl-label">Atom size</span>
+          <div class="slider-group">
+            <input type="range" id="atom-size" min="50" max="200" value="100" style="width:80px">
+            <span class="slider-val" id="atom-size-val">100%</span>
+          </div>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:4px">
           <span class="ctrl-label">Label colour</span>
           <div class="swatches" id="label-swatches">
             <div class="swatch active" style="background:#fff;border:1px solid #ccc" data-color="#ffffff" onclick="setLabelColor(this)"></div>
@@ -320,11 +327,18 @@
             <div class="swatch" style="background:#ffffff;border:1px solid #ccc" data-color="#ffffff" onclick="setDativeColor(this)" title="White"></div>
           </div>
         </div>
-        <div class="ctrl-row" style="margin-bottom:6px">
+        <div class="ctrl-row" style="margin-bottom:4px">
           <span class="ctrl-label">Arrow width</span>
           <div class="slider-group">
             <input type="range" id="arrow-width" min="2" max="10" value="4" style="width:70px">
             <span class="slider-val" id="arrow-width-val">4</span>
+          </div>
+        </div>
+        <div class="ctrl-row" style="margin-bottom:6px">
+          <span class="ctrl-label">Cone size</span>
+          <div class="slider-group">
+            <input type="range" id="cone-size" min="50" max="200" value="100" style="width:70px">
+            <span class="slider-val" id="cone-size-val">100%</span>
           </div>
         </div>
         <div id="dative-info" style="font-size:9px;font-family:var(--mono);color:var(--dim);margin-top:4px;line-height:1.6"></div>
@@ -755,6 +769,7 @@ function buildDativeTraces(ca, dativeBonds) {
   if (!$('show-dative').checked) return [];
   const color = state.dativeColor;
   const shaftW = parseInt($('arrow-width').value) || 4;
+  const coneScale = getConeSizeScale();
   const CONE_FRAC = 0.28;
   const traces = [];
 
@@ -788,7 +803,8 @@ function buildDativeTraces(ca, dativeBonds) {
     if (len < 1e-6) continue;
     const axisN = vScl(axis, 1/len);
     const coneLen = Math.min(CONE_FRAC * len, 0.6);
-    const pConeBase = vSub(pAcceptor, vScl(axisN, coneLen));
+    const effectiveConeLen = Math.min((coneLen * 0.9) / coneScale, len * 0.98);
+    const pConeBase = vSub(pAcceptor, vScl(axisN, effectiveConeLen));
 
     // Shaft line
     traces.push({
@@ -805,7 +821,7 @@ function buildDativeTraces(ca, dativeBonds) {
       type:'cone',
       x:[pAcceptor[0]], y:[pAcceptor[1]], z:[pAcceptor[2]],
       u:[axisN[0]], v:[axisN[1]], w:[axisN[2]],
-      sizemode:'absolute', sizeref:coneLen*0.9,
+      sizemode:'absolute', sizeref:effectiveConeLen,
       colorscale:[[0,color],[1,color]], showscale:false,
       hovertext:[pi_bond_pair ? `π-dative (atoms ${donor_atoms.map(x=>x+1).join('-')})` : `LP-dative (atom ${donor_atoms[0]+1})`],
       hoverinfo:'text',
@@ -829,6 +845,7 @@ function buildFigure() {
   const showLabels  = $('show-labels').checked;
   const showNumbers = $('show-numbers').checked;
   const labelSize   = parseInt($('label-size').value)||12;
+  const atomScale   = getAtomSizeScale();
 
   const labelFilter  = parseFilter($('label-atoms').value, atoms.length);
   const hiddenFilter = parseFilter($('hidden-atoms').value, atoms.length);
@@ -931,7 +948,8 @@ function buildFigure() {
     for (const [el,d] of Object.entries(grps)){
       const pr=ATOM_PROPS[el]||DEFAULT_ATOM;
       const color=isDark?(ATOM_DARK[el]||'#333'):pr.cpk;
-      const size=style==='wireframe'?4:Math.max(8,Math.min(30,pr.r*20));
+      const baseSize=style==='wireframe'?4:Math.max(8,Math.min(30,pr.r*20));
+      const size=baseSize*atomScale;
       const mline=isDark?{color:'#000',width:2}:style==='ball_stick'?{color:'rgba(0,0,0,0.4)',width:1}:{width:0};
       const any=d.labels.some(l=>l);
       traces.push({
@@ -1092,6 +1110,14 @@ function resolveExportDimensions(){
   };
 }
 
+function getAtomSizeScale(){
+  return (parseInt($('atom-size')?.value,10)||100)/100;
+}
+
+function getConeSizeScale(){
+  return (parseInt($('cone-size')?.value,10)||100)/100;
+}
+
 function exportExtraZoom(){
   const style=$('mol-style')?.value||'';
   const labelSize=parseInt($('label-size')?.value,10)||12;
@@ -1175,10 +1201,24 @@ document.addEventListener('DOMContentLoaded',()=>{
     clearTimeout(_rt);_rt=setTimeout(()=>{if(state.loaded)visualize();},200);
   });
 
+  // Atom size slider
+  const as=$('atom-size'); let _at=null;
+  as.addEventListener('input',()=>{
+    $('atom-size-val').textContent=as.value+'%';
+    clearTimeout(_at);_at=setTimeout(()=>{if(state.loaded)visualize();},200);
+  });
+
   // Arrow width slider
   const aw=$('arrow-width');
   aw.addEventListener('input',()=>{
     $('arrow-width-val').textContent=aw.value;
+    if(state.loaded) visualize();
+  });
+
+  // Cone size slider
+  const cs=$('cone-size');
+  cs.addEventListener('input',()=>{
+    $('cone-size-val').textContent=cs.value+'%';
     if(state.loaded) visualize();
   });
 

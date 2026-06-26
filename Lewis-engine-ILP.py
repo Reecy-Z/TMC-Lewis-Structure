@@ -1084,6 +1084,380 @@ def _cbc_record_for_h_neighbor(
     return ((h_idx,), "X")
 
 
+# Post-ILP carbene labels for CBC notes: 0-based (metal_idx, c_idx) -> "NHC"|"MIC"|"CAAC".
+LAST_HETERO_CYCLIC_CARBENE_LABELS: dict[tuple[int, int], str] = {}
+
+# η² covalent→π upgrade (apply_eta_covalent_pi_corrections): 0-based (metal, lig) pairs
+# that must NOT receive a SMILES dative arrow (partner gets the single arrow).
+LAST_ETA_COVALENT_PI_DATIVE_SKIP: set[tuple[int, int]] = set()
+
+_CARBENE_RING_HETERO_SYMS = frozenset({"N", "O", "S"})
+
+
+def _aromatic_system_containing(atom_id, aromatic_systems):
+    for sys_atoms in aromatic_systems:
+        if atom_id in sys_atoms:
+            return sys_atoms
+    return None
+
+
+def _hetero_count_in_aromatic_system(system_atoms, atom_el):
+    return sum(
+        1 for a in system_atoms if atom_el.get(a) in _CARBENE_RING_HETERO_SYMS
+    )
+
+
+def _charged_hetero_in_aromatic_system(system_atoms, atom_el, fc_by_atom_id):
+    for a in system_atoms:
+        if atom_el.get(a) not in _CARBENE_RING_HETERO_SYMS:
+            continue
+        if fc_by_atom_id.get(a, 0) != 0:
+            return True
+    return False
+
+
+def _bond_order_dict_from_bonds(bonds):
+    bo = {}
+    for i, j, order in bonds:
+        key = (min(i, j), max(i, j))
+        bo[key] = int(order)
+    return bo
+
+
+def _nonmetal_lewis_neighbors(atom_id, atom_el, bo):
+    """Non-TM partners with Lewis bond order > 0."""
+    out = []
+    for (a, b), order in bo.items():
+        if order <= 0 or atom_id not in (a, b):
+            continue
+        partner = b if a == atom_id else a
+        if is_TM(atom_el.get(partner, "")):
+            continue
+        out.append((partner, order, atom_el.get(partner)))
+    return out
+
+
+def _is_nhc_carbene_connectivity(c_idx, atom_el, bo):
+    """
+    NHC: carbene C has exactly two non-metal Lewis neighbors, both N via single bonds.
+    """
+    nm = _nonmetal_lewis_neighbors(c_idx, atom_el, bo)
+    if len(nm) != 2:
+        return False
+    return all(sym == "N" and order == 1 for _p, order, sym in nm)
+
+
+def _is_sp3_carbon(c_idx, atom_el, bo):
+    """True when C has no Lewis multiple bonds (all incident orders are 0 or 1)."""
+    if atom_el.get(c_idx) != "C":
+        return False
+    for (a, b), order in bo.items():
+        if c_idx in (a, b) and order > 1:
+            return False
+    return True
+
+
+def _is_caac_carbene_connectivity(c_idx, atom_el, bo):
+    """
+    CAAC: carbene C has exactly two non-metal Lewis neighbors — one N and one sp³ C,
+    both single bonds, no other non-metal connections.
+    """
+    nm = _nonmetal_lewis_neighbors(c_idx, atom_el, bo)
+    if len(nm) != 2:
+        return False
+    has_n = False
+    has_sp3_c = False
+    for _partner, order, sym in nm:
+        if order != 1:
+            return False
+        if sym == "N":
+            has_n = True
+        elif sym == "C" and _is_sp3_carbon(_partner, atom_el, bo):
+            has_sp3_c = True
+        else:
+            return False
+    return has_n and has_sp3_c
+
+
+def _minimal_ligand_rings_containing(atom_id, atom_el, connectivity_edges, max_ring_size=12):
+    """Minimal cycles in the ligand skeleton (M–L edges stripped) containing *atom_id*."""
+    cut = _remove_metal_nonmetal_edges(connectivity_edges)
+    adj = _build_adj_from_edges(cut)
+    rings = _minimal_rings(_find_simple_rings(adj, atom_el, max_size=max_ring_size))
+    return [r for r in rings if atom_id in r]
+
+
+def _caac_non_aromatic_ring(c_idx, atom_el, aromatic_systems, connectivity_edges):
+    """
+    Non-aromatic heterocycle with exactly one N heteroatom that contains the carbene C.
+    Returns the ring atom set, or None.
+    """
+    if _aromatic_system_containing(c_idx, aromatic_systems) is not None:
+        return None
+    for ring in _minimal_ligand_rings_containing(c_idx, atom_el, connectivity_edges):
+        n_count = sum(1 for a in ring if atom_el.get(a) == "N")
+        other_hetero = sum(
+            1 for a in ring if atom_el.get(a) in _CARBENE_RING_HETERO_SYMS and atom_el.get(a) != "N"
+        )
+        if n_count == 1 and other_hetero == 0:
+            return ring
+    return None
+
+
+def _classify_caac_carbene(c_idx, atom_el, bo, aromatic_systems, connectivity_edges):
+    """Return \"CAAC\" or None for a TM-bound carbene C in a saturated 1N heterocycle."""
+    if _caac_non_aromatic_ring(c_idx, atom_el, aromatic_systems, connectivity_edges) is None:
+        return None
+    if _is_caac_carbene_connectivity(c_idx, atom_el, bo):
+        return "CAAC"
+    return None
+
+
+def _classify_heterocyclic_carbene(
+    c_idx,
+    atom_el,
+    bo,
+    fc_by_atom_id,
+    aromatic_systems,
+):
+    """
+    Return "MIC", "NHC", or None for a TM-bound carbene C in a heteroaromatic ring.
+    MIC (mesoionic) takes priority when the ring bears a charged N/O/S heteroatom.
+    """
+    ring = _aromatic_system_containing(c_idx, aromatic_systems)
+    if ring is None:
+        return None
+    if _hetero_count_in_aromatic_system(ring, atom_el) < 2:
+        return None
+    if _charged_hetero_in_aromatic_system(ring, atom_el, fc_by_atom_id):
+        return "MIC"
+    if _is_nhc_carbene_connectivity(c_idx, atom_el, bo):
+        return "NHC"
+    return None
+
+
+def _recompute_ligand_fc(atom_id, atom_el, bo, lp_val):
+    el = atom_el.get(atom_id)
+    if el is None or is_TM(el) or el not in base.VALENCE_ELECTRONS:
+        return None
+    if base.is_ionlike_s_block_metal(el):
+        bond_sum = sum(
+            order
+            for (a, b), order in bo.items()
+            if order > 0 and atom_id in (a, b)
+        )
+        return base.VALENCE_ELECTRONS[el] - bond_sum
+    bond_sum = sum(
+        order
+        for (a, b), order in bo.items()
+        if order > 0 and atom_id in (a, b)
+    )
+    assigned_e = 2 * lp_val + bond_sum
+    return base.VALENCE_ELECTRONS[el] - assigned_e
+
+
+def _recompute_tm_oxidation_in_fc_out(atom_el, fc_out, bo, mol_charge):
+    """Refresh fc_out[tm] = ox(M) from ligand Σfc and Σ b_tm after post-ILP edits."""
+    tm_ids = [i for i, el in atom_el.items() if is_TM(el)]
+    for tm_i in tm_ids:
+        ligand_q = sum(
+            fc_out.get(j, 0)
+            for j in fc_out
+            if j != tm_i and not is_TM(atom_el.get(j, ""))
+        )
+        sigma = sum(
+            bo.get((min(tm_i, lig), max(tm_i, lig)), 0)
+            for lig in atom_el
+            if lig != tm_i and not is_TM(atom_el.get(lig, ""))
+        )
+        fc_out[tm_i] = int(mol_charge) - int(ligand_q) + int(sigma)
+
+
+def apply_heterocyclic_carbene_corrections(
+    atoms_packed,
+    bonds,
+    lp_out,
+    fc_out,
+    aromatic_systems,
+    connectivity_edges,
+    mol_charge=0,
+):
+    """
+    Post-ILP NHC / MIC / CAAC pass: force M–C dative (drop M–C Lewis order) and lp=1.
+
+    NHC/MIC use aromatic_candidate_systems; CAAC uses non-aromatic 1N heterocycles.
+    Fischer/Schrock alkylidenes outside these rules are unchanged.
+
+    Returns (bonds, lp_out, fc_out, labels_0based) where labels_0based maps
+    (metal_idx, c_idx) 0-based -> "NHC"|"MIC"|"CAAC".
+    """
+    atom_el = {a[0]: a[1] for a in atoms_packed}
+    id_to_pos = {a[0]: k for k, a in enumerate(atoms_packed)}
+    bo = _bond_order_dict_from_bonds(bonds)
+    labels_0based: dict[tuple[int, int], str] = {}
+
+    if not connectivity_edges:
+        base.LAST_HETERO_CYCLIC_CARBENE_LABELS = labels_0based
+        return bonds, lp_out, fc_out, labels_0based
+
+    aromatic_systems = aromatic_systems or ()
+    seen_pairs = set()
+    for tm_id, lig_id, ei, ej in connectivity_edges:
+        if not is_TM(ei) ^ is_TM(ej):
+            continue
+        tm, c_idx = (tm_id, lig_id) if is_TM(ei) else (lig_id, tm_id)
+        if atom_el.get(c_idx) != "C":
+            continue
+        pair = (tm, c_idx)
+        if pair in seen_pairs:
+            continue
+        seen_pairs.add(pair)
+
+        kind = _classify_heterocyclic_carbene(
+            c_idx, atom_el, bo, fc_out, aromatic_systems
+        )
+        if kind is None:
+            kind = _classify_caac_carbene(
+                c_idx, atom_el, bo, aromatic_systems, connectivity_edges
+            )
+        if kind is None:
+            continue
+
+        key = (min(tm, c_idx), max(tm, c_idx))
+        if bo.get(key, 0) > 0:
+            bo.pop(key, None)
+
+        lp_out[c_idx] = 1
+        new_fc = _recompute_ligand_fc(c_idx, atom_el, bo, lp_out[c_idx])
+        if new_fc is not None:
+            fc_out[c_idx] = new_fc
+
+        tm_pos = id_to_pos.get(tm)
+        c_pos = id_to_pos.get(c_idx)
+        if tm_pos is not None and c_pos is not None:
+            labels_0based[(tm_pos, c_pos)] = kind
+
+    bonds_out = sorted(
+        (a, b, o) for (a, b), o in bo.items() if o > 0
+    )
+    _recompute_tm_oxidation_in_fc_out(atom_el, fc_out, bo, mol_charge)
+    base.LAST_HETERO_CYCLIC_CARBENE_LABELS = labels_0based
+    return bonds_out, lp_out, fc_out, labels_0based
+
+
+def apply_eta_covalent_pi_corrections(
+    atoms_packed,
+    bonds,
+    lp_out,
+    fc_out,
+    mol_charge=0,
+    *,
+    metal_adjacency_edges=None,
+    pi_min_order=None,
+):
+    """
+    Post-ILP / pre-CBC η²-only fix: for a 2-atom η group where both atoms have
+    covalent M–L bond order 1 and an internal L–L bond ≥ *pi_min_order* (default
+    double), upgrade that internal bond by one (C=C → C≡C), zero both M–L Lewis
+    orders, and mark one ligand atom as the sole dative donor (CBC L pair).
+
+    Returns (bonds, lp_out, fc_out).
+    """
+    if pi_min_order is None:
+        pi_min_order = ILP_ETA_PI_BOND_MIN_ORDER
+
+    atom_syms = [a[1] for a in atoms_packed]
+    id_to_pos = {a[0]: k for k, a in enumerate(atoms_packed)}
+    pos_to_id = {k: a[0] for k, a in enumerate(atoms_packed)}
+    n = len(atom_syms)
+
+    bo: dict[tuple[int, int], int] = {}
+    for i, j, order in bonds:
+        pi, pj = id_to_pos[i], id_to_pos[j]
+        bo[(min(pi, pj), max(pi, pj))] = int(order)
+
+    skip_dative: set[tuple[int, int]] = set()
+
+    adj_lewis = defaultdict(set)
+    for (a, b), order in bo.items():
+        if order > 0:
+            adj_lewis[a].add(b)
+            adj_lewis[b].add(a)
+
+    def bo_ij(i, j):
+        return bo.get((min(i, j), max(i, j)), 0)
+
+    metal_adj_0 = None
+    if metal_adjacency_edges:
+        metal_adj_0 = []
+        for tm, lig, ei, ej in metal_adjacency_edges:
+            if not is_TM(ei) ^ is_TM(ej):
+                continue
+            if tm not in id_to_pos or lig not in id_to_pos:
+                continue
+            metal_adj_0.append((id_to_pos[tm], id_to_pos[lig], ei, ej))
+
+    lig_comp = _ligand_component_by_array_index(
+        atom_syms, bo, metal_adj_0
+    )
+
+    for metal_idx in range(n):
+        if not is_TM(atom_syms[metal_idx]):
+            continue
+
+        coord_for_eta = set()
+        for j in adj_lewis[metal_idx]:
+            if not is_TM(atom_syms[j]):
+                coord_for_eta.add(j)
+        if metal_adj_0:
+            for tm_i, lig_i, _ei, _ej in metal_adj_0:
+                if tm_i == metal_idx:
+                    coord_for_eta.add(lig_i)
+
+        for group in _eta_coordinating_groups(
+            metal_idx, coord_for_eta, lig_comp, adj_lewis
+        ):
+            if len(group) != 2:
+                continue
+            a, b = group[0], group[1]
+            if bo_ij(metal_idx, a) <= 0 or bo_ij(metal_idx, b) <= 0:
+                continue
+            if bo_ij(metal_idx, a) != 1 or bo_ij(metal_idx, b) != 1:
+                continue
+            ll_key = (min(a, b), max(a, b))
+            ll_order = bo.get(ll_key, 0)
+            if ll_order < pi_min_order:
+                continue
+
+            bo.pop((min(metal_idx, a), max(metal_idx, a)), None)
+            bo.pop((min(metal_idx, b), max(metal_idx, b)), None)
+            if ll_order < 3:
+                bo[ll_key] = ll_order + 1
+
+            skip_dative.add((metal_idx, b))
+
+    pos_lp = {id_to_pos[k]: v for k, v in lp_out.items()}
+    pos_fc = {id_to_pos[k]: fc_out.get(k, 0) for k in id_to_pos}
+    atom_el_pos = {i: atom_syms[i] for i in range(n)}
+    for lig_idx in range(n):
+        if is_TM(atom_syms[lig_idx]):
+            continue
+        new_fc = _recompute_ligand_fc(lig_idx, atom_el_pos, bo, pos_lp.get(lig_idx, 0))
+        if new_fc is not None:
+            pos_fc[lig_idx] = new_fc
+    _recompute_tm_oxidation_in_fc_out(atom_el_pos, pos_fc, bo, mol_charge)
+    for pos, aid in pos_to_id.items():
+        fc_out[aid] = pos_fc[pos]
+
+    bonds_out = sorted(
+        (pos_to_id[a], pos_to_id[b], o)
+        for (a, b), o in bo.items()
+        if o > 0
+    )
+    base.LAST_ETA_COVALENT_PI_DATIVE_SKIP = skip_dative
+    return bonds_out, lp_out, fc_out
+
+
 def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency_edges=None):
     n = len(atoms)
 
@@ -1415,6 +1789,40 @@ def cbc_x_ligands_from_interaction_records(cbc_interaction_records):
     return out
 
 
+def mlx_x_weight_for_record(metal_idx: int, atom_tuple: tuple[int, ...], typ: str, bo) -> int:
+    """
+    MLX X contribution for one CBC record: sum of ILP Mo–ligand bond orders on X
+  atoms (single/double/triple M–L → X1/X2/X3). Returns 0 for non-X records.
+    """
+    if typ != "X":
+        return 0
+
+    def bo_ij(i: int, j: int) -> int:
+        return int(bo.get((min(i, j), max(i, j)), 0))
+
+    order_sum = sum(bo_ij(metal_idx, a) for a in atom_tuple)
+    return max(order_sum, 1)
+
+
+def mlx_lx_counts_from_cbc_records(metal_idx: int, interaction_records, bo) -> tuple[int, int]:
+    """
+    MLX tallies for plotting / EN:
+      L — one per CBC L record;
+      X — Σ ILP Mo–L bond orders over CBC X records (triple M≡L → X3, etc.).
+    """
+    l_count = sum(1 for _, typ in interaction_records if typ == "L")
+    x_count = sum(
+        mlx_x_weight_for_record(metal_idx, atom_tuple, typ, bo)
+        for atom_tuple, typ in interaction_records
+    )
+    return l_count, x_count
+
+
+def mlx_en_vn(metal_m: int, l: int, x: int, charge: int = 0) -> tuple[int, int]:
+    """EN = m + 2l + x − q for charged [ML_l X_x]^q; VN = x (bond-order-weighted)."""
+    return metal_m + 2 * l + x - int(charge), x
+
+
 def print_cbc_report(
     atoms,
     coords,
@@ -1504,6 +1912,12 @@ def print_cbc_report(
                 return "H σ-complex — dative donor"
 
         if cbc_char == "L":
+            carbene_labels = getattr(base, "LAST_HETERO_CYCLIC_CARBENE_LABELS", {})
+            carbene_kind = carbene_labels.get((metal_idx, rep))
+            if carbene_kind in ("NHC", "MIC", "CAAC"):
+                if carbene_kind == "CAAC":
+                    return "C CAAC — cyclic alkylamino carbene, lone-pair σ-donor"
+                return f"C {carbene_kind} — heterocyclic carbene, lone-pair σ-donor"
             is_co = (sym == "C" and any(atoms[k] == "O" and bo_ij(rep, k) >= 2 for k in adj_lewis[rep]))
             if is_co:
                 return "CO — σ-donor via C lone pair"
@@ -1530,9 +1944,8 @@ def print_cbc_report(
         sym_m = atoms[metal_idx]
         interaction_records = results[metal_idx]
 
-        total_L = sum(1 for _, t in interaction_records if t == "L")
-        total_X = sum(1 for _, t in interaction_records if t == "X")
         total_Z = sum(1 for _, t in interaction_records if t == "Z")
+        total_L, total_X = mlx_lx_counts_from_cbc_records(metal_idx, interaction_records, bo)
 
         parts = []
         if total_L:
@@ -1565,7 +1978,17 @@ def print_cbc_report(
                 lbl = f"{lbl}(×{count})"
             d_str = f"{avg_dist(metal_idx, atom_tuple):.2f} Å"
             note = row_note(atom_tuple, cbc_char, metal_idx)
-            if count > 1:
+            if cbc_char == "X":
+                xw = mlx_x_weight_for_record(metal_idx, atom_tuple, cbc_char, bo)
+                if xw > 1:
+                    sym_rep = atoms[atom_tuple[0]]
+                    bond_names = {2: "double", 3: "triple"}
+                    bond_desc = bond_names.get(xw, f"order-{xw}")
+                    note = (
+                        f"{sym_rep}: {bond_desc} covalent M–{sym_rep} bond "
+                        f"(nitrido/oxo/imido); MLX X{xw}"
+                    )
+            elif count > 1:
                 sym_rep = atoms[atom_tuple[0]]
                 bond_names = {2: "double (2×)", 3: "triple (3×)"}
                 bond_desc = bond_names.get(count, f"{count}×")
@@ -1591,6 +2014,7 @@ def _subscript(n):
 #    AROMATIC_PI_BY_RING_SIZE (m atoms → π count; binary if two options).
 # 4b) Soft: similar M–L distances on a ligand → same z_cov (ILP_WEIGHT_ML_DISTANCE_CLASS).
 # 4c) Hard (optional): η-fragment carbons → lp = 0 (ILP_HARD_ETA_CARBON_LP_ZERO).
+# 4c2) Hard (always): non-η coordinating C → z_cov=1, b_tm∈{1,2,3}; η C and terminal CO may stay dative.
 # 4d) Hard (always): terminal CO (2-atom C+O fragment, M–L via C) → C≡O triple, M–C dative (b_tm=0).
 # 4e) Hard (always): SCN arm (S–C–N, 3 atoms) → S=C=N (both double bonds).
 # 5) For O/N/S/P in aromatic systems:
@@ -2430,6 +2854,7 @@ def solve_bond_orders(
     # Monatomic ML single covalent rule:
     # - F/Cl/Br/I at TM are forced to a covalent single bond (b_tm=1).
     # - H is forced only when isolated (no non-TM neighbor).
+    eta_lig_by_metal = _eta_ligand_atoms_by_metal(atoms, edges)
     for tm, lig in tm_nm_keys:
         if not _force_monatomic_ml_single_cov(lig, atom_el, edges):
             continue
@@ -2437,8 +2862,21 @@ def solve_bond_orders(
         prob += u2_tm[(tm, lig)] == 0
         prob += u3_tm[(tm, lig)] == 0
 
-    # Terminal CO (2-atom C+O fragment, M–L through C): C≡O triple; M–C dative (b_tm=0).
     terminal_cos = _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el)
+
+    # Non-η coordinating C: disallow dative class (z_cov=1 → b_tm∈{1,2,3}).
+    # η/haptic carbons and terminal CO (handled below) may stay dative.
+    terminal_co_mc = {(tm, c_idx) for tm, c_idx, _o in terminal_cos}
+    for tm, lig in tm_nm_keys:
+        if atom_el.get(lig) != "C":
+            continue
+        if lig in eta_lig_by_metal.get(tm, ()):
+            continue
+        if (tm, lig) in terminal_co_mc:
+            continue
+        prob += z_cov_tm[(tm, lig)] == 1
+
+    # Terminal CO (2-atom C+O fragment, M–L through C): C≡O triple; M–C dative (b_tm=0).
     co_triple_done = set()
     for tm, c_idx, o_idx in terminal_cos:
         kk = (min(c_idx, o_idx), max(c_idx, o_idx))
@@ -2537,7 +2975,6 @@ def solve_bond_orders(
     sigma_cov_ml_all = (
         pulp.lpSum(b_tm[k] for k in tm_nm_keys) if tm_nm_keys else 0
     )
-    eta_lig_by_metal = _eta_ligand_atoms_by_metal(atoms, edges)
     sigma_cov_ml_non_eta_terms = [
         b_tm[(tm, lig)]
         for tm, lig in tm_nm_keys
@@ -2855,6 +3292,8 @@ def infer_dative_ml_pairs_cbc(
             )
 
         for lig in sorted(dative_ligs):
+            if (metal_idx, lig) in base.LAST_ETA_COVALENT_PI_DATIVE_SKIP:
+                continue
             if (metal_idx, lig) not in ml_bo_zero:
                 continue
             if bo_ij(metal_idx, lig) != 0:
@@ -3154,6 +3593,23 @@ def main():
 
     bonds, lp_out, fc_out = solve_bond_orders(
         atoms, raw, aromatic_systems, mol_charge=charge, metal_adjacency_edges=raw
+    )
+    bonds, lp_out, fc_out, _carbene_labels = apply_heterocyclic_carbene_corrections(
+        atoms,
+        bonds,
+        lp_out,
+        fc_out,
+        aromatic_systems,
+        raw,
+        mol_charge=charge,
+    )
+    bonds, lp_out, fc_out = apply_eta_covalent_pi_corrections(
+        atoms,
+        bonds,
+        lp_out,
+        fc_out,
+        mol_charge=charge,
+        metal_adjacency_edges=raw,
     )
     atom_syms = [a[1] for a in atoms]
     print(f"Read {len(atoms)} atoms from {xyz} (charge={charge})")
