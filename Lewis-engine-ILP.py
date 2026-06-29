@@ -2015,6 +2015,8 @@ def _subscript(n):
 # 4c) Hard (optional): η-fragment carbons → lp = 0 (ILP_HARD_ETA_CARBON_LP_ZERO).
 # 4c2) Hard (always): non-η coordinating C → z_cov=1, b_tm∈{1,2,3}; η C and terminal CO may stay dative.
 # 4d) Hard (always): terminal CO (2-atom C+O fragment, M–L via C) → C≡O triple, M–C dative (b_tm=0).
+# 4d2) Hard (always): nitrile arm M←N≡C–X (deg N=2, deg Cα=2, H counted) → C≡N triple, M–N dative.
+# 4d3) Hard (always): isonitrile arm M←C≡N–X (deg C=2, deg N=2, H counted) → C≡N triple, M–C dative.
 # 4e) Hard (always): SCN arm (S–C–N, 3 atoms) → S=C=N (both double bonds).
 # 5) For O/N/S/P in aromatic systems:
 #    - if no double bond around that atom, one lone pair (2e) can contribute;
@@ -2530,6 +2532,77 @@ def ligand_ml_contacts_by_component(atoms, edges):
     return dict(out)
 
 
+def _full_adjacency_from_edges(edges):
+    """Atom index → neighbor set from raw connectivity (includes H and TM)."""
+    adj = defaultdict(set)
+    for i, j, *_ in edges:
+        adj[i].add(j)
+        adj[j].add(i)
+    return adj
+
+
+def _nitrile_arm_tm_n_c_triples(atoms, edges, tm_nm_keys, atom_el):
+    """
+    Nitrile arm M←N≡C–X: neighbor degrees count H and metal.
+    deg(N)=2 ({TM, Cα}), deg(Cα)=2 ({N, X}), Cα–N in *edges*.
+    Returns (tm, n_idx, c_alpha_idx).
+    """
+    _ = atoms
+    adj = _full_adjacency_from_edges(edges)
+    out = []
+    seen = set()
+    for tm, n_idx in tm_nm_keys:
+        if atom_el.get(n_idx) != "N":
+            continue
+        if len(adj[n_idx]) != 2 or tm not in adj[n_idx]:
+            continue
+        c_nbrs = adj[n_idx] - {tm}
+        if len(c_nbrs) != 1:
+            continue
+        c_alpha = next(iter(c_nbrs))
+        if atom_el.get(c_alpha) != "C":
+            continue
+        if len(adj[c_alpha]) != 2 or n_idx not in adj[c_alpha]:
+            continue
+        key = (tm, n_idx, c_alpha)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(key)
+    return out
+
+
+def _isonitrile_arm_tm_c_n_triples(atoms, edges, tm_nm_keys, atom_el):
+    """
+    Isonitrile arm M←C≡N–X: neighbor degrees count H and metal.
+    deg(C)=2 ({TM, Nβ}), deg(Nβ)=2 ({C, X}), C–N in *edges*.
+    Returns (tm, c_idx, n_beta_idx).
+    """
+    _ = atoms
+    adj = _full_adjacency_from_edges(edges)
+    out = []
+    seen = set()
+    for tm, c_idx in tm_nm_keys:
+        if atom_el.get(c_idx) != "C":
+            continue
+        if len(adj[c_idx]) != 2 or tm not in adj[c_idx]:
+            continue
+        n_nbrs = adj[c_idx] - {tm}
+        if len(n_nbrs) != 1:
+            continue
+        n_beta = next(iter(n_nbrs))
+        if atom_el.get(n_beta) != "N":
+            continue
+        if len(adj[n_beta]) != 2 or c_idx not in adj[n_beta]:
+            continue
+        key = (tm, c_idx, n_beta)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(key)
+    return out
+
+
 def _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el):
     """
     One (tm, c, o) per TM–C contact that is a terminal carbonyl: nonmetal component is
@@ -2860,31 +2933,61 @@ def solve_bond_orders(
         prob += u3_tm[(tm, lig)] == 0
 
     terminal_cos = _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el)
+    nitrile_arms = _nitrile_arm_tm_n_c_triples(atoms, edges, tm_nm_keys, atom_el)
+    isonitrile_arms = _isonitrile_arm_tm_c_n_triples(atoms, edges, tm_nm_keys, atom_el)
 
     # Non-η coordinating C: disallow dative class (z_cov=1 → b_tm∈{1,2,3}).
-    # η/haptic carbons and terminal CO (handled below) may stay dative.
+    # η/haptic carbons, terminal CO, and isonitrile arms may stay dative.
     terminal_co_mc = {(tm, c_idx) for tm, c_idx, _o in terminal_cos}
+    isonitrile_arm_mc = {(tm, c_idx) for tm, c_idx, _n in isonitrile_arms}
+    dative_coord_c_mc = terminal_co_mc | isonitrile_arm_mc
     for tm, lig in tm_nm_keys:
         if atom_el.get(lig) != "C":
             continue
         if lig in eta_lig_by_metal.get(tm, ()):
             continue
-        if (tm, lig) in terminal_co_mc:
+        if (tm, lig) in dative_coord_c_mc:
             continue
         prob += z_cov_tm[(tm, lig)] == 1
 
     # Terminal CO (2-atom C+O fragment, M–L through C): C≡O triple; M–C dative (b_tm=0).
-    co_triple_done = set()
+    cn_triple_done = set()
     for tm, c_idx, o_idx in terminal_cos:
         kk = (min(c_idx, o_idx), max(c_idx, o_idx))
         if kk not in u2:
             raise RuntimeError(
                 f"Terminal CO: C–O edge {kk} not in ILP edge set (check connectivity)"
             )
-        if kk not in co_triple_done:
+        if kk not in cn_triple_done:
             prob += u2[kk] == 1
             prob += u3[kk] == 1
-            co_triple_done.add(kk)
+            cn_triple_done.add(kk)
+        prob += b_tm[(tm, c_idx)] == 0
+
+    # Nitrile arm M←N≡C–X: C≡N triple; M–N dative (b_tm=0).
+    for tm, n_idx, c_alpha in nitrile_arms:
+        kk = (min(c_alpha, n_idx), max(c_alpha, n_idx))
+        if kk not in u2:
+            raise RuntimeError(
+                f"Nitrile arm: C–N edge {kk} not in ILP edge set (check connectivity)"
+            )
+        if kk not in cn_triple_done:
+            prob += u2[kk] == 1
+            prob += u3[kk] == 1
+            cn_triple_done.add(kk)
+        prob += b_tm[(tm, n_idx)] == 0
+
+    # Isonitrile arm M←C≡N–X: C≡N triple; M–C dative (b_tm=0).
+    for tm, c_idx, n_beta in isonitrile_arms:
+        kk = (min(c_idx, n_beta), max(c_idx, n_beta))
+        if kk not in u2:
+            raise RuntimeError(
+                f"Isonitrile arm: C–N edge {kk} not in ILP edge set (check connectivity)"
+            )
+        if kk not in cn_triple_done:
+            prob += u2[kk] == 1
+            prob += u3[kk] == 1
+            cn_triple_done.add(kk)
         prob += b_tm[(tm, c_idx)] == 0
 
     # SCN arm (S–C–N fragment): S=C=N (S–C and C–N double bonds).
