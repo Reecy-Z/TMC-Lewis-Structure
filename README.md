@@ -4,6 +4,8 @@ Code repository for the manuscript **Automated Generation of Lewis-like Structur
 
 ILP-based Lewis structures for transition-metal complexes: bond orders, formal charges, CBC (L/X/Z), oxidation states, 3D viewer, and SMILES from XYZ.
 
+![Overview](TOC.png)
+
 ## Repository layout
 
 | Path | Role |
