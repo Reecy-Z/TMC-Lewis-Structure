@@ -153,9 +153,9 @@
   <div id="file-strip">
     <!-- Python script selector -->
     <div class="file-row">
-      <span class="file-label">lewis2.py</span>
-      <div class="drop-zone py-needed" id="py-drop" onclick="document.getElementById('py-input').click()" title="Select your lewis2.py file">
-        Select lewis2.py ↑
+      <span class="file-label">Lewis-engine-ILP.py</span>
+      <div class="drop-zone py-needed" id="py-drop" onclick="document.getElementById('py-input').click()" title="Select your Lewis-engine-ILP.py file">
+        Select Lewis-engine-ILP.py ↑
       </div>
       <input type="file" id="py-input" accept=".py">
     </div>
@@ -304,7 +304,7 @@
       </div>
     </div>
 
-    <!-- Dative Arrows (only when lewis2.py loaded) -->
+    <!-- Dative Arrows (only when Lewis-engine-ILP.py loaded) -->
     <div class="section" id="dative-section">
       <div class="section-header" onclick="toggleSection(this)">
         <span class="section-icon">⇝</span>
@@ -346,7 +346,7 @@
       </div>
     </div>
 
-    <div id="vis-info" style="margin-top:10px;font-size:9px;font-family:var(--mono);color:var(--dim)">Load lewis2.py and a .xyz file to begin.</div>
+    <div id="vis-info" style="margin-top:10px;font-size:9px;font-family:var(--mono);color:var(--dim)">Load Lewis-engine-ILP.py and a .xyz file to begin.</div>
   </div>
 </aside>
 
@@ -357,7 +357,7 @@
       <circle cx="40" cy="40" r="5" fill="#74c69d"/>
     </svg>
     <div class="placeholder-text">No structure loaded</div>
-    <div class="placeholder-hint">Select lewis2.py → drop a .xyz file</div>
+    <div class="placeholder-hint">Select Lewis-engine-ILP.py → drop a .xyz file</div>
   </div>
   <div id="plot"></div>
   <div id="loading">
@@ -475,9 +475,9 @@ async function initPyodide() {
     state.pyReady = true;
 
     setTimeout(() => { bar.classList.add('hidden'); }, 1200);
-    $('mode-chip').textContent = 'Select lewis2.py';
+    $('mode-chip').textContent = 'Select Lewis-engine-ILP.py';
     $('mode-chip').className = 'loading';
-    showToast('Python engine ready — select lewis2.py', 'info');
+    showToast('Python engine ready — select Lewis-engine-ILP.py', 'info');
   } catch(e) {
     $('py-init-msg').textContent = '✗ Python load failed: ' + e.message;
     $('mode-chip').textContent = 'Python failed';
@@ -486,7 +486,7 @@ async function initPyodide() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  LEWIS BRIDGE CODE (injected after lewis2.py)
+//  LEWIS BRIDGE CODE (injected after Lewis-engine-ILP.py)
 // ══════════════════════════════════════════════════════════════════
 const BRIDGE_CODE = `
 import json
@@ -607,12 +607,12 @@ async function injectLewisCode() {
     await pyodide.runPythonAsync(BRIDGE_CODE);
     $('mode-chip').textContent = 'Ready';
     $('mode-chip').className = 'ok';
-    showToast('lewis2.py loaded — drop a .xyz file', 'success');
+    showToast('Lewis-engine-ILP.py loaded — drop a .xyz file', 'success');
 
     // If xyz already loaded, re-run
     if (state._xyzText) runAnalysis(state._xyzText, state._xyzName);
   } catch(e) {
-    showToast('lewis2.py error: ' + e.message.slice(0,60), 'error');
+    showToast('Lewis-engine-ILP.py error: ' + e.message.slice(0,60), 'error');
     console.error(e);
   }
 }
@@ -637,7 +637,7 @@ async function handleXYZ(file) {
 
   if (!state.pyReady || !state.lewisCode) {
     // Parse XYZ manually for geometry-only view
-    showToast('Showing geometry only (lewis2.py not yet loaded)', 'info');
+    showToast('Showing geometry only (Lewis-engine-ILP.py not yet loaded)', 'info');
     parseXYZFallback(text, file.name);
     return;
   }
@@ -694,7 +694,7 @@ function parseXYZFallback(text, fname) {
   state.bonds = detectBondsAuto(atoms, coords);
   state.dativeBonds = [];
   state.loaded = true; state._newFile = true;
-  $('file-info').textContent = `${n} atoms (geometry only — load lewis2.py for bonds)`;
+  $('file-info').textContent = `${n} atoms (geometry only — load Lewis-engine-ILP.py for bonds)`;
   $('status-atoms').textContent = `${n} atoms`;
   $('mode-chip').textContent = `XYZ (geo only)`;
   visualize();
