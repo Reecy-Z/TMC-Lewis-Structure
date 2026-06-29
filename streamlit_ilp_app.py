@@ -4,8 +4,6 @@ Streamlit app for ILP-based Lewis structure analysis (Lewis-engine-ILP backend).
 
 Run:
     streamlit run streamlit_ilp_app.py --server.address 0.0.0.0 --server.port 8501
-
-Auth credentials: copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml`.
 """
 
 from __future__ import annotations
@@ -25,7 +23,7 @@ import streamlit.components.v1 as components
 APP_TITLE = "Orbis QC — TMC Lewis Analyzer"
 ROOT_DIR = Path(__file__).resolve().parent
 ENGINE_FILE = ROOT_DIR / "Lewis-engine-ILP.py"
-VIEWER_FILE = ROOT_DIR / "XYZ_Viewer_fixed_V2.html"
+VIEWER_FILE = ROOT_DIR / "XYZ_Viewer.html"
 # Streamlit iframe height for the embedded XYZ viewer (px). Increase for a taller 3D panel.
 VIEWER_IFRAME_HEIGHT = 1100
 VIEWER_MIN_HEIGHT_PX = 820
@@ -35,19 +33,19 @@ DEMO_CASES = (
     {
         "id": "abasec",
         "label": "ABASEC (+1)",
-        "path": ROOT_DIR / "test_5_22" / "ABASEC_charge_plus_1.xyz",
+        "path": ROOT_DIR / "test" / "ABASEC_charge_plus_1.xyz",
         "charge": 1,
     },
     {
         "id": "abelok",
         "label": "ABELOK (0)",
-        "path": ROOT_DIR / "test_5_22" / "ABELOK_charge_0.xyz",
+        "path": ROOT_DIR / "test" / "ABELOK_charge_0.xyz",
         "charge": 0,
     },
     {
         "id": "kadxao",
         "label": "KADXAO (0)",
-        "path": ROOT_DIR / "test_5_22" / "KADXAO_charge_0.xyz",
+        "path": ROOT_DIR / "test" / "KADXAO_charge_0.xyz",
         "charge": 0,
     },
 )
@@ -289,24 +287,6 @@ div[data-testid="stCodeBlock"]{
 [data-testid="stCustomComponentV1"]{
   margin-bottom:0 !important;
 }
-.login-wrap{
-  max-width:400px;
-  margin:12vh auto 0 auto;
-  padding:0 12px;
-}
-.login-card{
-  background:#ffffff;
-  border:1px solid #d0dae8;
-  border-radius:14px;
-  padding:28px 26px 22px 26px;
-  box-shadow:0 8px 28px rgba(15,23,42,.08);
-}
-.login-brand{
-  text-align:center;
-  margin-bottom:22px;
-}
-.login-brand .orbis-title{ font-size:22px; }
-.login-brand .orbis-sub{ font-size:12px; margin-top:4px; }
 </style>
         """,
         unsafe_allow_html=True,
@@ -852,55 +832,6 @@ def show_3d_preview(payload: dict):
     )
 
 
-def init_auth_session() -> None:
-    if "authenticated" not in st.session_state:
-        st.session_state.authenticated = False
-
-
-def get_auth_credentials() -> tuple[str, str]:
-    """Read login credentials from .streamlit/secrets.toml [auth] section."""
-    try:
-        auth = st.secrets["auth"]
-        username = auth["username"]
-        password = auth["password"]
-    except (KeyError, TypeError, AttributeError) as exc:
-        raise RuntimeError(
-            "Missing auth secrets. Create `.streamlit/secrets.toml` with:\n\n"
-            "[auth]\n"
-            'username = "your_username"\n'
-            'password = "your_password"'
-        ) from exc
-    return str(username), str(password)
-
-
-def show_login_page(auth_username: str, auth_password: str) -> None:
-    st.markdown(
-        """
-        <div class="login-wrap">
-          <div class="login-card">
-            <div class="login-brand">
-              <div class="orbis-title">Orbis QC</div>
-              <div class="orbis-sub">TMC Lewis Analyzer — sign in to continue</div>
-            </div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    _left, center, _right = st.columns([1, 1.2, 1])
-    with center:
-        with st.form("orbis_login_form", clear_on_submit=False):
-            username = st.text_input("Username", placeholder="Enter username")
-            password = st.text_input("Password", type="password", placeholder="Enter password")
-            submitted = st.form_submit_button("Sign in", use_container_width=True, type="primary")
-        if submitted:
-            if username == auth_username and password == auth_password:
-                st.session_state.authenticated = True
-                st.rerun()
-            else:
-                st.error("Invalid username or password.")
-
-
 def _xyz_export_stem(xyz_file, *, demo_xyz_name: str | None = None) -> str:
     """Base filename for download (upload or quick-example)."""
     if xyz_file is not None:
@@ -1159,15 +1090,6 @@ def run_analyzer_app() -> None:
 def main() -> None:
     st.set_page_config(page_title=APP_TITLE, layout="wide", initial_sidebar_state="collapsed")
     inject_styles()
-    init_auth_session()
-    try:
-        auth_username, auth_password = get_auth_credentials()
-    except RuntimeError as exc:
-        st.error(str(exc))
-        st.stop()
-    if not st.session_state.authenticated:
-        show_login_page(auth_username, auth_password)
-        return
     run_analyzer_app()
 
 
