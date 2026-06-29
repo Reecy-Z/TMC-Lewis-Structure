@@ -35,8 +35,6 @@ ILP_HARD_OCTET = True
 ILP_HARD_MOL_CHARGE_BALANCE = True
 # Σox(TM) ≥ Σb_tm on non-η M–L only (η orders excluded). Halogen (F/Cl/Br/I) ligands are omitted.
 ILP_HARD_OX_GE_SIGMA = False
-# C with no TM neighbor in connectivity: prefer lp = 0 (soft penalty when enabled).
-ILP_HARD_C_LP_ONLY_TM_NEIGHBORS = True
 # η-fragment carbons to a TM (≥ETA_MIN_COORDINATING_GROUP_SIZE): lp = 0.
 ILP_HARD_ETA_CARBON_LP_ZERO = True
 
@@ -46,6 +44,7 @@ ILP_WEIGHT_AROMATIC_DEVIATION = 100.0
 ILP_WEIGHT_ENEG_NEGATIVE_FC = 10.0
 ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
 ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
+# Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
 # Conjugated aromatic π targets by system atom count m (see _aromatic_pi_target_expr).
@@ -2022,7 +2021,7 @@ def _subscript(n):
 #    - if double-bonded, pi contribution comes from double bonds (2 per double).
 # 6) For ring carbons not bonded to a transition metal: if unsaturated (any incident
 #    multiple bond or formal charge <= -1), the same optional lone-pair pi term applies.
-# 7) Hard (optional): remote C → lp = 0 (ILP_HARD_C_LP_ONLY_TM_NEIGHBORS).
+# 7) Soft (optional): remote C → prefer lp = 0 (ILP_WEIGHT_REMOTE_C_LP_VIOLATION).
 # 8) Hard (optional): mol_charge = Σfc(ligands) + Σox(TM) − Σb_tm (ILP_HARD_MOL_CHARGE_BALANCE).
 # 9) Hard (optional): Σox(TM) ≥ Σb_tm on non-η M–L only (ILP_HARD_OX_GE_SIGMA); F/Cl/Br/I ligands omitted from RHS.
 # 10) Soft: minimize Σox(TM) (ILP_WEIGHT_TM_OX_MINIMIZE).
@@ -2637,15 +2636,13 @@ def solve_bond_orders(
     tm_ox_minimize_weight=None,
     aromatic_huckel_n=None,
     ml_distance_class_weight=None,
-    c_lp_tm_neighbor_hard=None,
-    retry_relax_c_lp_tm=True,
-    __from_c_lp_relaxed_retry=False,
+    remote_c_lp_violation_weight=None,
     solve_time_limit_sec=SOLVE_BOND_ORDERS_CBC_TIME_LIMIT_SEC,
 ):
-    apply_c_lp_tm = (
-        ILP_HARD_C_LP_ONLY_TM_NEIGHBORS
-        if c_lp_tm_neighbor_hard is None
-        else bool(c_lp_tm_neighbor_hard)
+    rc_lp_w = (
+        ILP_WEIGHT_REMOTE_C_LP_VIOLATION
+        if remote_c_lp_violation_weight is None
+        else remote_c_lp_violation_weight
     )
 
     prob = pulp.LpProblem("BondOrderAssignmentAromatic", pulp.LpMinimize)
@@ -3048,10 +3045,10 @@ def solve_bond_orders(
     # (tm_ox_penalty). TM oxidation variables remain present for hard constraints.
 
     remote_c_lp_violation = {}
-    if apply_c_lp_tm:
+    if rc_lp_w > 0:
         for i, el, *_ in atoms:
             if el == "C" and i in lp and i not in tm_neighbor_atoms:
-                # Elastic remote-C lp=0: allow lp>0 but penalize it heavily.
+                # Elastic remote-C lp=0: allow lp>0 but penalize in objective.
                 v = pulp.LpVariable(f"rcv_{i}", lowBound=0, cat="Integer")
                 remote_c_lp_violation[i] = v
                 prob += lp[i] <= v
@@ -3068,10 +3065,9 @@ def solve_bond_orders(
         objective_terms.append(ILP_WEIGHT_ENEG_NEGATIVE_FC * eneg_neg_charge_penalty)
     if ILP_WEIGHT_AROMATIC_DEVIATION > 0:
         objective_terms.append(ILP_WEIGHT_AROMATIC_DEVIATION * aromatic_penalty)
-    if ILP_WEIGHT_REMOTE_C_LP_VIOLATION > 0 and remote_c_lp_violation:
+    if rc_lp_w > 0 and remote_c_lp_violation:
         objective_terms.append(
-            ILP_WEIGHT_REMOTE_C_LP_VIOLATION
-            * pulp.lpSum(remote_c_lp_violation.values())
+            rc_lp_w * pulp.lpSum(remote_c_lp_violation.values())
         )
     if ml_zcov_w > 0:
         objective_terms.append(ml_zcov_w * ml_zcov_penalty)
