@@ -2017,7 +2017,6 @@ def _subscript(n):
 # 4d) Hard (always): terminal CO (2-atom C+O fragment, M–L via C) → C≡O triple, M–C dative (b_tm=0).
 # 4d2) Hard (always): nitrile arm M←N≡C–X (deg N=2, deg Cα=2, H counted) → C≡N triple, M–N dative.
 # 4d3) Hard (always): isonitrile arm M←C≡N–X (deg C=2, deg N=2, H counted) → C≡N triple, M–C dative.
-# 4e) Hard (always): SCN arm (S–C–N, 3 atoms) → S=C=N (both double bonds).
 # 5) For O/N/S/P in aromatic systems:
 #    - if no double bond around that atom, one lone pair (2e) can contribute;
 #    - if double-bonded, pi contribution comes from double bonds (2 per double).
@@ -2635,39 +2634,6 @@ def _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el):
     return out
 
 
-def _scn_fragment_s_c_n_triples(atoms, edges, atom_el):
-    """
-    SCN arm: exactly {S, C, N}, edges S–C and C–N (no S–N).
-    Metal attachment at S and/or N is allowed (e.g. thiolate bridges S–C–N–M).
-    """
-    lig_comp = _nonmetal_ligand_components(atoms, edges)
-    by_lid = defaultdict(set)
-    for aid, lid in lig_comp.items():
-        by_lid[lid].add(aid)
-
-    out = []
-    for comp in by_lid.values():
-        if len(comp) != 3:
-            continue
-        if {atom_el.get(aid) for aid in comp} != {"S", "C", "N"}:
-            continue
-        s_idx = next(aid for aid in comp if atom_el.get(aid) == "S")
-        c_idx = next(aid for aid in comp if atom_el.get(aid) == "C")
-        n_idx = next(aid for aid in comp if atom_el.get(aid) == "N")
-        has_sc = has_cn = has_sn = False
-        for i, j, ei, ej in edges:
-            pair = {i, j}
-            if pair == {s_idx, c_idx} and "S" in (ei, ej) and "C" in (ei, ej):
-                has_sc = True
-            if pair == {c_idx, n_idx} and "C" in (ei, ej) and "N" in (ei, ej):
-                has_cn = True
-            if pair == {s_idx, n_idx}:
-                has_sn = True
-        if has_sc and has_cn and not has_sn:
-            out.append((s_idx, c_idx, n_idx))
-    return out
-
-
 def _ligand_ml_zcov_pair_weights(
     atoms,
     edges,
@@ -2989,23 +2955,6 @@ def solve_bond_orders(
             prob += u3[kk] == 1
             cn_triple_done.add(kk)
         prob += b_tm[(tm, c_idx)] == 0
-
-    # SCN arm (S–C–N fragment): S=C=N (S–C and C–N double bonds).
-    scn_triples = _scn_fragment_s_c_n_triples(atoms, edges, atom_el)
-    scn_edge_done = set()
-    for s_idx, c_idx, n_idx in scn_triples:
-        sc_kk = (min(s_idx, c_idx), max(s_idx, c_idx))
-        cn_kk = (min(c_idx, n_idx), max(c_idx, n_idx))
-        for kk, label in ((sc_kk, "S–C"), (cn_kk, "C–N")):
-            if kk not in u2:
-                raise RuntimeError(
-                    f"SCN ligand: {label} edge {kk} not in ILP edge set (check connectivity)"
-                )
-            if kk in scn_edge_done:
-                continue
-            prob += u2[kk] == 1
-            prob += u3[kk] == 0
-            scn_edge_done.add(kk)
 
     # --- Aromatic 4n+2 penalty ---
     aromatic_dev_terms = []
