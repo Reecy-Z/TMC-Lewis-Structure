@@ -333,10 +333,21 @@ def unsupported_transition_metals(engine, atoms: list[str]) -> list[str]:
 
 
 def validate_transition_metals(engine, atoms: list[str]) -> None:
+    tm_set = getattr(engine, "TM_SET", frozenset())
+    tm_atoms = [(i + 1, sym) for i, sym in enumerate(atoms) if sym in tm_set]
+    if len(tm_atoms) > 1:
+        detail = "\n".join(f"- **{sym}** (atom index: {idx})" for idx, sym in tm_atoms)
+        raise UnsupportedTransitionMetalError(
+            "Multiple transition-metal centers detected in XYZ.\n\n"
+            f"{detail}\n\n"
+            "This app currently supports only mononuclear transition-metal complexes. "
+            "Please provide a structure with exactly one transition-metal atom."
+        )
+
     bad = unsupported_transition_metals(engine, atoms)
     if not bad:
         return
-    supported = ", ".join(sorted(getattr(engine, "TM_SET", ())))
+    supported = ", ".join(sorted(tm_set))
     lines = []
     for sym in bad:
         idxs = [str(i + 1) for i, a in enumerate(atoms) if a == sym]

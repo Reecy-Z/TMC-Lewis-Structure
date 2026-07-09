@@ -47,6 +47,9 @@ ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
+# Safety check before connectivity/ILP: atoms closer than this are considered overlaps.
+ATOM_OVERLAP_DISTANCE_THRESHOLD_A = 0.60
+
 # Conjugated aromatic π targets by system atom count m (see _aromatic_pi_target_expr).
 # Tuple (low, high): ILP binary picks high when two common counts exist; (n, None) is fixed.
 AROMATIC_PI_BY_RING_SIZE: dict[int, tuple[int, int | None]] = {
@@ -383,6 +386,14 @@ def read_xyz(path: str):
             ) from exc
         atoms.append((k + 1, sym, x, y, z))
     validate_atom_symbols([a[1] for a in atoms])
+    tm_atoms = [(idx, sym) for idx, sym, *_xyz in atoms if is_tm(sym)]
+    if len(tm_atoms) > 1:
+        tm_items = ", ".join(f"{sym}{idx}" for idx, sym in tm_atoms)
+        raise RuntimeError(
+            "WARNING: multiple transition-metal centers detected in XYZ: "
+            f"{tm_items}. This workflow currently supports only mononuclear "
+            "transition-metal complexes. Please provide a single-metal structure."
+        )
     return atoms
 
 
@@ -542,9 +553,36 @@ def _within_cov_bond_cutoff(d, ei, ej):
     return d < _bond_cutoff(ei, ej)
 
 
+def _assert_no_atom_overlap(atoms, threshold=ATOM_OVERLAP_DISTANCE_THRESHOLD_A):
+    """
+    Abort early if any atom pair is unrealistically close (<= threshold, Angstrom).
+    """
+    overlaps = []
+    n = len(atoms)
+    for i in range(n):
+        ai = atoms[i]
+        for j in range(i + 1, n):
+            aj = atoms[j]
+            d = dist(ai, aj)
+            if d <= float(threshold):
+                overlaps.append((ai[0], ai[1], aj[0], aj[1], d))
+    if not overlaps:
+        return
+    items = ", ".join(
+        f"{si}{ii}-{sj}{jj} ({d:.3f} A)" for ii, si, jj, sj, d in overlaps[:30]
+    )
+    more = "" if len(overlaps) <= 30 else f" ... +{len(overlaps) - 30} more pair(s)"
+    raise RuntimeError(
+        "WARNING: atom overlap detected (distance <= "
+        f"{float(threshold):.2f} A): {items}{more}. "
+        "Please adjust the structure and rerun."
+    )
+
+
 def connectivity(atoms, factor=None):
     """Raw connectivity: TM–nonmetal uses tmQM P99+0.05 Å; other pairs COV+0.45/0.40 Å."""
     _ = factor  # deprecated; kept for call-site compatibility
+    _assert_no_atom_overlap(atoms)
     edges = []
     n = len(atoms)
     for i in range(n):
