@@ -64,6 +64,10 @@ class UnsupportedTransitionMetalError(ValueError):
     """XYZ contains a transition-metal element outside Lewis-engine-ILP TM_SET."""
 
 
+class MultipleTransitionMetalError(ValueError):
+    """XYZ contains more than one transition-metal center."""
+
+
 class IlpSolveError(RuntimeError):
     """ILP solver did not return an optimal / integer-feasible solution."""
 
@@ -336,10 +340,10 @@ def validate_transition_metals(engine, atoms: list[str]) -> None:
     tm_set = getattr(engine, "TM_SET", frozenset())
     tm_atoms = [(i + 1, sym) for i, sym in enumerate(atoms) if sym in tm_set]
     if len(tm_atoms) > 1:
-        detail = "\n".join(f"- **{sym}** (atom index: {idx})" for idx, sym in tm_atoms)
-        raise UnsupportedTransitionMetalError(
+        detail = "\n".join(f"{sym} (atom index: {idx})" for idx, sym in tm_atoms)
+        raise MultipleTransitionMetalError(
             "Multiple transition-metal centers detected in XYZ.\n\n"
-            f"{detail}\n\n"
+            f"{detail}\n"
             "This app currently supports only mononuclear transition-metal complexes. "
             "Please provide a structure with exactly one transition-metal atom."
         )
@@ -367,6 +371,24 @@ def show_unsupported_tm_error(exc: UnsupportedTransitionMetalError) -> None:
         "Replace the metal center with a supported transition metal, or remove it from the "
         "structure before running ILP analysis."
     )
+
+
+def show_multiple_tm_error(exc: MultipleTransitionMetalError) -> None:
+    st.error(str(exc).replace("\n", "  \n"))
+
+
+def show_unsupported_element_error(engine, atoms: list[str]) -> None:
+    valence = getattr(engine, "VALENCE", {})
+    cov = getattr(engine, "COV_R_CCDC", {})
+    detail = "\n".join(
+        f"{sym} (atom index: {i})"
+        for i, sym in enumerate(atoms, start=1)
+        if sym not in valence or sym not in cov
+    )
+    msg = "Unsupported element symbol(s) in XYZ."
+    if detail:
+        msg = f"{msg}\n\n{detail}"
+    st.error(msg.replace("\n", "  \n"))
 
 
 def show_ilp_solve_error(
@@ -1080,6 +1102,8 @@ def run_analyzer_app() -> None:
         )
         st.markdown("</div>", unsafe_allow_html=True)
 
+    except MultipleTransitionMetalError as exc:
+        show_multiple_tm_error(exc)
     except UnsupportedTransitionMetalError as exc:
         show_unsupported_tm_error(exc)
     except IlpSolveError as exc:
@@ -1087,8 +1111,7 @@ def run_analyzer_app() -> None:
     except ValueError as exc:
         msg = str(exc)
         if msg.startswith("Unsupported element symbol"):
-            st.error("Unsupported element symbol in XYZ")
-            st.markdown(msg)
+            show_unsupported_element_error(engine, atoms)
         else:
             st.error(f"Invalid XYZ input: {exc}")
     except Exception as exc:

@@ -79,6 +79,9 @@ ETA_MIN_COORDINATING_GROUP_SIZE = 2
 # CBC wall-time limit for prob.solve inside solve_bond_orders (0 = no limit).
 SOLVE_BOND_ORDERS_CBC_TIME_LIMIT_SEC = 10.0
 
+# Terminal nitrosyl M–N–O: angle at N (deg). >= this → linear M←N⁺≡O; else bent M–N=O.
+NO_LINEAR_ANGLE_MIN_DEG = 160.0
+
 
 # Covalent radii: ccdc_covalent_radii.json (CCDC ChemistryLib; Z=1–118 + D). TM–L cutoffs use
 # p99_A + margin; other pairs use R_cov sum + COV_BOND_MARGIN.
@@ -93,7 +96,7 @@ _CCDC_COV_RADII_JSON = os.path.join(
 )
 
 _TM_NONMETAL_LIMITS_JSON = os.path.join(
-    os.path.dirname(__file__), "tmQM_tm_nonmetal_bond_limits.json"
+    os.path.dirname(__file__), "tm_nonmetal_bond_limits.json"
 )
 # TM–L connectivity cutoff: empirical p99_A + this margin (Å)
 TM_NONMETAL_P99_MARGIN_A = 0.05
@@ -2055,6 +2058,8 @@ def _subscript(n):
 # 4d) Hard (always): terminal CO (2-atom C+O fragment, M–L via C) → C≡O triple, M–C dative (b_tm=0).
 # 4d2) Hard (always): nitrile arm M←N≡C–X (deg N=2, deg Cα=2, H counted) → C≡N triple, M–N dative.
 # 4d3) Hard (always): isonitrile arm M←C≡N–X (deg C=2, deg N=2, H counted) → C≡N triple, M–C dative.
+# 4d4) Hard (always): terminal nitrosyl {N,O} via N, not η². Linear M–N–O (>=160°) →
+#      N≡O triple, M←N dative (b_tm=0), NO⁺. Bent → N=O double, M–N covalent single.
 # 5) For O/N/S/P in aromatic systems:
 #    - if no double bond around that atom, one lone pair (2e) can contribute;
 #    - if double-bonded, pi contribution comes from double bonds (2 per double).
@@ -2672,6 +2677,74 @@ def _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el):
     return out
 
 
+def _angle_at_vertex_deg(p_left, p_vertex, p_right) -> float:
+    """Angle left–vertex–right in degrees from (x, y, z) triples."""
+    v1 = (
+        p_left[0] - p_vertex[0],
+        p_left[1] - p_vertex[1],
+        p_left[2] - p_vertex[2],
+    )
+    v2 = (
+        p_right[0] - p_vertex[0],
+        p_right[1] - p_vertex[1],
+        p_right[2] - p_vertex[2],
+    )
+    n1 = math.sqrt(v1[0] ** 2 + v1[1] ** 2 + v1[2] ** 2)
+    n2 = math.sqrt(v2[0] ** 2 + v2[1] ** 2 + v2[2] ** 2)
+    if n1 < 1e-8 or n2 < 1e-8:
+        return 0.0
+    cosang = (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / (n1 * n2)
+    cosang = max(-1.0, min(1.0, cosang))
+    return math.degrees(math.acos(cosang))
+
+
+def _terminal_no_tm_n_o_records(atoms, edges, tm_nm_keys, atom_el):
+    """
+    Terminal nitrosyl after connectivity: ligand fragment is exactly {N, O},
+    coordinated through N (not η²-NO). Classify by M–N–O angle:
+
+      linear (angle >= NO_LINEAR_ANGLE_MIN_DEG): M←N⁺≡O
+      bent: M–N=O
+
+    Returns (linear, bent) lists of (tm, n_idx, o_idx, angle_deg).
+    """
+    lig_comp = _nonmetal_ligand_components(atoms, edges)
+    xyz = {aid: (x, y, z) for aid, _el, x, y, z in atoms}
+    tm_nm_set = set(tm_nm_keys)
+    linear = []
+    bent = []
+    seen = set()
+    for tm, lig in tm_nm_keys:
+        if atom_el.get(lig) != "N":
+            continue
+        lid = lig_comp.get(lig)
+        if lid is None:
+            continue
+        comp = {aid for aid, l in lig_comp.items() if l == lid}
+        if len(comp) != 2:
+            continue
+        if {atom_el.get(aid) for aid in comp} != {"N", "O"}:
+            continue
+        n_idx = lig
+        o_idx = next(aid for aid in comp if atom_el.get(aid) == "O")
+        if (tm, o_idx) in tm_nm_set:
+            continue
+        has_no = any({i, j} == {n_idx, o_idx} for i, j, *_ in edges)
+        if not has_no:
+            continue
+        key = (tm, n_idx, o_idx)
+        if key in seen:
+            continue
+        seen.add(key)
+        ang = _angle_at_vertex_deg(xyz[tm], xyz[n_idx], xyz[o_idx])
+        rec = (tm, n_idx, o_idx, ang)
+        if ang >= NO_LINEAR_ANGLE_MIN_DEG:
+            linear.append(rec)
+        else:
+            bent.append(rec)
+    return linear, bent
+
+
 def _ligand_ml_zcov_pair_weights(
     atoms,
     edges,
@@ -2703,7 +2776,7 @@ def _ligand_ml_zcov_pair_weights(
     return pairs
 
 
-def solve_bond_orders(
+def build_bond_order_ilp(
     atoms,
     edges,
     aromatic_systems,
@@ -2714,8 +2787,15 @@ def solve_bond_orders(
     aromatic_huckel_n=None,
     ml_distance_class_weight=None,
     remote_c_lp_violation_weight=None,
-    solve_time_limit_sec=SOLVE_BOND_ORDERS_CBC_TIME_LIMIT_SEC,
 ):
+    """Build the Lewis bond-order PuLP model without solving.
+
+    Returns
+    -------
+    prob : pulp.LpProblem
+    ctx : dict
+        Decode context for solve_bond_orders (variable maps, edge keys, etc.).
+    """
     rc_lp_w = (
         ILP_WEIGHT_REMOTE_C_LP_VIOLATION
         if remote_c_lp_violation_weight is None
@@ -2939,6 +3019,13 @@ def solve_bond_orders(
     terminal_cos = _terminal_co_tm_c_o_triples(atoms, edges, tm_nm_keys, atom_el)
     nitrile_arms = _nitrile_arm_tm_n_c_triples(atoms, edges, tm_nm_keys, atom_el)
     isonitrile_arms = _isonitrile_arm_tm_c_n_triples(atoms, edges, tm_nm_keys, atom_el)
+    linear_nos, bent_nos = _terminal_no_tm_n_o_records(
+        atoms, edges, tm_nm_keys, atom_el
+    )
+    base.LAST_TERMINAL_NO = {
+        "linear": linear_nos,
+        "bent": bent_nos,
+    }
 
     # Non-η coordinating C: disallow dative class (z_cov=1 → b_tm∈{1,2,3}).
     # η/haptic carbons, terminal CO, and isonitrile arms may stay dative.
@@ -2993,6 +3080,36 @@ def solve_bond_orders(
             prob += u3[kk] == 1
             cn_triple_done.add(kk)
         prob += b_tm[(tm, c_idx)] == 0
+
+    # Terminal nitrosyl {N,O} via N:
+    #   linear: M←N⁺≡O  (N≡O triple, M–N dative);
+    #   bent:   M–N=O   (N=O double, M–N covalent single).
+    no_no_done = set()
+    for tm, n_idx, o_idx, _ang in linear_nos:
+        kk = (min(n_idx, o_idx), max(n_idx, o_idx))
+        if kk not in u2:
+            raise RuntimeError(
+                f"Linear nitrosyl: N–O edge {kk} not in ILP edge set (check connectivity)"
+            )
+        if kk not in no_no_done:
+            prob += u2[kk] == 1
+            prob += u3[kk] == 1
+            no_no_done.add(kk)
+        prob += b_tm[(tm, n_idx)] == 0
+    for tm, n_idx, o_idx, _ang in bent_nos:
+        kk = (min(n_idx, o_idx), max(n_idx, o_idx))
+        if kk not in u2:
+            raise RuntimeError(
+                f"Bent nitrosyl: N–O edge {kk} not in ILP edge set (check connectivity)"
+            )
+        if kk not in no_no_done:
+            prob += u2[kk] == 1
+            prob += u3[kk] == 0
+            no_no_done.add(kk)
+        if (tm, n_idx) in z_cov_tm:
+            prob += z_cov_tm[(tm, n_idx)] == 1
+            prob += u2_tm[(tm, n_idx)] == 0
+            prob += u3_tm[(tm, n_idx)] == 0
 
     # --- Aromatic 4n+2 penalty ---
     aromatic_dev_terms = []
@@ -3170,6 +3287,58 @@ def solve_bond_orders(
         raise RuntimeError("ILP objective is empty: enable at least one ILP_WEIGHT_* term")
     prob += pulp.lpSum(objective_terms)
 
+    ctx = {
+        "atoms": atoms,
+        "edges": edges,
+        "atom_el": atom_el,
+        "ilp_edges": ilp_edges,
+        "tm_nm_keys": tm_nm_keys,
+        "u2": u2,
+        "u3": u3,
+        "b_tm": b_tm,
+        "lp": lp,
+        "q": q,
+        "remote_c_lp_violation": remote_c_lp_violation,
+        "tm_ox_vars": tm_ox_vars,
+    }
+    return prob, ctx
+
+
+def solve_bond_orders(
+    atoms,
+    edges,
+    aromatic_systems,
+    mol_charge=0,
+    *,
+    metal_adjacency_edges=None,
+    tm_ox_minimize_weight=None,
+    aromatic_huckel_n=None,
+    ml_distance_class_weight=None,
+    remote_c_lp_violation_weight=None,
+    solve_time_limit_sec=SOLVE_BOND_ORDERS_CBC_TIME_LIMIT_SEC,
+):
+    prob, ctx = build_bond_order_ilp(
+        atoms,
+        edges,
+        aromatic_systems,
+        mol_charge=mol_charge,
+        metal_adjacency_edges=metal_adjacency_edges,
+        tm_ox_minimize_weight=tm_ox_minimize_weight,
+        aromatic_huckel_n=aromatic_huckel_n,
+        ml_distance_class_weight=ml_distance_class_weight,
+        remote_c_lp_violation_weight=remote_c_lp_violation_weight,
+    )
+    ilp_edges = ctx["ilp_edges"]
+    tm_nm_keys = ctx["tm_nm_keys"]
+    u2 = ctx["u2"]
+    u3 = ctx["u3"]
+    b_tm = ctx["b_tm"]
+    lp = ctx["lp"]
+    q = ctx["q"]
+    remote_c_lp_violation = ctx["remote_c_lp_violation"]
+    tm_ox_vars = ctx["tm_ox_vars"]
+    atom_el = ctx["atom_el"]
+
     cbc_opts: dict = {"msg": False}
     if solve_time_limit_sec is not None and float(solve_time_limit_sec) > 0:
         cbc_opts["timeLimit"] = float(solve_time_limit_sec)
@@ -3228,6 +3397,7 @@ def solve_bond_orders(
         else:
             fc_out[tm_i] = int(round(pulp.value(ox_v)))
     return bonds, lp_out, fc_out
+
 
 
 def _array_idx(atom_id: int, n_atoms: int) -> int:
