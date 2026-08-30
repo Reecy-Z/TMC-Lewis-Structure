@@ -44,6 +44,8 @@ ILP_WEIGHT_AROMATIC_DEVIATION = 100.0
 ILP_WEIGHT_ENEG_NEGATIVE_FC = 10.0
 ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
 ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
+# When expanded octet is on: prefer 10e then 12e/14e (tie-break only).
+ILP_WEIGHT_EXPANDED_OCTET = 1.0
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
@@ -51,8 +53,8 @@ ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 ATOM_OVERLAP_DISTANCE_THRESHOLD_A = 0.60
 
 # Conjugated aromatic π targets by system atom count m (see _aromatic_pi_target_expr).
-# Tuple (low, high): ILP binary picks high when two common counts exist; (n, None) is fixed.
-AROMATIC_PI_BY_RING_SIZE: dict[int, tuple[int, int | None]] = {
+# (n, None) is fixed; (low, high) is a binary choice; longer tuples are SOS-1 choices.
+AROMATIC_PI_BY_RING_SIZE: dict[int, tuple[int | None, ...]] = {
     3: (2, None),
     4: (2, 6),
     5: (6, None),
@@ -62,7 +64,7 @@ AROMATIC_PI_BY_RING_SIZE: dict[int, tuple[int, int | None]] = {
     9: (10, None),
     10: (10, None),
     11: (10, 14),
-    12: (10, 14),
+    12: (10, 12, 14),
     13: (14, None),
     14: (14, None),
     15: (14, 18),
@@ -206,14 +208,11 @@ VALENCE_ELECTRONS = dict(VALENCE)
 # Halides at M: always forced to covalent M–X single bond (MLX X-type).
 TM_MONATOMIC_COV_LIGANDS = frozenset({"F", "Cl", "Br", "I"})
 
-# P/As may use 10e/12e expanded octet only when bonded to at least one of these (connectivity).
-_P_EXPANDED_OCTET_NEIGHBOR_SYMS = frozenset({"O", "N", "S", "F", "Cl", "Br", "I"})
-_AS_EXPANDED_OCTET_NEIGHBOR_SYMS = _P_EXPANDED_OCTET_NEIGHBOR_SYMS
-# S may use 10e/12e expanded octet only when bonded to at least one of these.
-_S_EXPANDED_OCTET_NEIGHBOR_SYMS = frozenset({"O", "N", "F", "Cl", "Br", "I"})
-# Cl/Br/I may use 10e/12e/14e when bonded to O, N, or any halogen (incl. same element).
+# Expanded octet when non-TM connectivity exceeds these (M–L edges ignored).
+_P_AS_EXPANDED_OCTET_NON_TM_DEG = 3
+_S_EXPANDED_OCTET_NON_TM_DEG = 2
+_HEAVY_HALOGEN_EXPANDED_OCTET_NON_TM_DEG = 1
 _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS = frozenset({"Cl", "Br", "I"})
-_ALL_HALOGEN_SYMS = frozenset({"F", "Cl", "Br", "I"})
 
 def _load_ccdc_covalent_radii(path: str = _CCDC_COV_RADII_JSON) -> dict[str, float]:
     """CCDC ChemistryLib Element.covalent_radius() values (Å) from ccdc_covalent_radii.json."""
@@ -1124,7 +1123,8 @@ def _cbc_record_for_h_neighbor(
     return ((h_idx,), "X")
 
 
-# Post-ILP carbene labels for CBC notes: 0-based (metal_idx, c_idx) -> "NHC"|"MIC"|"CAAC".
+# Post-ILP carbene labels for CBC notes: 0-based (metal_idx, c_idx)
+# -> "NHC"|"MIC"|"CAAC"|"OXA"|"ADC"|"PYZ".
 LAST_HETERO_CYCLIC_CARBENE_LABELS: dict[tuple[int, int], str] = {}
 
 # η² covalent→π upgrade (apply_eta_covalent_pi_corrections): 0-based (metal, lig) pairs
@@ -1253,6 +1253,177 @@ def _classify_caac_carbene(c_idx, atom_el, bo, aromatic_systems, connectivity_ed
     return None
 
 
+def _lewis_bond_order(bo, a, b) -> int:
+    return int(bo.get((min(a, b), max(a, b)), 0))
+
+
+def _is_oxazolidin_2_ylidene_connectivity(c_idx, atom_el, bo):
+    """Carbene C has exactly two non-metal Lewis neighbors: N and O, both singles."""
+    nm = _nonmetal_lewis_neighbors(c_idx, atom_el, bo)
+    if len(nm) != 2:
+        return False
+    if {sym for _p, _order, sym in nm} != {"N", "O"}:
+        return False
+    return all(order == 1 for _p, order, _sym in nm)
+
+
+def _oxazolidine_2_ylidene_ring(c_idx, atom_el, bo, connectivity_edges):
+    """
+    Saturated 5-ring C(carbene)–N–C–C–O with all Lewis singles.
+    Returns the ring atom set, or None.
+    """
+    if not _is_oxazolidin_2_ylidene_connectivity(c_idx, atom_el, bo):
+        return None
+    n_idx = next(p for p, _o, sym in _nonmetal_lewis_neighbors(c_idx, atom_el, bo) if sym == "N")
+    o_idx = next(p for p, _o, sym in _nonmetal_lewis_neighbors(c_idx, atom_el, bo) if sym == "O")
+    for ring in _minimal_ligand_rings_containing(c_idx, atom_el, connectivity_edges):
+        ring_set = set(ring)
+        if len(ring_set) != 5:
+            continue
+        if n_idx not in ring_set or o_idx not in ring_set:
+            continue
+        if sum(1 for a in ring_set if atom_el.get(a) == "C") != 3:
+            continue
+        if sum(1 for a in ring_set if atom_el.get(a) == "N") != 1:
+            continue
+        if sum(1 for a in ring_set if atom_el.get(a) == "O") != 1:
+            continue
+        n_others = [
+            p
+            for p, _o, _s in _nonmetal_lewis_neighbors(n_idx, atom_el, bo)
+            if p in ring_set and p != c_idx
+        ]
+        o_others = [
+            p
+            for p, _o, _s in _nonmetal_lewis_neighbors(o_idx, atom_el, bo)
+            if p in ring_set and p != c_idx
+        ]
+        if len(n_others) != 1 or len(o_others) != 1:
+            continue
+        c_from_n, c_from_o = n_others[0], o_others[0]
+        if atom_el.get(c_from_n) != "C" or atom_el.get(c_from_o) != "C":
+            continue
+        if c_from_n == c_from_o:
+            continue
+        ring_bonds = (
+            (c_idx, n_idx),
+            (n_idx, c_from_n),
+            (c_from_n, c_from_o),
+            (c_from_o, o_idx),
+            (o_idx, c_idx),
+        )
+        if any(_lewis_bond_order(bo, a, b) != 1 for a, b in ring_bonds):
+            continue
+        return ring_set
+    return None
+
+
+def _classify_oxazolidin_2_ylidene(c_idx, atom_el, bo, connectivity_edges):
+    """Return \"OXA\" or None for oxazolidin-2-ylidene (N,O-carbene, all-single 5-ring)."""
+    if _oxazolidine_2_ylidene_ring(c_idx, atom_el, bo, connectivity_edges) is None:
+        return None
+    return "OXA"
+
+
+def _is_nr2_nitrogen(n_idx, atom_el, bo, carbene_c) -> bool:
+    """True if N is an -NR2 (R = H or C) singly bonded to the carbene C."""
+    if atom_el.get(n_idx) != "N":
+        return False
+    nm = _nonmetal_lewis_neighbors(n_idx, atom_el, bo)
+    if any(order != 1 for _p, order, _s in nm):
+        return False
+    others = [p for p, _o, _s in nm if p != carbene_c]
+    if len(others) != 2:
+        return False
+    return all(atom_el.get(p) in ("H", "C") for p in others)
+
+
+def _classify_adc_carbene(c_idx, atom_el, bo, connectivity_edges):
+    """
+    Return \"ADC\" or None for an acyclic diaminocarbene: C singly bonded to
+    two -NR2, and the carbene C is not in a ligand ring.
+    """
+    if not _is_nhc_carbene_connectivity(c_idx, atom_el, bo):
+        return None
+    n_idxs = [p for p, _o, _s in _nonmetal_lewis_neighbors(c_idx, atom_el, bo)]
+    if not all(_is_nr2_nitrogen(n_idx, atom_el, bo, c_idx) for n_idx in n_idxs):
+        return None
+    if _minimal_ligand_rings_containing(c_idx, atom_el, connectivity_edges):
+        return None
+    return "ADC"
+
+
+def _edge_in_connectivity(a, b, edges) -> bool:
+    return any({i, j} == {a, b} for i, j, *_ in edges)
+
+
+def _is_pyrazolin_5_ylidene_connectivity(c_idx, atom_el, bo):
+    """Carbene C has exactly two non-metal Lewis neighbors: N and C, both singles."""
+    nm = _nonmetal_lewis_neighbors(c_idx, atom_el, bo)
+    if len(nm) != 2:
+        return False
+    if {sym for _p, _o, sym in nm} != {"N", "C"}:
+        return False
+    return all(order == 1 for _p, order, _s in nm)
+
+
+def _pyrazolin_5_ylidene_ring(c_idx, atom_el, bo, connectivity_edges):
+    """
+    5-ring C5(carbene)–N2–N1–C3–C4: adjacent N–N, carbene between one N and C4.
+    Returns the ring atom set, or None.
+    """
+    if not _is_pyrazolin_5_ylidene_connectivity(c_idx, atom_el, bo):
+        return None
+    n2 = next(p for p, _o, sym in _nonmetal_lewis_neighbors(c_idx, atom_el, bo) if sym == "N")
+    c4 = next(p for p, _o, sym in _nonmetal_lewis_neighbors(c_idx, atom_el, bo) if sym == "C")
+    for ring in _minimal_ligand_rings_containing(c_idx, atom_el, connectivity_edges):
+        ring_set = set(ring)
+        if len(ring_set) != 5:
+            continue
+        if n2 not in ring_set or c4 not in ring_set:
+            continue
+        nitrogens = [a for a in ring_set if atom_el.get(a) == "N"]
+        carbons = [a for a in ring_set if atom_el.get(a) == "C"]
+        if len(nitrogens) != 2 or len(carbons) != 3:
+            continue
+        n1 = next(a for a in nitrogens if a != n2)
+        if _lewis_bond_order(bo, n2, n1) < 1 and not _edge_in_connectivity(
+            n2, n1, connectivity_edges
+        ):
+            continue
+        n1_ring_c = [
+            p
+            for p, _o, _s in _nonmetal_lewis_neighbors(n1, atom_el, bo)
+            if p in ring_set and atom_el.get(p) == "C"
+        ]
+        if not n1_ring_c:
+            n1_ring_c = [
+                a
+                for a in ring_set
+                if atom_el.get(a) == "C"
+                and a != c_idx
+                and _edge_in_connectivity(n1, a, connectivity_edges)
+            ]
+        if len(n1_ring_c) != 1:
+            continue
+        c3 = n1_ring_c[0]
+        if c3 in (c_idx, c4):
+            continue
+        if _lewis_bond_order(bo, c3, c4) < 1 and not _edge_in_connectivity(
+            c3, c4, connectivity_edges
+        ):
+            continue
+        return ring_set
+    return None
+
+
+def _classify_pyrazolin_5_ylidene(c_idx, atom_el, bo, connectivity_edges):
+    """Return \"PYZ\" or None for pyrazolin-5-ylidene (N–N 5-ring, C between N and C)."""
+    if _pyrazolin_5_ylidene_ring(c_idx, atom_el, bo, connectivity_edges) is None:
+        return None
+    return "PYZ"
+
+
 def _classify_heterocyclic_carbene(
     c_idx,
     atom_el,
@@ -1323,13 +1494,17 @@ def apply_heterocyclic_carbene_corrections(
     mol_charge=0,
 ):
     """
-    Post-ILP NHC / MIC / CAAC pass: force M–C dative (drop M–C Lewis order) and lp=1.
+    Post-ILP NHC / MIC / CAAC / OXA / ADC / PYZ pass: force M–C dative (drop M–C
+    Lewis order) and lp=1 (carbene C is 6e: two singles + one lone pair).
 
-    NHC/MIC use aromatic_candidate_systems; CAAC uses non-aromatic 1N heterocycles.
+    NHC/MIC use aromatic_candidate_systems; CAAC uses non-aromatic 1N heterocycles;
+    OXA is oxazolidin-2-ylidene (all-single 5-ring C–N–C–C–O);
+    ADC is acyclic diaminocarbene (C singly bonded to two -NR2, C not in a ring);
+    PYZ is pyrazolin-5-ylidene (5-ring C–N–N–C–C, carbene between N and C).
     Fischer/Schrock alkylidenes outside these rules are unchanged.
 
     Returns (bonds, lp_out, fc_out, labels_0based) where labels_0based maps
-    (metal_idx, c_idx) 0-based -> "NHC"|"MIC"|"CAAC".
+    (metal_idx, c_idx) 0-based -> "NHC"|"MIC"|"CAAC"|"OXA"|"ADC"|"PYZ".
     """
     atom_el = {a[0]: a[1] for a in atoms_packed}
     id_to_pos = {a[0]: k for k, a in enumerate(atoms_packed)}
@@ -1359,6 +1534,18 @@ def apply_heterocyclic_carbene_corrections(
         if kind is None:
             kind = _classify_caac_carbene(
                 c_idx, atom_el, bo, aromatic_systems, connectivity_edges
+            )
+        if kind is None:
+            kind = _classify_oxazolidin_2_ylidene(
+                c_idx, atom_el, bo, connectivity_edges
+            )
+        if kind is None:
+            kind = _classify_adc_carbene(
+                c_idx, atom_el, bo, connectivity_edges
+            )
+        if kind is None:
+            kind = _classify_pyrazolin_5_ylidene(
+                c_idx, atom_el, bo, connectivity_edges
             )
         if kind is None:
             continue
@@ -1954,9 +2141,15 @@ def print_cbc_report(
         if cbc_char == "L":
             carbene_labels = getattr(base, "LAST_HETERO_CYCLIC_CARBENE_LABELS", {})
             carbene_kind = carbene_labels.get((metal_idx, rep))
-            if carbene_kind in ("NHC", "MIC", "CAAC"):
+            if carbene_kind in ("NHC", "MIC", "CAAC", "OXA", "ADC", "PYZ"):
                 if carbene_kind == "CAAC":
                     return "C CAAC — cyclic alkylamino carbene, lone-pair σ-donor"
+                if carbene_kind == "OXA":
+                    return "C OXA — oxazolidin-2-ylidene, lone-pair σ-donor"
+                if carbene_kind == "ADC":
+                    return "C ADC — acyclic diaminocarbene, lone-pair σ-donor"
+                if carbene_kind == "PYZ":
+                    return "C PYZ — pyrazolin-5-ylidene, lone-pair σ-donor"
                 return f"C {carbene_kind} — heterocyclic carbene, lone-pair σ-donor"
             is_co = (sym == "C" and any(atoms[k] == "O" and bo_ij(rep, k) >= 2 for k in adj_lewis[rep]))
             if is_co:
@@ -2051,7 +2244,7 @@ def _subscript(n):
 # 2) Remove metal-nonmetal edges for ring/fused-ring detection.
 # 3) Keep only planar ring/fused-ring systems as aromatic candidates.
 # 4) Soft (optional): aromatic π via ILP_WEIGHT_AROMATIC_DEVIATION; target from
-#    AROMATIC_PI_BY_RING_SIZE (m atoms → π count; binary if two options).
+#    AROMATIC_PI_BY_RING_SIZE (m atoms → π count; 1–3 discrete options).
 # 4b) Soft: similar M–L distances on a ligand → same z_cov (ILP_WEIGHT_ML_DISTANCE_CLASS).
 # 4c) Hard (optional): η-fragment carbons → lp = 0 (ILP_HARD_ETA_CARBON_LP_ZERO).
 # 4c2) Hard (always): non-η coordinating C → z_cov=1, b_tm∈{1,2,3}; η C and terminal CO may stay dative.
@@ -2060,12 +2253,16 @@ def _subscript(n):
 # 4d3) Hard (always): isonitrile arm M←C≡N–X (deg C=2, deg N=2, H counted) → C≡N triple, M–C dative.
 # 4d4) Hard (always): terminal nitrosyl {N,O} via N, not η². Linear M–N–O (>=160°) →
 #      N≡O triple, M←N dative (b_tm=0), NO⁺. Bent → N=O double, M–N covalent single.
+# 4d5) Hard (always): O2 fragment {O,O} with O–O and ≥1 M–O → O(−)–O(−) single,
+#      each q(O)=−1, M–O dative (b_tm=0).
 # 5) For O/N/S/P in aromatic systems:
 #    - if no double bond around that atom, one lone pair (2e) can contribute;
 #    - if double-bonded, pi contribution comes from double bonds (2 per double).
 # 6) For ring carbons not bonded to a transition metal: if unsaturated (any incident
 #    multiple bond or formal charge <= -1), the same optional lone-pair pi term applies.
 # 7) Soft (optional): remote C → prefer lp = 0 (ILP_WEIGHT_REMOTE_C_LP_VIOLATION).
+# 7b) Expanded octet if non-TM degree > 3 (P/As), > 2 (S), or > 1 (Cl/Br/I);
+#     then 10e/12e(/14e), preferring lower (ILP_WEIGHT_EXPANDED_OCTET).
 # 8) Hard (optional): mol_charge = Σfc(ligands) + Σox(TM) − Σb_tm (ILP_HARD_MOL_CHARGE_BALANCE).
 # 9) Hard (optional): Σox(TM) ≥ Σb_tm on non-η M–L only (ILP_HARD_OX_GE_SIGMA); F/Cl/Br/I ligands omitted from RHS.
 # 10) Soft: minimize Σox(TM) (ILP_WEIGHT_TM_OX_MINIMIZE).
@@ -2117,56 +2314,30 @@ def _non_tm_neighbors_in_edges(lig_idx, atom_el, edges):
     return out
 
 
+def _non_tm_degree(idx, atom_el, edges) -> int:
+    return len(_non_tm_neighbors_in_edges(idx, atom_el, edges))
+
+
 def _p_allows_expanded_octet(p_idx, atom_el, edges) -> bool:
-    """True if P has a connectivity neighbor in O/N/S/halogen."""
-    for i, j, _ei, _ej in edges:
-        if p_idx not in (i, j):
-            continue
-        other = j if i == p_idx else i
-        if atom_el.get(other) in _P_EXPANDED_OCTET_NEIGHBOR_SYMS:
-            return True
-    return False
+    """True if P has more than 3 non-TM connectivity neighbors."""
+    return _non_tm_degree(p_idx, atom_el, edges) > _P_AS_EXPANDED_OCTET_NON_TM_DEG
 
 
 def _s_allows_expanded_octet(s_idx, atom_el, edges) -> bool:
-    """True if S has a connectivity neighbor in O/N/halogen."""
-    for i, j, _ei, _ej in edges:
-        if s_idx not in (i, j):
-            continue
-        other = j if i == s_idx else i
-        if atom_el.get(other) in _S_EXPANDED_OCTET_NEIGHBOR_SYMS:
-            return True
-    return False
+    """True if S has more than 2 non-TM connectivity neighbors."""
+    return _non_tm_degree(s_idx, atom_el, edges) > _S_EXPANDED_OCTET_NON_TM_DEG
 
 
 def _as_allows_expanded_octet(as_idx, atom_el, edges) -> bool:
-    """True if As has a connectivity neighbor in O/N/S/halogen."""
-    for i, j, _ei, _ej in edges:
-        if as_idx not in (i, j):
-            continue
-        other = j if i == as_idx else i
-        if atom_el.get(other) in _AS_EXPANDED_OCTET_NEIGHBOR_SYMS:
-            return True
-    return False
+    """True if As has more than 3 non-TM connectivity neighbors."""
+    return _non_tm_degree(as_idx, atom_el, edges) > _P_AS_EXPANDED_OCTET_NON_TM_DEG
 
 
 def _heavy_halogen_allows_expanded_octet(x_idx, x_sym, atom_el, edges) -> bool:
-    """
-    True if Cl/Br/I has a connectivity neighbor that is O, N, or any halogen
-    (including another atom of the same element, e.g. Cl–Cl).
-    """
+    """True if Cl/Br/I has more than 1 non-TM connectivity neighbor."""
     if x_sym not in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS:
         return False
-    for i, j, _ei, _ej in edges:
-        if x_idx not in (i, j):
-            continue
-        other = j if i == x_idx else i
-        osym = atom_el.get(other)
-        if osym in ("O", "N"):
-            return True
-        if osym in _ALL_HALOGEN_SYMS:
-            return True
-    return False
+    return _non_tm_degree(x_idx, atom_el, edges) > _HEAVY_HALOGEN_EXPANDED_OCTET_NON_TM_DEG
 
 
 def _filter_tm_nm_keys_agostic_shadow_ligands(tm_nm_keys, atom_el, edges):
@@ -2504,8 +2675,9 @@ def _aromatic_pi_target_expr(prob, sys_idx: int, n_atoms: int):
     """
     Target π-electron count for a conjugated aromatic system with *n_atoms* ring atoms.
 
-    Uses AROMATIC_PI_BY_RING_SIZE; ambiguous sizes get one binary (low vs high).
-    Unknown sizes fall back to variable k with pi = 4*k + 2 (Hückel 4n+2).
+    Uses AROMATIC_PI_BY_RING_SIZE. One value is fixed; two values use one binary;
+    three values use two SOS-1 binaries. Unknown sizes fall back to variable k
+    with pi = 4*k + 2 (Hückel 4n+2).
     """
     spec = AROMATIC_PI_BY_RING_SIZE.get(n_atoms)
     if spec is None:
@@ -2515,11 +2687,20 @@ def _aromatic_pi_target_expr(prob, sys_idx: int, n_atoms: int):
             f"sys{sys_idx}_k", lowBound=0, upBound=kmax, cat="Integer"
         )
         return 4 * k + 2
-    low, high = spec
-    if high is None:
-        return low
-    pick_hi = pulp.LpVariable(f"sys{sys_idx}_pihi", cat="Binary")
-    return low + (high - low) * pick_hi
+    options = [int(v) for v in spec if v is not None]
+    if not options:
+        raise ValueError(f"Empty aromatic π target for {n_atoms} atoms")
+    if len(options) == 1:
+        return options[0]
+    picks = [
+        pulp.LpVariable(f"sys{sys_idx}_piopt_{idx}", cat="Binary")
+        for idx in range(1, len(options))
+    ]
+    if len(picks) > 1:
+        prob += pulp.lpSum(picks) <= 1
+    return options[0] + pulp.lpSum(
+        (opt - options[0]) * pick for opt, pick in zip(options[1:], picks)
+    )
 
 
 def _nonmetal_ligand_components(atoms, edges):
@@ -2745,6 +2926,41 @@ def _terminal_no_tm_n_o_records(atoms, edges, tm_nm_keys, atom_el):
     return linear, bent
 
 
+def _peroxide_o2_fragments(atoms, edges, tm_nm_keys, atom_el):
+    """
+    O2 ligand after connectivity: nonmetal component is exactly {O, O} with an
+    O–O edge and at least one M–O contact. Hard-coded as O(−)–O(−) peroxide.
+    Returns [(o_a, o_b, ((tm, o), ...)), ...].
+    """
+    lig_comp = _nonmetal_ligand_components(atoms, edges)
+    comps = defaultdict(set)
+    for aid, lid in lig_comp.items():
+        comps[lid].add(aid)
+    tm_on_o = defaultdict(list)
+    for tm, lig in tm_nm_keys:
+        if atom_el.get(lig) == "O":
+            tm_on_o[lig].append(tm)
+    out = []
+    seen = set()
+    for aids in comps.values():
+        if len(aids) != 2:
+            continue
+        if {atom_el.get(a) for a in aids} != {"O"}:
+            continue
+        o1, o2 = sorted(aids)
+        if not any({i, j} == {o1, o2} for i, j, *_ in edges):
+            continue
+        contacts = tuple((tm, o) for o in (o1, o2) for tm in tm_on_o[o])
+        if not contacts:
+            continue
+        key = (o1, o2)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append((o1, o2, contacts))
+    return out
+
+
 def _ligand_ml_zcov_pair_weights(
     atoms,
     edges,
@@ -2912,31 +3128,31 @@ def build_bond_order_ilp(
             # (Models silylene-like :SiR2 donation while preserving hard-octet.)
             si_oct8_choice[i] = pulp.LpVariable(f"si8_{i}", cat="Binary")
         if el == "S" and _s_allows_expanded_octet(i, atom_el, edges):
-            # 8e/10e/12e only when a neighbor is O, N, or halogen; else fixed 8e below.
+            # Non-TM degree > 2: 10e or 12e (no 8e). Else fixed 8e below.
             y10 = pulp.LpVariable(f"s10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"s12_{i}", cat="Binary")
-            prob += y10 + y12 <= 1
+            prob += y10 + y12 == 1
             s_oct_choice[i] = (y10, y12)
         if el == "P" and _p_allows_expanded_octet(i, atom_el, edges):
-            # 8e/10e/12e only when a neighbor is O, N, S, or halogen; else fixed 8e below.
+            # Non-TM degree > 3: 10e or 12e (no 8e). Else fixed 8e below.
             y10 = pulp.LpVariable(f"p10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"p12_{i}", cat="Binary")
-            prob += y10 + y12 <= 1
+            prob += y10 + y12 == 1
             p_oct_choice[i] = (y10, y12)
         if el == "As" and _as_allows_expanded_octet(i, atom_el, edges):
-            # 8e/10e/12e only when a neighbor is O, N, S, or halogen; else fixed 8e below.
+            # Non-TM degree > 3: 10e or 12e (no 8e). Else fixed 8e below.
             y10 = pulp.LpVariable(f"as10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"as12_{i}", cat="Binary")
-            prob += y10 + y12 <= 1
+            prob += y10 + y12 == 1
             as_oct_choice[i] = (y10, y12)
         if el in _HEAVY_HALOGEN_EXPANDED_OCTET_SYMS and _heavy_halogen_allows_expanded_octet(
             i, el, atom_el, edges
         ):
-            # 8e/10e/12e/14e when neighbor is O, N, or any halogen (incl. same element).
+            # Non-TM degree > 1: 10e/12e/14e (no 8e).
             y10 = pulp.LpVariable(f"x10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"x12_{i}", cat="Binary")
             y14 = pulp.LpVariable(f"x14_{i}", cat="Binary")
-            prob += y10 + y12 + y14 <= 1
+            prob += y10 + y12 + y14 == 1
             halogen_oct_choice[i] = (y10, y12, y14)
 
     for i, el, *_ in atoms:
@@ -3022,10 +3238,12 @@ def build_bond_order_ilp(
     linear_nos, bent_nos = _terminal_no_tm_n_o_records(
         atoms, edges, tm_nm_keys, atom_el
     )
+    peroxide_o2 = _peroxide_o2_fragments(atoms, edges, tm_nm_keys, atom_el)
     base.LAST_TERMINAL_NO = {
         "linear": linear_nos,
         "bent": bent_nos,
     }
+    base.LAST_PEROXIDE_O2 = peroxide_o2
 
     # Non-η coordinating C: disallow dative class (z_cov=1 → b_tm∈{1,2,3}).
     # η/haptic carbons, terminal CO, and isonitrile arms may stay dative.
@@ -3110,6 +3328,26 @@ def build_bond_order_ilp(
             prob += z_cov_tm[(tm, n_idx)] == 1
             prob += u2_tm[(tm, n_idx)] == 0
             prob += u3_tm[(tm, n_idx)] == 0
+
+    # O2 ligand {O,O}: O(−)–O(−) single; M–O dative.
+    oo_done = set()
+    for o1, o2, contacts in peroxide_o2:
+        kk = (min(o1, o2), max(o1, o2))
+        if kk not in u2:
+            raise RuntimeError(
+                f"Peroxide O2: O–O edge {kk} not in ILP edge set (check connectivity)"
+            )
+        if kk not in oo_done:
+            prob += u2[kk] == 0
+            prob += u3[kk] == 0
+            oo_done.add(kk)
+        if o1 in q:
+            prob += q[o1] == -1
+        if o2 in q:
+            prob += q[o2] == -1
+        for tm, o_idx in contacts:
+            if (tm, o_idx) in b_tm:
+                prob += b_tm[(tm, o_idx)] == 0
 
     # --- Aromatic 4n+2 penalty ---
     aromatic_dev_terms = []
@@ -3282,6 +3520,20 @@ def build_bond_order_ilp(
         objective_terms.append(
             -ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS * eta_group_u2_sum
         )
+    if ILP_WEIGHT_EXPANDED_OCTET > 0:
+        expanded_octet_cost = []
+        for y10, y12 in s_oct_choice.values():
+            expanded_octet_cost.append(y10 + 2 * y12)
+        for y10, y12 in p_oct_choice.values():
+            expanded_octet_cost.append(y10 + 2 * y12)
+        for y10, y12 in as_oct_choice.values():
+            expanded_octet_cost.append(y10 + 2 * y12)
+        for y10, y12, y14 in halogen_oct_choice.values():
+            expanded_octet_cost.append(y10 + 2 * y12 + 3 * y14)
+        if expanded_octet_cost:
+            objective_terms.append(
+                ILP_WEIGHT_EXPANDED_OCTET * pulp.lpSum(expanded_octet_cost)
+            )
 
     if not objective_terms:
         raise RuntimeError("ILP objective is empty: enable at least one ILP_WEIGHT_* term")
