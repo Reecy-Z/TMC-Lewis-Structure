@@ -46,6 +46,9 @@ ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
 ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
 # When expanded octet is on: prefer 10e then 12e/14e (tie-break only).
 ILP_WEIGHT_EXPANDED_OCTET = 1.0
+# Soft tie-break: minimize Σox(TM). Keep ≪ formal-charge (100) so it does not
+# buy a lower ox by putting extra charge on ligands.
+ILP_WEIGHT_TM_OX_MINIMIZE = 1.0
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
@@ -3486,8 +3489,11 @@ def build_bond_order_ilp(
         if ml_distance_class_weight is None
         else ml_distance_class_weight
     )
-    # Note: we intentionally do NOT add a "minimize TM oxidation state" soft objective
-    # (tm_ox_penalty). TM oxidation variables remain present for hard constraints.
+    tm_ox_w = (
+        ILP_WEIGHT_TM_OX_MINIMIZE
+        if tm_ox_minimize_weight is None
+        else tm_ox_minimize_weight
+    )
 
     remote_c_lp_violation = {}
     if rc_lp_w > 0:
@@ -3534,6 +3540,8 @@ def build_bond_order_ilp(
             objective_terms.append(
                 ILP_WEIGHT_EXPANDED_OCTET * pulp.lpSum(expanded_octet_cost)
             )
+    if tm_ox_w > 0 and tm_ox_vars:
+        objective_terms.append(tm_ox_w * tm_ox_sum)
 
     if not objective_terms:
         raise RuntimeError("ILP objective is empty: enable at least one ILP_WEIGHT_* term")
