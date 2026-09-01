@@ -49,7 +49,7 @@ ILP_WEIGHT_EXPANDED_OCTET = 1.0
 # Soft: minimize Σox(TM). Must exceed aromatic-dev cost per ox unit to flip
 # cases like AYUNIT (20π peri-fused vs 4n+2). Above formal-charge (100) it can
 # also buy lower ox by putting extra |q| on ligands.
-ILP_WEIGHT_TM_OX_MINIMIZE = 50
+ILP_WEIGHT_TM_OX_MINIMIZE = 110.0
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
@@ -1194,6 +1194,24 @@ def _nonmetal_lewis_neighbors(atom_id, atom_el, bo):
     return out
 
 
+def _connectivity_nonmetal_neighbors(atom_id, atom_el, connectivity_edges):
+    """Non-TM partners in the connectivity graph (Lewis order ignored)."""
+    out = []
+    seen = set()
+    for a, b, _ei, _ej in connectivity_edges or ():
+        if atom_id not in (a, b):
+            continue
+        partner = b if a == atom_id else a
+        if partner in seen:
+            continue
+        sym = atom_el.get(partner)
+        if not sym or is_TM(sym):
+            continue
+        seen.add(partner)
+        out.append((partner, sym))
+    return out
+
+
 def _is_nhc_carbene_connectivity(c_idx, atom_el, bo):
     """
     NHC: carbene C has exactly two non-metal Lewis neighbors, both N via single bonds.
@@ -1343,7 +1361,7 @@ def _classify_oxazolidin_2_ylidene(c_idx, atom_el, bo, connectivity_edges):
 
 
 def _is_nr2_nitrogen(n_idx, atom_el, bo, carbene_c) -> bool:
-    """True if N is an -NR2 (R = H or C) singly bonded to the carbene C."""
+    """True if N is -NR2 / hydrazino (R = H, C, or N) singly bonded to the carbene C."""
     if atom_el.get(n_idx) != "N":
         return False
     nm = _nonmetal_lewis_neighbors(n_idx, atom_el, bo)
@@ -1352,22 +1370,63 @@ def _is_nr2_nitrogen(n_idx, atom_el, bo, carbene_c) -> bool:
     others = [p for p, _o, _s in nm if p != carbene_c]
     if len(others) != 2:
         return False
-    return all(atom_el.get(p) in ("H", "C") for p in others)
+    return all(atom_el.get(p) in ("H", "C", "N") for p in others)
+
+
+def _is_adc_nitrogen(n_idx, atom_el, connectivity_edges, carbene_c) -> bool:
+    """Amino or hydrazino N: other non-TM connectivity neighbors are H, C, or N."""
+    if atom_el.get(n_idx) != "N":
+        return False
+    nm = _connectivity_nonmetal_neighbors(n_idx, atom_el, connectivity_edges)
+    others = [p for p, _s in nm if p != carbene_c]
+    if not (1 <= len(others) <= 2):
+        return False
+    return all(atom_el.get(p) in ("H", "C", "N") for p in others)
 
 
 def _classify_adc_carbene(c_idx, atom_el, bo, connectivity_edges):
     """
-    Return \"ADC\" or None for an acyclic diaminocarbene: C singly bonded to
-    two -NR2, and the carbene C is not in a ligand ring.
+    Return \"ADC\" or None for an acyclic diaminocarbene.
+
+    Uses TM–C connectivity, not ILP Lewis orders: the carbene C has exactly two
+    non-metal neighbours, both N (amino or hydrazino). Ligand-skeleton rings
+    are excluded. ILP may have drawn C=N; CBC later forces C–N singles + lp=1.
     """
-    if not _is_nhc_carbene_connectivity(c_idx, atom_el, bo):
+    del bo
+    if atom_el.get(c_idx) != "C":
         return None
-    n_idxs = [p for p, _o, _s in _nonmetal_lewis_neighbors(c_idx, atom_el, bo)]
-    if not all(_is_nr2_nitrogen(n_idx, atom_el, bo, c_idx) for n_idx in n_idxs):
+    nm = _connectivity_nonmetal_neighbors(c_idx, atom_el, connectivity_edges)
+    if len(nm) != 2:
+        return None
+    if not all(sym == "N" for _p, sym in nm):
+        return None
+    n_idxs = [p for p, _s in nm]
+    if not all(_is_adc_nitrogen(n, atom_el, connectivity_edges, c_idx) for n in n_idxs):
         return None
     if _minimal_ligand_rings_containing(c_idx, atom_el, connectivity_edges):
         return None
     return "ADC"
+
+
+def _relax_adc_lewis_bonds(c_idx, atom_el, bo, lp_out, fc_out, connectivity_edges):
+    """Force C–N (and hydrazine N–N) to singles; amino/hydrazino N get lp=1."""
+    n_idxs = [
+        p
+        for p, s in _connectivity_nonmetal_neighbors(c_idx, atom_el, connectivity_edges)
+        if s == "N"
+    ]
+    touched = set(n_idxs)
+    for n in n_idxs:
+        bo[(min(c_idx, n), max(c_idx, n))] = 1
+        for p, s in _connectivity_nonmetal_neighbors(n, atom_el, connectivity_edges):
+            if s == "N" and p != c_idx:
+                bo[(min(n, p), max(n, p))] = 1
+                touched.add(p)
+    for n in touched:
+        lp_out[n] = 1
+        new_fc = _recompute_ligand_fc(n, atom_el, bo, lp_out[n])
+        if new_fc is not None:
+            fc_out[n] = new_fc
 
 
 def _saturated_n_heterocyclic_carbene_ring(
@@ -1450,6 +1509,30 @@ def _classify_saturated_nhc_6_7(c_idx, atom_el, bo, connectivity_edges):
         if _saturated_n_heterocyclic_carbene_ring(
             c_idx, atom_el, bo, connectivity_edges, ring_size
         ) is not None:
+            return "SNHC"
+    return None
+
+
+def _classify_expanded_ring_ncn_carbene(c_idx, atom_el, bo, connectivity_edges):
+    """
+    Return \"SNHC\" or None for an N–C–N carbene in a 9- or 10-membered
+    ligand ring (biphenyl-/ether-bridged expanded NHC). Uses connectivity,
+    not ILP Lewis orders.
+    """
+    del bo
+    if atom_el.get(c_idx) != "C":
+        return None
+    nm = _connectivity_nonmetal_neighbors(c_idx, atom_el, connectivity_edges)
+    if len(nm) != 2 or not all(sym == "N" for _p, sym in nm):
+        return None
+    n_idxs = [p for p, _s in nm]
+    if not all(_is_adc_nitrogen(n, atom_el, connectivity_edges, c_idx) for n in n_idxs):
+        return None
+    n_set = set(n_idxs)
+    for ring in _minimal_ligand_rings_containing(c_idx, atom_el, connectivity_edges):
+        if len(ring) not in (9, 10):
+            continue
+        if n_set <= set(ring):
             return "SNHC"
     return None
 
@@ -1601,8 +1684,10 @@ def apply_heterocyclic_carbene_corrections(
     NHC/MIC use aromatic_candidate_systems; CAAC uses non-aromatic 1N heterocycles;
     OXA is oxazolidin-2-ylidene (all-single 5-ring C–N–C–C–O);
     IMD is imidazolidin-2-ylidene (saturated 5-ring, two non-adjacent N, all singles);
-    SNHC is a saturated 6- or 7-membered NHC (tetrahydropyrimidin- / diazepan-2-ylidene);
-    ADC is acyclic diaminocarbene (C singly bonded to two -NR2, C not in a ring);
+    SNHC is a saturated 6- or 7-membered NHC, or a 9-/10-membered N–C–N
+    expanded-ring NHC (biphenyl or diaryl ether bridge);
+    ADC is acyclic diaminocarbene (connectivity: TM-bound C with two N neighbours,
+    amino or hydrazino, C not in a ligand ring; ILP C=N is relaxed to singles);
     PYZ is pyrazolin-5-ylidene (5-ring C–N–N–C–C, carbene between N and C).
     Fischer/Schrock alkylidenes outside these rules are unchanged.
 
@@ -1651,6 +1736,10 @@ def apply_heterocyclic_carbene_corrections(
                 c_idx, atom_el, bo, connectivity_edges
             )
         if kind is None:
+            kind = _classify_expanded_ring_ncn_carbene(
+                c_idx, atom_el, bo, connectivity_edges
+            )
+        if kind is None:
             kind = _classify_adc_carbene(
                 c_idx, atom_el, bo, connectivity_edges
             )
@@ -1660,6 +1749,11 @@ def apply_heterocyclic_carbene_corrections(
             )
         if kind is None:
             continue
+
+        if kind in ("ADC", "SNHC"):
+            _relax_adc_lewis_bonds(
+                c_idx, atom_el, bo, lp_out, fc_out, connectivity_edges
+            )
 
         key = (min(tm, c_idx), max(tm, c_idx))
         if bo.get(key, 0) > 0:
@@ -2268,7 +2362,7 @@ def print_cbc_report(
                 if carbene_kind == "IMD":
                     return "C IMD — imidazolidin-2-ylidene, lone-pair σ-donor"
                 if carbene_kind == "SNHC":
-                    return "C SNHC — saturated 6/7-membered NHC, lone-pair σ-donor"
+                    return "C SNHC — 6–10-membered N–C–N NHC, lone-pair σ-donor"
                 if carbene_kind == "ADC":
                     return "C ADC — acyclic diaminocarbene, lone-pair σ-donor"
                 if carbene_kind == "PYZ":
@@ -3229,8 +3323,6 @@ def build_bond_order_ilp(
     tm_neighbor_atoms = _atoms_bonded_to_tm(
         metal_adjacency_edges if metal_adjacency_edges is not None else edges
     )
-    # η-carbons: 8e only (lp=0 + 6e would force q=+1 / C⁺).
-    eta_c_ids = set(_eta_carbon_atom_ids(atoms, edges))
 
     lp, oct_plus, oct_minus, q, abs_q, q_neg = {}, {}, {}, {}, {}, {}
     b_oct8_choice = {}
@@ -3254,8 +3346,8 @@ def build_bond_order_ilp(
         if el == "B":
             # For boron: choose 6e (y=0) vs 8e (y=1) local-electron target.
             b_oct8_choice[i] = pulp.LpVariable(f"b8_{i}", cat="Binary")
-        if el == "C" and i in tm_neighbor_atoms and i not in eta_c_ids:
-            # Non-η TM-bound C (carbene / related): 6e vs 8e. η-C stays 8e below.
+        if el == "C" and i in tm_neighbor_atoms:
+            # For TM-bound carbon (carbene / related): allow 6e vs 8e local-electron targets.
             c_oct8_choice[i] = pulp.LpVariable(f"c8_{i}", cat="Binary")
         if (
             el == "Si"
@@ -3312,8 +3404,6 @@ def build_bond_order_ilp(
                 oct_target = 8
             else:
                 oct_target = 6 + 2 * b_oct8_choice[i]
-        elif el == "C" and i in eta_c_ids:
-            oct_target = 8
         elif el == "C" and i in c_oct8_choice:
             oct_target = 6 + 2 * c_oct8_choice[i]
         elif el == "Si" and i in si_oct8_choice:
