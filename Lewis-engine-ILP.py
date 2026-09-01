@@ -985,6 +985,15 @@ def _eta_coordinating_groups(metal_idx, coord_indices, lig_comp, adj_lewis):
     return groups
 
 
+def _non_tm_lewis_degree(idx, atoms, adj_lewis) -> int:
+    return sum(1 for nb in adj_lewis.get(idx, ()) if not is_TM(atoms[nb]))
+
+
+def _is_z_type_boron_atom(idx, atoms, adj_lewis) -> bool:
+    """Neutral BR3 (three non-metal Lewis neighbours) is a Z-type acceptor."""
+    return atoms[idx] == "B" and _non_tm_lewis_degree(idx, atoms, adj_lewis) == 3
+
+
 def _ilp_cbc_records_for_eta_group(
     metal_idx,
     group,
@@ -992,11 +1001,12 @@ def _ilp_cbc_records_for_eta_group(
     adj_lewis,
     lp_lewis=None,
     *,
+    atoms=None,
     pi_min_order=None,
 ):
     """
     η fragment: ILP bo(M–L)>0 → X; dative ends with bo(L–L')≥pi_min_order → one L pair;
-    remaining dative coordinators → single-atom L only if lp > 0 (non-η dative).
+    remaining dative coordinators → single-atom L if lp > 0, or Z if tricoordinate B.
     """
     if pi_min_order is None:
         pi_min_order = ILP_ETA_PI_BOND_MIN_ORDER
@@ -1018,6 +1028,9 @@ def _ilp_cbc_records_for_eta_group(
                 in_pair.add(b)
     for i in sorted(dative):
         if i not in in_pair:
+            if atoms is not None and _is_z_type_boron_atom(i, atoms, adj_lewis):
+                records.append(((i,), "Z"))
+                continue
             lp_cnt = lp_lewis.get(i, 0) if lp_lewis else 0
             if lp_cnt > 0:
                 records.append(((i,), "L"))
@@ -1789,7 +1802,11 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
                     # Keep explicit Lewis M–L σ bonds even if the ligand atom is saturated
                     # and has no lone pairs (e.g. M–SiR3). The saturated-no-LP filter is
                     # only meant to suppress *purely geometric* M···L contacts.
-                    if bo_lewis.get(key_ml, 0) <= 0 and is_saturated_no_lp(lig):
+                    if (
+                        bo_lewis.get(key_ml, 0) <= 0
+                        and is_saturated_no_lp(lig)
+                        and not _is_z_type_boron_atom(lig, atoms, lewis_adj)
+                    ):
                         continue
                     if not _within_cov_bond_cutoff(d_ij, sym_tm, sym_lig):
                         continue
@@ -1797,9 +1814,13 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
                 elif _within_cov_bond_cutoff(d_ij, si, sj):
                     bonds.append((i, j))
 
-        # Geometric M–L with b_tm=0: keep C (η/haptic graph); other elements need lp > 0.
+        # Geometric M–L with b_tm=0: keep C (η/haptic) and Z-type BR3; others need lp > 0.
         for tm, lig in ml_bo_zero:
-            if atoms[lig] != "C" and _effective_lp(lig) <= 0:
+            if (
+                atoms[lig] != "C"
+                and not _is_z_type_boron_atom(lig, atoms, lewis_adj)
+                and _effective_lp(lig) <= 0
+            ):
                 continue
             bonds.append((tm, lig))
 
@@ -1983,7 +2004,7 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
         ):
             interaction_records.extend(
                 _ilp_cbc_records_for_eta_group(
-                    metal_idx, group, bo_ij, adj_lewis, lp
+                    metal_idx, group, bo_ij, adj_lewis, lp, atoms=atoms
                 )
             )
 
@@ -2266,6 +2287,8 @@ def _subscript(n):
 # 7) Soft (optional): remote C → prefer lp = 0 (ILP_WEIGHT_REMOTE_C_LP_VIOLATION).
 # 7b) Expanded octet if non-TM degree > 3 (P/As), > 2 (S), or > 1 (Cl/Br/I);
 #     then 10e/12e(/14e), preferring lower (ILP_WEIGHT_EXPANDED_OCTET).
+# 7c) Boron: non-TM degree 3 → 6e (neutral BR3); degree 4 → 8e ([BR4]−).
+#     Tricoordinate B also bonded to a TM is Z-type (b_tm=0, M→B dative).
 # 8) Hard (optional): mol_charge = Σfc(ligands) + Σox(TM) − Σb_tm (ILP_HARD_MOL_CHARGE_BALANCE).
 # 9) Hard (optional): Σox(TM) ≥ Σb_tm on non-η M–L only (ILP_HARD_OX_GE_SIGMA); F/Cl/Br/I ligands omitted from RHS.
 # 10) Soft: minimize Σox(TM) (ILP_WEIGHT_TM_OX_MINIMIZE).
@@ -2319,6 +2342,16 @@ def _non_tm_neighbors_in_edges(lig_idx, atom_el, edges):
 
 def _non_tm_degree(idx, atom_el, edges) -> int:
     return len(_non_tm_neighbors_in_edges(idx, atom_el, edges))
+
+
+def _is_tricoordinate_boron(idx, atom_el, edges) -> bool:
+    """B with exactly three non-metal connectivity neighbors (M–B ignored)."""
+    return atom_el.get(idx) == "B" and _non_tm_degree(idx, atom_el, edges) == 3
+
+
+def _is_tetracoordinate_boron(idx, atom_el, edges) -> bool:
+    """B with exactly four non-metal connectivity neighbors (M–B ignored)."""
+    return atom_el.get(idx) == "B" and _non_tm_degree(idx, atom_el, edges) == 4
 
 
 def _p_allows_expanded_octet(p_idx, atom_el, edges) -> bool:
@@ -3170,7 +3203,14 @@ def build_bond_order_ilp(
             prob += q_neg[i] >= -q[i]
             continue
         if el == "B" and i in b_oct8_choice:
-            oct_target = 6 + 2 * b_oct8_choice[i]
+            # Non-TM degree 3 → 6e (neutral BR3); degree 4 → 8e ([BR4]−).
+            # Other degrees keep the 6e/8e choice variable.
+            if _is_tricoordinate_boron(i, atom_el, edges):
+                oct_target = 6
+            elif _is_tetracoordinate_boron(i, atom_el, edges):
+                oct_target = 8
+            else:
+                oct_target = 6 + 2 * b_oct8_choice[i]
         elif el == "C" and i in c_oct8_choice:
             oct_target = 6 + 2 * c_oct8_choice[i]
         elif el == "Si" and i in si_oct8_choice:
@@ -3247,6 +3287,13 @@ def build_bond_order_ilp(
         "bent": bent_nos,
     }
     base.LAST_PEROXIDE_O2 = peroxide_o2
+
+    # Tricoordinate B (three non-metal neighbours) + M–B: Z-type acceptor.
+    # Force b_tm=0 so B stays 6e; the metal donates to B (CBC Z, M→B dative).
+    for tm, lig in tm_nm_keys:
+        if _is_tricoordinate_boron(lig, atom_el, edges):
+            prob += z_cov_tm[(tm, lig)] == 0
+            prob += b_tm[(tm, lig)] == 0
 
     # Non-η coordinating C: disallow dative class (z_cov=1 → b_tm∈{1,2,3}).
     # η/haptic carbons, terminal CO, and isonitrile arms may stay dative.
@@ -3439,6 +3486,9 @@ def build_bond_order_ilp(
         if lig not in lp:
             continue
         if atom_el[lig] == "H" and not _force_monatomic_ml_single_cov(lig, atom_el, edges):
+            continue
+        # Z-type BR3: empty p orbital, no lone pair on B.
+        if _is_tricoordinate_boron(lig, atom_el, edges):
             continue
         # b_tm ∈ {0,1,2,3}. Enforce lp>=1 when b_tm==0, else lp>=0.
         prob += lp[lig] >= 1 - b_tm[(tm, lig)]
@@ -3732,14 +3782,17 @@ def infer_dative_ml_pairs_cbc(
     edges=None,
 ):
     """
-    CBC-stage dative M–L for SMILES: ILP b_tm=0 and CBC type L.
+    CBC-stage dative M–L for SMILES: ILP b_tm=0 and CBC type L or Z.
 
-    Single-atom L donors (e.g. N with lp) → one dative arrow each.
+    Single-atom L donors (e.g. N with lp) → one dative arrow each (L→M).
     η-type L (including paired atom tuples) → one dative per ring/contact atom
     with b_tm=0 (e.g. Cp η⁵ → five C->M arrows).
+    CBC Z (tricoordinate B) is stored on ``LAST_Z_DATIVE_ML_PAIRS`` as
+    1-based (tm, lig) for M→B arrows.
     Returns (tm, lig) with 1-based atom indices (ligand donates to TM).
     """
     adjacency = metal_adjacency_edges if metal_adjacency_edges is not None else edges
+    base.LAST_Z_DATIVE_ML_PAIRS = []
     if adjacency is None:
         return []
 
@@ -3786,10 +3839,23 @@ def infer_dative_ml_pairs_cbc(
         coord_by_metal[tmi].add(ligi)
 
     out = []
+    z_out = []
     seen = set()
+    seen_z = set()
     for metal_idx, records in cbc.items():
         l_seeds = set()
         for atom_tuple, cbc_char in records:
+            if cbc_char == "Z":
+                for a in atom_tuple:
+                    if (metal_idx, a) not in ml_bo_zero:
+                        continue
+                    if bo_ij(metal_idx, a) != 0:
+                        continue
+                    pair = (metal_idx + 1, a + 1)
+                    if pair not in seen_z:
+                        seen_z.add(pair)
+                        z_out.append(pair)
+                continue
             if cbc_char != "L":
                 continue
             for a in atom_tuple:
@@ -3818,6 +3884,7 @@ def infer_dative_ml_pairs_cbc(
             if pair not in seen:
                 seen.add(pair)
                 out.append(pair)
+    base.LAST_Z_DATIVE_ML_PAIRS = z_out
     return out
 
 
@@ -3836,6 +3903,7 @@ def infer_dative_ml_pairs(atoms, edges, bonds, *, coords=None, lp=None, fc=None)
             metal_adjacency_edges=edges,
             edges=edges,
         )
+    base.LAST_Z_DATIVE_ML_PAIRS = []
     orders = {}
     for i, j, o in bonds:
         orders[(min(i, j), max(i, j))] = int(o)
@@ -3867,7 +3935,15 @@ def _ilp_bond_order_to_rdkit(order: int):
     return Chem.BondType.SINGLE
 
 
-def ilp_to_rdkit_mol(atoms, bonds, fc_out, *, dative_ml_pairs=None, edges=None):
+def ilp_to_rdkit_mol(
+    atoms,
+    bonds,
+    fc_out,
+    *,
+    dative_ml_pairs=None,
+    z_dative_ml_pairs=None,
+    edges=None,
+):
     """
   Build an RDKit Mol from ILP results.
 
@@ -3876,6 +3952,7 @@ def ilp_to_rdkit_mol(atoms, bonds, fc_out, *, dative_ml_pairs=None, edges=None):
   *fc_out*: formal charge per idx; TM entries are oxidation states for [M+n] labels.
   *dative_ml_pairs*: (tm, lig) 1-based from ``infer_dative_ml_pairs_cbc``; η rings
   get one ``lig->M`` per contact atom (e.g. five arrows for Cp η⁵).
+  *z_dative_ml_pairs*: (tm, lig) 1-based Z-type acceptors; drawn as ``M->lig``.
     """
     _require_rdkit()
     if dative_ml_pairs is None:
@@ -3915,6 +3992,10 @@ def ilp_to_rdkit_mol(atoms, bonds, fc_out, *, dative_ml_pairs=None, edges=None):
 
     for tm, lig in dative_ml_pairs:
         _add_edge(lig, tm, Chem.BondType.DATIVE)
+    if z_dative_ml_pairs is None:
+        z_dative_ml_pairs = getattr(base, "LAST_Z_DATIVE_ML_PAIRS", []) or []
+    for tm, lig in z_dative_ml_pairs:
+        _add_edge(tm, lig, Chem.BondType.DATIVE)
 
     mol = rw.GetMol()
     try:
@@ -3930,6 +4011,7 @@ def ilp_to_smiles(
     fc_out,
     *,
     dative_ml_pairs=None,
+    z_dative_ml_pairs=None,
     edges=None,
     canonical=False,
 ):
@@ -3939,6 +4021,7 @@ def ilp_to_smiles(
         bonds,
         fc_out,
         dative_ml_pairs=dative_ml_pairs,
+        z_dative_ml_pairs=z_dative_ml_pairs,
         edges=edges,
     )
     return Chem.MolToSmiles(mol, canonical=canonical)

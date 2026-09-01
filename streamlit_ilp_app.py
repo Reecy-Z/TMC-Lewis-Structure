@@ -638,6 +638,18 @@ def build_viewer_payload(
         if not backend.is_TM(atoms[metal_idx]):
             continue
         for atom_tuple, cbc_char in results[metal_idx]:
+            if cbc_char == "Z" and len(atom_tuple) == 1:
+                lig = atom_tuple[0]
+                if lig == metal_idx:
+                    continue
+                dative_bonds.append(
+                    {
+                        "donor_atoms": [metal_idx],
+                        "acceptor": lig,
+                        "pi_bond_pair": None,
+                    }
+                )
+                continue
             if cbc_char != "L":
                 continue
             donor_atoms = list(atom_tuple)
@@ -668,7 +680,7 @@ def build_viewer_payload(
         if not backend.is_TM(atoms[metal_idx]):
             continue
         for atom_tuple, cbc_char in results[metal_idx]:
-            if cbc_char not in ("X", "Z") or len(atom_tuple) != 1:
+            if cbc_char != "X" or len(atom_tuple) != 1:
                 continue
             lig = atom_tuple[0]
             if lig == metal_idx:
