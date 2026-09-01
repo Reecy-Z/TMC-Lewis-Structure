@@ -46,9 +46,10 @@ ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
 ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
 # When expanded octet is on: prefer 10e then 12e/14e (tie-break only).
 ILP_WEIGHT_EXPANDED_OCTET = 1.0
-# Soft tie-break: minimize Σox(TM). Keep ≪ formal-charge (100) so it does not
-# buy a lower ox by putting extra charge on ligands.
-ILP_WEIGHT_TM_OX_MINIMIZE = 1.0
+# Soft: minimize Σox(TM). Must exceed aromatic-dev cost per ox unit to flip
+# cases like AYUNIT (20π peri-fused vs 4n+2). Above formal-charge (100) it can
+# also buy lower ox by putting extra |q| on ligands.
+ILP_WEIGHT_TM_OX_MINIMIZE = 110.0
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
