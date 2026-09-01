@@ -49,7 +49,7 @@ ILP_WEIGHT_EXPANDED_OCTET = 1.0
 # Soft: minimize Σox(TM). Must exceed aromatic-dev cost per ox unit to flip
 # cases like AYUNIT (20π peri-fused vs 4n+2). Above formal-charge (100) it can
 # also buy lower ox by putting extra |q| on ligands.
-ILP_WEIGHT_TM_OX_MINIMIZE = 110.0
+ILP_WEIGHT_TM_OX_MINIMIZE = 50
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
 
@@ -3229,6 +3229,8 @@ def build_bond_order_ilp(
     tm_neighbor_atoms = _atoms_bonded_to_tm(
         metal_adjacency_edges if metal_adjacency_edges is not None else edges
     )
+    # η-carbons: 8e only (lp=0 + 6e would force q=+1 / C⁺).
+    eta_c_ids = set(_eta_carbon_atom_ids(atoms, edges))
 
     lp, oct_plus, oct_minus, q, abs_q, q_neg = {}, {}, {}, {}, {}, {}
     b_oct8_choice = {}
@@ -3252,8 +3254,8 @@ def build_bond_order_ilp(
         if el == "B":
             # For boron: choose 6e (y=0) vs 8e (y=1) local-electron target.
             b_oct8_choice[i] = pulp.LpVariable(f"b8_{i}", cat="Binary")
-        if el == "C" and i in tm_neighbor_atoms:
-            # For TM-bound carbon (carbene / related): allow 6e vs 8e local-electron targets.
+        if el == "C" and i in tm_neighbor_atoms and i not in eta_c_ids:
+            # Non-η TM-bound C (carbene / related): 6e vs 8e. η-C stays 8e below.
             c_oct8_choice[i] = pulp.LpVariable(f"c8_{i}", cat="Binary")
         if (
             el == "Si"
@@ -3310,6 +3312,8 @@ def build_bond_order_ilp(
                 oct_target = 8
             else:
                 oct_target = 6 + 2 * b_oct8_choice[i]
+        elif el == "C" and i in eta_c_ids:
+            oct_target = 8
         elif el == "C" and i in c_oct8_choice:
             oct_target = 6 + 2 * c_oct8_choice[i]
         elif el == "Si" and i in si_oct8_choice:
