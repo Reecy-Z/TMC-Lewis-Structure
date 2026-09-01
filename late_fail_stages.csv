@@ -1,0 +1,367 @@
+IDs,stage,exc,msg
+ABEJAS,fix_equivalent_Os,ArgumentError,Python argument types in
+AFUXOP,get_lig_mol,IndexError,list index out of range
+AGEBIA,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+AGEVAJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+AHEXAM,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+AJIDOM,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+APUGIC,fix_equivalent_Os,ArgumentError,Python argument types in
+AXEQUP,fix_equivalent_Os,ArgumentError,Python argument types in
+AXEREA,fix_equivalent_Os,ArgumentError,Python argument types in
+AYOXER,fix_equivalent_Os,ArgumentError,Python argument types in
+AYOXIV,fix_equivalent_Os,ArgumentError,Python argument types in
+BAFLUS,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BASTAT,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BAYTIE,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BENPAL,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 8 9 12 13 14
+BENQIW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BIMLEP,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BIMLIT,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BOLDOW,fix_equivalent_Os,ArgumentError,Python argument types in
+BOZMIN,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BUNFEW,fix_equivalent_Os,ArgumentError,Python argument types in
+BUPMIK,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BUPMOQ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BUYMIS,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+BUYMOY,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+CAFPIJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+CAJPUY,fix_equivalent_Os,ArgumentError,Python argument types in
+CAMSAM,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+CAWYUX,fix_equivalent_Os,ArgumentError,Python argument types in
+CEGGON,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+CEGPOW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+CEJBEZ,fix_equivalent_Os,ArgumentError,Python argument types in
+CIGJIN,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 0 1 2 9 10 11 12 21 22
+CIJJUA,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+CILFOV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+CODXID,fix_equivalent_Os,ArgumentError,Python argument types in
+COLPOI,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+COMWUX,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+DACPOO,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 11 12 13 14 15
+DAJDAT,fix_equivalent_Os,ArgumentError,Python argument types in
+DAJSAJ,fix_equivalent_Os,ArgumentError,Python argument types in
+DAPBON,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+DAVQIA,fix_equivalent_Os,ArgumentError,Python argument types in
+DEPWAW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+DILDAG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+DIVVEM,fix_equivalent_Os,ArgumentError,Python argument types in
+DIVVIQ,fix_equivalent_Os,ArgumentError,Python argument types in
+DIVVOW,fix_equivalent_Os,ArgumentError,Python argument types in
+DOGGEM,fix_equivalent_Os,ArgumentError,Python argument types in
+DOGGIQ,fix_equivalent_Os,ArgumentError,Python argument types in
+DORHEY,fix_equivalent_Os,ArgumentError,Python argument types in
+DOTMOQ,fix_equivalent_Os,ArgumentError,Python argument types in
+DUGSIH,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 7 8 9 10 11
+ECOTAR,fix_equivalent_Os,ArgumentError,Python argument types in
+ECOTEV,fix_equivalent_Os,ArgumentError,Python argument types in
+EGEGON,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+EGEGUT,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ENUZOD,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+EQURAL,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ETOHAY,fix_equivalent_Os,ArgumentError,Python argument types in
+ETOHEC,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ETUSIV,fix_equivalent_Os,ArgumentError,Python argument types in
+EWEXUZ,fix_equivalent_Os,ArgumentError,Python argument types in
+FACHOH,fix_equivalent_Os,ArgumentError,Python argument types in
+FAYBIS,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+FESKET,fix_equivalent_Os,ArgumentError,Python argument types in
+FIBZOG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+FIGKUC,fix_equivalent_Os,ArgumentError,Python argument types in
+FIGLAJ,fix_equivalent_Os,ArgumentError,Python argument types in
+FILJUG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+FOCNER,fix_equivalent_Os,ArgumentError,Python argument types in
+FOFDOT,fix_equivalent_Os,ArgumentError,Python argument types in
+FOPQAD,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+GABSEI,fix_equivalent_Os,ArgumentError,Python argument types in
+GAGBUO,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+GENTUO,fix_equivalent_Os,ArgumentError,Python argument types in
+GENYAB,fix_equivalent_Os,ArgumentError,Python argument types in
+GENYIJ,fix_equivalent_Os,ArgumentError,Python argument types in
+GENYOP,fix_equivalent_Os,ArgumentError,Python argument types in
+GIJNOD,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+GIJZAA,fix_equivalent_Os,ArgumentError,Python argument types in
+GINQID,fix_equivalent_Os,ArgumentError,Python argument types in
+GIPTUU,fix_equivalent_Os,ArgumentError,Python argument types in
+GIPWAD,fix_equivalent_Os,ArgumentError,Python argument types in
+GIPWOR,fix_equivalent_Os,ArgumentError,Python argument types in
+GITMIF,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+GIXSAH,fix_equivalent_Os,ArgumentError,Python argument types in
+GIZFUQ,fix_equivalent_Os,ArgumentError,Python argument types in
+GOHDUF,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+GOJQUT,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+GUQFOO,timeout40,,
+GUVNIV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+GUXPAS,fix_equivalent_Os,ArgumentError,Python argument types in
+GUXPIA,fix_equivalent_Os,ArgumentError,Python argument types in
+GUZMAR,fix_equivalent_Os,ArgumentError,Python argument types in
+GUZMEV,fix_equivalent_Os,ArgumentError,Python argument types in
+GUZMIZ,fix_equivalent_Os,ArgumentError,Python argument types in
+GUZMOF,fix_equivalent_Os,ArgumentError,Python argument types in
+GUZNAS,fix_equivalent_Os,ArgumentError,Python argument types in
+GUZNIA,fix_equivalent_Os,ArgumentError,Python argument types in
+HAGKIL,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+HAJLAG,fix_equivalent_Os,ArgumentError,Python argument types in
+HAZKOI,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+HERKAQ,fix_equivalent_Os,ArgumentError,Python argument types in
+HERQEA,fix_equivalent_Os,ArgumentError,Python argument types in
+HEYYER,fix_equivalent_Os,ArgumentError,Python argument types in
+HIHSOH,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+HINLOF,fix_equivalent_Os,ArgumentError,Python argument types in
+HINLUL,fix_equivalent_Os,ArgumentError,Python argument types in
+HINMAS,fix_equivalent_Os,ArgumentError,Python argument types in
+HINMIA,fix_equivalent_Os,ArgumentError,Python argument types in
+HINMUM,fix_equivalent_Os,ArgumentError,Python argument types in
+HINNAT,fix_equivalent_Os,ArgumentError,Python argument types in
+HINNEX,fix_equivalent_Os,ArgumentError,Python argument types in
+HISCAN,fix_equivalent_Os,ArgumentError,Python argument types in
+HITBAO,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+HIXZEU,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+HIXZIY,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+HUGWUC,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+HUHSAF,fix_equivalent_Os,ArgumentError,Python argument types in
+HUJWEO,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IBUKAR,fix_equivalent_Os,ArgumentError,Python argument types in
+IFOPAW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IHAJUW,fix_equivalent_Os,ArgumentError,Python argument types in
+ILEKIV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ILEKOB,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ILIVAB,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IMUHAA,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ITARIF,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ITEGIY,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IVUSOJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IVUSUP,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IWAZAJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IXUFUE,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IXUGEP,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+IXUTOK,fix_equivalent_Os,ArgumentError,Python argument types in
+JAHHAC,fix_equivalent_Os,ArgumentError,Python argument types in
+JATDAM,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+JEJPUK,fix_equivalent_Os,ArgumentError,Python argument types in
+JEKQAS,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+JELCOS,fix_equivalent_Os,ArgumentError,Python argument types in
+JEYROU,fix_equivalent_Os,ArgumentError,Python argument types in
+JIZNOW,fix_equivalent_Os,ArgumentError,Python argument types in
+JOMZES,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+JOTJEK,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 0 1 2 3 4 5 11 12 23
+JOXLAJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+JUQQAN,fix_equivalent_Os,ArgumentError,Python argument types in
+KACDOI,fix_equivalent_Os,ArgumentError,Python argument types in
+KACFAW,fix_equivalent_Os,ArgumentError,Python argument types in
+KACFEA,fix_equivalent_Os,ArgumentError,Python argument types in
+KESYEP,unexpected_success,,
+KEWQOS,fix_equivalent_Os,ArgumentError,Python argument types in
+KIHTAZ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+KIHVIH,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+KIRXOA,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+KOCXIK,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+KOMCIZ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+LACNOS,fix_equivalent_Os,ArgumentError,Python argument types in
+LECZEZ,fix_equivalent_Os,ArgumentError,Python argument types in
+LELMEV,fix_equivalent_Os,ArgumentError,Python argument types in
+LENQUQ,fix_equivalent_Os,ArgumentError,Python argument types in
+LIBHOT,fix_equivalent_Os,ArgumentError,Python argument types in
+LIBHUZ,fix_equivalent_Os,ArgumentError,Python argument types in
+LIBWIE,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+LIFXOQ,fix_equivalent_Os,ArgumentError,Python argument types in
+LIKXIN,timeout40,,
+LILCAL,fix_equivalent_Os,ArgumentError,Python argument types in
+LIMBAL,fix_equivalent_Os,ArgumentError,Python argument types in
+LIRLAZ,fix_equivalent_Os,ArgumentError,Python argument types in
+LIRLED,fix_equivalent_Os,ArgumentError,Python argument types in
+LIWQOY,fix_equivalent_Os,ArgumentError,Python argument types in
+LODVOQ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+LUJFUR,fix_equivalent_Os,ArgumentError,Python argument types in
+LUKYEV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+LUNRIX,unexpected_success,,
+LUQNIV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+MASSEH,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+MASSUX,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+MIDLIW,get_lig_mol,IndexError,list index out of range
+MIJTUV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+MIYWUM,fix_equivalent_Os,ArgumentError,Python argument types in
+MOHSIN,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+MOMQUB,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+MOQQEO,fix_equivalent_Os,ArgumentError,Python argument types in
+MUTTEC,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+NAGXOL,get_lig_mol,IndexError,list index out of range
+NAJVUS,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+NATZOZ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+NAWHEA,fix_equivalent_Os,ArgumentError,Python argument types in
+NAWHIE,fix_equivalent_Os,ArgumentError,Python argument types in
+NAXDOI,fix_equivalent_Os,ArgumentError,Python argument types in
+NECLUD,fix_equivalent_Os,ArgumentError,Python argument types in
+NEZXUL,fix_equivalent_Os,ArgumentError,Python argument types in
+NIGLEW,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 2 3 6 7 12 13 20 21 22 23 24 31 32 33 34 44 51
+NIVFUV,fix_equivalent_Os,ArgumentError,Python argument types in
+NIVGAC,fix_equivalent_Os,ArgumentError,Python argument types in
+NOFKOJ,fix_equivalent_Os,ArgumentError,Python argument types in
+NOZROJ,fix_equivalent_Os,ArgumentError,Python argument types in
+NUWWAD,fix_equivalent_Os,ArgumentError,Python argument types in
+ODUBAS,fix_equivalent_Os,ArgumentError,Python argument types in
+OKAPEX,fix_equivalent_Os,ArgumentError,Python argument types in
+OKAPIB,fix_equivalent_Os,ArgumentError,Python argument types in
+OLITUZ,fix_equivalent_Os,ArgumentError,Python argument types in
+OPUPUL,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 0 1 2 9 10
+OYOLUK,fix_equivalent_Os,ArgumentError,Python argument types in
+OZOKAQ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+PAYPOU,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+PAYPUA,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+PEPPAE,fix_equivalent_Os,ArgumentError,Python argument types in
+PEVDAV,fix_equivalent_Os,ArgumentError,Python argument types in
+PIWNUH,fix_equivalent_Os,ArgumentError,Python argument types in
+PIWPAP,fix_equivalent_Os,ArgumentError,Python argument types in
+PIWPOD,fix_equivalent_Os,ArgumentError,Python argument types in
+PIWPUJ,fix_equivalent_Os,ArgumentError,Python argument types in
+PIYSEV,fix_equivalent_Os,ArgumentError,Python argument types in
+PUNTAV,fix_equivalent_Os,AtomValenceException,"Explicit valence for atom # 4 N, 3, is greater than permitted"
+PUPNIZ,fix_equivalent_Os,ArgumentError,Python argument types in
+PUPNOF,fix_equivalent_Os,ArgumentError,Python argument types in
+QAHGUC,fix_equivalent_Os,ArgumentError,Python argument types in
+QAHZII,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+QECFUZ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+QEDBOT,fix_equivalent_Os,ArgumentError,Python argument types in
+QEJSEG,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 23 24 27 28 29 34 35 36 37 38 39
+QEKLAU,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+QIDZUY,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+QIJWIS,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+QIZREZ,fix_equivalent_Os,ArgumentError,Python argument types in
+QOQGEK,fix_equivalent_Os,AtomValenceException,"Explicit valence for atom # 4 N, 3, is greater than permitted"
+QOQGIO,fix_equivalent_Os,AtomValenceException,"Explicit valence for atom # 4 N, 3, is greater than permitted"
+QOQGUA,fix_equivalent_Os,AtomValenceException,"Explicit valence for atom # 4 N, 3, is greater than permitted"
+RABVEW,fix_equivalent_Os,ArgumentError,Python argument types in
+RANNIE,fix_equivalent_Os,ArgumentError,Python argument types in
+RAZDIG,fix_equivalent_Os,ArgumentError,Python argument types in
+REHFEP,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+REKVUB,fix_equivalent_Os,ArgumentError,Python argument types in
+RITCIJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+RITXUN,fix_equivalent_Os,ArgumentError,Python argument types in
+ROJWEV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ROJWOF,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ROMFEE,fix_equivalent_Os,ArgumentError,Python argument types in
+ROSGEL,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+RUCBEY,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+RUJQIW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+SACGIO,fix_equivalent_Os,ArgumentError,Python argument types in
+SAKPEA,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+SEFNUO,fix_equivalent_Os,ArgumentError,Python argument types in
+SEMCUK,fix_equivalent_Os,ArgumentError,Python argument types in
+SEWCEC,fix_equivalent_Os,ArgumentError,Python argument types in
+SIGXIR,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+SILLEG,fix_equivalent_Os,ArgumentError,Python argument types in
+SOHFOL,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+SOLVEU,fix_equivalent_Os,ArgumentError,Python argument types in
+SOQLOZ,fix_equivalent_Os,ArgumentError,Python argument types in
+SOWCIR,fix_equivalent_Os,ArgumentError,Python argument types in
+SUCBAT,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 0 1 2 3 15 16 25
+SUNROK,fix_equivalent_Os,ArgumentError,Python argument types in
+TEDGIS,fix_equivalent_Os,ArgumentError,Python argument types in
+TIBBIP,fix_equivalent_Os,ArgumentError,Python argument types in
+TIHSOS,fix_equivalent_Os,ArgumentError,Python argument types in
+TIWHAJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+TIWHEN,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+TIWHIR,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+TONPIW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+TOXBOX,fix_equivalent_Os,ArgumentError,Python argument types in
+TUBVAP,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+UCIGAP,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 7 8 9 12 16
+UCIGUJ,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 7 8 9 12 16
+UFUHEL,fix_equivalent_Os,ArgumentError,Python argument types in
+UJITAI,fix_equivalent_Os,ArgumentError,Python argument types in
+ULONOY,fix_equivalent_Os,ArgumentError,Python argument types in
+UQUXAG,fix_equivalent_Os,ArgumentError,Python argument types in
+USEKEJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+UTEGEG,fix_equivalent_Os,ArgumentError,Python argument types in
+UTOWEH,fix_equivalent_Os,ArgumentError,Python argument types in
+UTOXEI,fix_equivalent_Os,ArgumentError,Python argument types in
+UVEXIE,fix_equivalent_Os,ArgumentError,Python argument types in
+UVIWON,fix_equivalent_Os,ArgumentError,Python argument types in
+UVIXAA,fix_equivalent_Os,ArgumentError,Python argument types in
+UVIXEE,fix_equivalent_Os,ArgumentError,Python argument types in
+UVIXII,fix_equivalent_Os,ArgumentError,Python argument types in
+VAHMOG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VAMCER,fix_equivalent_Os,ArgumentError,Python argument types in
+VEBCOV,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VEKTIO,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VEKTOU,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VENHED,fix_equivalent_Os,ArgumentError,Python argument types in
+VEXJOZ,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 11 12 15 31 32
+VEXKAM,fix_equivalent_Os,KekulizeException,Can't kekulize mol.  Unkekulized atoms: 11 12 15 31 32
+VIDCOA,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VIRXIE,fix_equivalent_Os,ArgumentError,Python argument types in
+VIWCAG,fix_equivalent_Os,ArgumentError,Python argument types in
+VOGLIM,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VOMBEE,fix_equivalent_Os,ArgumentError,Python argument types in
+VOVSOQ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VOVSUW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VOXRIJ,fix_equivalent_Os,ArgumentError,Python argument types in
+VUDMAJ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+VUGCAD,fix_equivalent_Os,ArgumentError,Python argument types in
+VUNMEW,fix_equivalent_Os,ArgumentError,Python argument types in
+WAQBAU,fix_equivalent_Os,ArgumentError,Python argument types in
+WAWPAO,fix_equivalent_Os,ArgumentError,Python argument types in
+WEGQIL,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+WEPTUI,fix_equivalent_Os,ArgumentError,Python argument types in
+WEPXEW,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+WETGOS,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+WEXZUX,fix_equivalent_Os,ArgumentError,Python argument types in
+WIJREN,fix_equivalent_Os,ArgumentError,Python argument types in
+WILVOE,unexpected_success,,
+WILVUK,unexpected_success,,
+WINJIO,unexpected_success,,
+WIPJUD,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+WITCOR,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+WIYHOB,fix_equivalent_Os,ArgumentError,Python argument types in
+WOJDAB,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+WORCOV,fix_equivalent_Os,ArgumentError,Python argument types in
+WOWDIX,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+WUHJUF,fix_equivalent_Os,ArgumentError,Python argument types in
+WUHKAM,fix_equivalent_Os,ArgumentError,Python argument types in
+WUNCIR,fix_equivalent_Os,ArgumentError,Python argument types in
+WUPDOA,fix_equivalent_Os,ArgumentError,Python argument types in
+XANREK,fix_equivalent_Os,ArgumentError,Python argument types in
+XEMTUG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+XEPVAQ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+XESBUU,fix_equivalent_Os,ArgumentError,Python argument types in
+XESCAB,fix_equivalent_Os,ArgumentError,Python argument types in
+XESCEF,fix_equivalent_Os,ArgumentError,Python argument types in
+XESCIJ,fix_equivalent_Os,ArgumentError,Python argument types in
+XESCOP,fix_equivalent_Os,ArgumentError,Python argument types in
+XESCUV,fix_equivalent_Os,ArgumentError,Python argument types in
+XESDAC,fix_equivalent_Os,ArgumentError,Python argument types in
+XILQAM,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+XIWHAO,fix_equivalent_Os,ArgumentError,Python argument types in
+XOSTUW,fix_equivalent_Os,ArgumentError,Python argument types in
+XOSVAC,fix_equivalent_Os,ArgumentError,Python argument types in
+XOWMUT,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+XUKWUX,fix_equivalent_Os,ArgumentError,Python argument types in
+XUPJAU,fix_equivalent_Os,ArgumentError,Python argument types in
+XUPJEY,fix_equivalent_Os,ArgumentError,Python argument types in
+YAQCIC,fix_equivalent_Os,ArgumentError,Python argument types in
+YAVFEG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+YEBYIQ,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+YIBVAG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+YIBVIO,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+YIXGAO,fix_equivalent_Os,ArgumentError,Python argument types in
+YIZCUF,fix_equivalent_Os,ArgumentError,Python argument types in
+YOGQAO,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+YOHRAO,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+YOJCOP,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+YOLHOX,fix_equivalent_Os,ArgumentError,Python argument types in
+YOXKUS,fix_equivalent_Os,ArgumentError,Python argument types in
+YOXLAZ,fix_equivalent_Os,ArgumentError,Python argument types in
+YOXYUF,fix_equivalent_Os,ArgumentError,Python argument types in
+YOXZAM,fix_equivalent_Os,ArgumentError,Python argument types in
+ZAPJEF,fix_equivalent_Os,ArgumentError,Python argument types in
+ZAPJIJ,fix_equivalent_Os,ArgumentError,Python argument types in
+ZAPQIT,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ZAPQUF,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ZEQFEG,fix_equivalent_Os,ArgumentError,Python argument types in
+ZEQXIC,fix_equivalent_Os,ArgumentError,Python argument types in
+ZERFAG,fix_equivalent_Os,ArgumentError,Python argument types in
+ZERFEK,fix_equivalent_Os,ArgumentError,Python argument types in
+ZIGHOO,fix_equivalent_Os,ArgumentError,Python argument types in
+ZISBAE,fix_equivalent_Os,ArgumentError,Python argument types in
+ZOCBEY,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ZOMVIG,get_lig_mol,AttributeError,'NoneType' object has no attribute 'GetAtoms'
+ZOSMIG,fix_equivalent_Os,ArgumentError,Python argument types in

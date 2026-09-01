@@ -1,0 +1,23 @@
+{
+  "input_csv": "ilp_mismatch_rerun_current/shards/shard_2.csv",
+  "xyz_directory": "/data/jingyuan_data/tmqmg",
+  "engine": "/home/zhujingyuan/TMC_Lewis_Structure/Lewis-engine-ILP.py",
+  "start_offset": 0,
+  "limit": null,
+  "skip_csd_lists": [
+    "/home/zhujingyuan/TMC_Lewis_Structure/list_error_geometry.txt"
+  ],
+  "skipped_excluded": 1,
+  "wall_time_seconds": 317.405,
+  "total_processed": 2657,
+  "missing_xyz": 0,
+  "ilp_success": 2657,
+  "ilp_failed": 0,
+  "other_errors": 0,
+  "smiles_generated": 2657,
+  "rdkit_parse_ok": 2656,
+  "rdkit_parse_fail": 1,
+  "rdkit_parse_ok_fraction_of_ilp_success": 0.9996,
+  "error_xyz_dir": "ilp_mismatch_rerun_current/results_2/error",
+  "error_xyz_saved": 1
+}

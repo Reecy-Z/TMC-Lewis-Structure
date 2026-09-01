@@ -1,0 +1,11 @@
+{
+  "metric_consensus": 29110,
+  "graph_consensus": 29068,
+  "metric_only_ambiguous": 42,
+  "processed": 29110,
+  "status_counts": {
+    "ok": 28981,
+    "validation_failed": 122,
+    "error": 7
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "cohort_size": 28948,
+  "canonical_ligand_mismatches": 4283,
+  "canonical_ligand_mismatch_percent": 14.795495371010087,
+  "chemically_equivalent_ligand_mismatches": 1192,
+  "chemically_equivalent_ligand_mismatch_percent": 4.1177283404725715,
+  "canonical_only_differences_resolved_by_equivalence": 3091,
+  "mechanism_counts": {
+    "coupled_ligand_charge_and_oxidation": 1009,
+    "metal_disconnection_or_ligand_partition": 161,
+    "unresolved_positional_or_equivalence": 19,
+    "feature_extraction_failure": 3
+  }
+}

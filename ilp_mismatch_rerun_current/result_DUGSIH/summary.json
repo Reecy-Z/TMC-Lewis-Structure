@@ -1,0 +1,21 @@
+{
+  "input_csv": "ilp_mismatch_rerun_current/DUGSIH.csv",
+  "xyz_directory": "/data/jingyuan_data/tmqmg",
+  "engine": "/home/zhujingyuan/TMC_Lewis_Structure/Lewis-engine-ILP.py",
+  "start_offset": 0,
+  "limit": null,
+  "skip_csd_lists": [],
+  "skipped_excluded": 0,
+  "wall_time_seconds": 0.059,
+  "total_processed": 1,
+  "missing_xyz": 0,
+  "ilp_success": 1,
+  "ilp_failed": 0,
+  "other_errors": 0,
+  "smiles_generated": 1,
+  "rdkit_parse_ok": 1,
+  "rdkit_parse_fail": 0,
+  "rdkit_parse_ok_fraction_of_ilp_success": 1.0,
+  "error_xyz_dir": "ilp_mismatch_rerun_current/result_DUGSIH/error",
+  "error_xyz_saved": 0
+}

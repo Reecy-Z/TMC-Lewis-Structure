@@ -1,0 +1,2 @@
+IDs,charge,status,ilp_seconds,n_atoms,rdkit_parse_ok,error,smiles_ilp
+DUGSIH,0,ok,0.0472,18,1,,[Mo+4]1234(Cl)(Cl)(<-C(=C->1(C->2(=C->3([H])[H])[H])[H])([H])[H])C1=C4C2=C=C12

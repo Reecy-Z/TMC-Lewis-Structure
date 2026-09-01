@@ -1,0 +1,5059 @@
+[
+  {
+    "id": "ACUZEG",
+    "xyz": "representative_complex/01_werner_type/ACUZEG_charge_plus1.xyz",
+    "charge": 1,
+    "category": "01_werner_type",
+    "openbabel": {
+      "n_atoms": 13,
+      "n_bonds": 14,
+      "smiles": "Cl[Co]12(Cl)([NH2]CCC[NH2]1)[NH2]CCC[NH2]2",
+      "tm": [
+        {
+          "atom": "Co0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Co0",
+          "b": "Cl7",
+          "order": "1"
+        },
+        {
+          "a": "N8",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "Cl1",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N2",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "N2",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "N6",
+          "order": "1"
+        },
+        {
+          "a": "C9",
+          "b": "N8",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C10",
+          "order": "1"
+        },
+        {
+          "a": "N12",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "N12",
+          "b": "Co0",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/ACUZEG.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 13,
+      "n_bonds": 14,
+      "smiles": "[Cl-]->[Co+3]12(<-[Cl-])(<-NCCCN->1)<-NCCCN->2",
+      "tm": [
+        {
+          "atom": "Co1",
+          "fc": 3
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Cl0",
+          "fc": -1
+        },
+        {
+          "atom": "Co1",
+          "fc": 3
+        },
+        {
+          "atom": "Cl2",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "Cl0",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "Cl2",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N3",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N3",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "N7",
+          "order": "1"
+        },
+        {
+          "a": "N8",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N8",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "N12",
+          "order": "1"
+        },
+        {
+          "a": "N7",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N12",
+          "b": "Co1",
+          "order": "dative"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/ACUZEG.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/ACUZEG.png"
+  },
+  {
+    "id": "ROKMIN",
+    "xyz": "representative_complex/01_werner_type/ROKMIN_charge_plus1.xyz",
+    "charge": 1,
+    "category": "01_werner_type",
+    "openbabel": {
+      "n_atoms": 21,
+      "n_bonds": 22,
+      "smiles": "[NH3][Co]([NH3])([NH3])([NH3])(N1[N]N=C([N+](=O)[O-])[N]1)N1[N]N=C([N+](=O)[O-])[N]1",
+      "tm": [
+        {
+          "atom": "Co0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "N8",
+          "fc": 1
+        },
+        {
+          "atom": "N13",
+          "fc": 1
+        },
+        {
+          "atom": "O17",
+          "fc": -1
+        },
+        {
+          "atom": "O20",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "N4",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N3",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N1",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N2",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N5",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N5",
+          "b": "N9",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "N7",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "N5",
+          "order": "1"
+        },
+        {
+          "a": "N7",
+          "b": "C15",
+          "order": "2"
+        },
+        {
+          "a": "N8",
+          "b": "O17",
+          "order": "1"
+        },
+        {
+          "a": "N10",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N10",
+          "b": "N14",
+          "order": "1"
+        },
+        {
+          "a": "N11",
+          "b": "N10",
+          "order": "1"
+        },
+        {
+          "a": "N12",
+          "b": "N11",
+          "order": "1"
+        },
+        {
+          "a": "N12",
+          "b": "C16",
+          "order": "2"
+        },
+        {
+          "a": "N13",
+          "b": "O20",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "N8",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "N9",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "N13",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "N14",
+          "order": "1"
+        },
+        {
+          "a": "O18",
+          "b": "N8",
+          "order": "2"
+        },
+        {
+          "a": "O19",
+          "b": "N13",
+          "order": "2"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/ROKMIN.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 21,
+      "n_bonds": 22,
+      "smiles": "N->[Co+3](<-N)(<-N)(<-N)(<-[n-]1nnc([N+](=O)[O-])n1)<-[n-]1nnc([N+](=O)[O-])n1",
+      "tm": [
+        {
+          "atom": "Co1",
+          "fc": 3
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Co1",
+          "fc": 3
+        },
+        {
+          "atom": "N5",
+          "fc": -1
+        },
+        {
+          "atom": "N9",
+          "fc": 1
+        },
+        {
+          "atom": "O11",
+          "fc": -1
+        },
+        {
+          "atom": "N13",
+          "fc": -1
+        },
+        {
+          "atom": "N17",
+          "fc": 1
+        },
+        {
+          "atom": "O19",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "N0",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N2",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N3",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N4",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N5",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N5",
+          "b": "N6",
+          "order": "a"
+        },
+        {
+          "a": "N6",
+          "b": "N7",
+          "order": "a"
+        },
+        {
+          "a": "N7",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "N9",
+          "order": "1"
+        },
+        {
+          "a": "N9",
+          "b": "O10",
+          "order": "2"
+        },
+        {
+          "a": "N9",
+          "b": "O11",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "N12",
+          "order": "a"
+        },
+        {
+          "a": "N13",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N13",
+          "b": "N14",
+          "order": "a"
+        },
+        {
+          "a": "N14",
+          "b": "N15",
+          "order": "a"
+        },
+        {
+          "a": "N15",
+          "b": "C16",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "N17",
+          "order": "1"
+        },
+        {
+          "a": "N17",
+          "b": "O18",
+          "order": "2"
+        },
+        {
+          "a": "N17",
+          "b": "O19",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "N20",
+          "order": "a"
+        },
+        {
+          "a": "N12",
+          "b": "N5",
+          "order": "a"
+        },
+        {
+          "a": "N20",
+          "b": "N13",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/ROKMIN.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/ROKMIN.png"
+  },
+  {
+    "id": "WUYHEF",
+    "xyz": "representative_complex/01_werner_type/WUYHEF_charge_plus1.xyz",
+    "charge": 1,
+    "category": "01_werner_type",
+    "openbabel": {
+      "n_atoms": 9,
+      "n_bonds": 9,
+      "smiles": "[NH3][Co]1([NH3])([NH3])([NH3])OC(=O)O1",
+      "tm": [
+        {
+          "atom": "Co0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "N7",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "Co0",
+          "b": "O2",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "O1",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "O1",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N4",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "N5",
+          "b": "Co0",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "O3",
+          "order": "2"
+        },
+        {
+          "a": "C8",
+          "b": "O2",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/WUYHEF.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 9,
+      "n_bonds": 9,
+      "smiles": "N->[Co+3]1(<-N)(<-N)(<-N)<-[O-]C(=O)[O-]->1",
+      "tm": [
+        {
+          "atom": "Co1",
+          "fc": 3
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Co1",
+          "fc": 3
+        },
+        {
+          "atom": "O5",
+          "fc": -1
+        },
+        {
+          "atom": "O8",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "N0",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N2",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N3",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "N4",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "O5",
+          "b": "Co1",
+          "order": "dative"
+        },
+        {
+          "a": "O5",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "O7",
+          "order": "2"
+        },
+        {
+          "a": "C6",
+          "b": "O8",
+          "order": "1"
+        },
+        {
+          "a": "O8",
+          "b": "Co1",
+          "order": "dative"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/WUYHEF.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/WUYHEF.png"
+  },
+  {
+    "id": "CUKMIG",
+    "xyz": "representative_complex/02_eta_pi_donor/CUKMIG_charge_minus1.xyz",
+    "charge": -1,
+    "category": "02_eta_pi_donor",
+    "openbabel": {
+      "n_atoms": 29,
+      "n_bonds": 31,
+      "smiles": "C1=C[C@H]2[Y][C@@H]1c1ccccc12.C[Si](C)(C)C1=C[CH]C=C1.C[Si](C)(C)[C]1C=CC=C1",
+      "tm": [
+        {
+          "atom": "Y0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Y0",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "Si1",
+          "b": "C15",
+          "order": "1"
+        },
+        {
+          "a": "Si1",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "Si2",
+          "b": "C10",
+          "order": "1"
+        },
+        {
+          "a": "Si2",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "C3",
+          "order": "2"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "C6",
+          "order": "2"
+        },
+        {
+          "a": "C7",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "Si2",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "Si2",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C12",
+          "order": "1"
+        },
+        {
+          "a": "C13",
+          "b": "C12",
+          "order": "1"
+        },
+        {
+          "a": "C14",
+          "b": "C13",
+          "order": "2"
+        },
+        {
+          "a": "C15",
+          "b": "C14",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "C11",
+          "order": "2"
+        },
+        {
+          "a": "C17",
+          "b": "Si1",
+          "order": "1"
+        },
+        {
+          "a": "C18",
+          "b": "Si1",
+          "order": "1"
+        },
+        {
+          "a": "C19",
+          "b": "C28",
+          "order": "1"
+        },
+        {
+          "a": "C20",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "C21",
+          "b": "C22",
+          "order": "1"
+        },
+        {
+          "a": "C21",
+          "b": "C20",
+          "order": "2"
+        },
+        {
+          "a": "C22",
+          "b": "C23",
+          "order": "1"
+        },
+        {
+          "a": "C22",
+          "b": "Y0",
+          "order": "1"
+        },
+        {
+          "a": "C23",
+          "b": "C24",
+          "order": "a"
+        },
+        {
+          "a": "C23",
+          "b": "C28",
+          "order": "a"
+        },
+        {
+          "a": "C24",
+          "b": "C25",
+          "order": "a"
+        },
+        {
+          "a": "C25",
+          "b": "C26",
+          "order": "a"
+        },
+        {
+          "a": "C27",
+          "b": "C26",
+          "order": "a"
+        },
+        {
+          "a": "C28",
+          "b": "C27",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/CUKMIG.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 29,
+      "n_bonds": 43,
+      "smiles": "C[Si](C)(C)c12->[Y+]3456789%10%11%12(<-c%13c%14ccccc%14c->3c->4c->5%13)(<-c(c->6[cH-]->71)c->82)<-c1c->9[cH-]->%10c->%11([Si](C)(C)C)c->%121",
+      "tm": [
+        {
+          "atom": "Y5",
+          "fc": 1
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Y5",
+          "fc": 1
+        },
+        {
+          "atom": "C18",
+          "fc": -1
+        },
+        {
+          "atom": "C22",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "C0",
+          "b": "Si1",
+          "order": "1"
+        },
+        {
+          "a": "Si1",
+          "b": "C2",
+          "order": "1"
+        },
+        {
+          "a": "Si1",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "Si1",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C6",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "a"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C16",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C18",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C19",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C20",
+          "b": "C21",
+          "order": "a"
+        },
+        {
+          "a": "C21",
+          "b": "C22",
+          "order": "a"
+        },
+        {
+          "a": "C22",
+          "b": "C23",
+          "order": "a"
+        },
+        {
+          "a": "C23",
+          "b": "Si24",
+          "order": "1"
+        },
+        {
+          "a": "Si24",
+          "b": "C25",
+          "order": "1"
+        },
+        {
+          "a": "Si24",
+          "b": "C26",
+          "order": "1"
+        },
+        {
+          "a": "Si24",
+          "b": "C27",
+          "order": "1"
+        },
+        {
+          "a": "C23",
+          "b": "C28",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C4",
+          "order": "a"
+        },
+        {
+          "a": "C28",
+          "b": "C20",
+          "order": "a"
+        },
+        {
+          "a": "C19",
+          "b": "C4",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C14",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C15",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C17",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C18",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C19",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C21",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C22",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C23",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C28",
+          "b": "Y5",
+          "order": "dative"
+        },
+        {
+          "a": "C15",
+          "b": "C6",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C7",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/CUKMIG.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/CUKMIG.png"
+  },
+  {
+    "id": "GAHCOH",
+    "xyz": "representative_complex/02_eta_pi_donor/GAHCOH_charge_0.xyz",
+    "charge": 0,
+    "category": "02_eta_pi_donor",
+    "openbabel": {
+      "n_atoms": 21,
+      "n_bonds": 22,
+      "smiles": "CC1=P[C@](C)([Zr](Cl)(Cl)[C@@]2(C)P=C(C)C(C)=C2C)C(C)=C1C",
+      "tm": [
+        {
+          "atom": "Zr0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Zr0",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "Zr0",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "Cl1",
+          "b": "Zr0",
+          "order": "1"
+        },
+        {
+          "a": "Cl2",
+          "b": "Zr0",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "P3",
+          "order": "2"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "2"
+        },
+        {
+          "a": "C6",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "P3",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C13",
+          "b": "P4",
+          "order": "2"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "2"
+        },
+        {
+          "a": "C14",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "C17",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "P4",
+          "order": "1"
+        },
+        {
+          "a": "C18",
+          "b": "C15",
+          "order": "1"
+        },
+        {
+          "a": "C19",
+          "b": "C14",
+          "order": "1"
+        },
+        {
+          "a": "C20",
+          "b": "C13",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/GAHCOH.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 21,
+      "n_bonds": 30,
+      "smiles": "Cc12->[Zr+4]3456789(<-[Cl-])(<-[Cl-])(<-p1[c-]->3(C)c->4(C)c->52C)<-p1c->6(C)c->7(C)c->8(C)[c-]->91C",
+      "tm": [
+        {
+          "atom": "Zr2",
+          "fc": 4
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Zr2",
+          "fc": 4
+        },
+        {
+          "atom": "Cl3",
+          "fc": -1
+        },
+        {
+          "atom": "Cl4",
+          "fc": -1
+        },
+        {
+          "atom": "C6",
+          "fc": -1
+        },
+        {
+          "atom": "C19",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "C0",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "Cl3",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "Cl4",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "P5",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "P5",
+          "b": "C6",
+          "order": "a"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "P12",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "P12",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "C14",
+          "order": "1"
+        },
+        {
+          "a": "C13",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C15",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C18",
+          "order": "1"
+        },
+        {
+          "a": "C17",
+          "b": "C19",
+          "order": "a"
+        },
+        {
+          "a": "C19",
+          "b": "C20",
+          "order": "1"
+        },
+        {
+          "a": "P5",
+          "b": "C1",
+          "order": "a"
+        },
+        {
+          "a": "C19",
+          "b": "P12",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C1",
+          "order": "a"
+        },
+        {
+          "a": "C6",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "C8",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "C10",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "C13",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "C15",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "C17",
+          "b": "Zr2",
+          "order": "dative"
+        },
+        {
+          "a": "C19",
+          "b": "Zr2",
+          "order": "dative"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/GAHCOH.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/GAHCOH.png"
+  },
+  {
+    "id": "IWOLIP",
+    "xyz": "representative_complex/02_eta_pi_donor/IWOLIP_charge_0.xyz",
+    "charge": 0,
+    "category": "02_eta_pi_donor",
+    "openbabel": {
+      "n_atoms": 14,
+      "n_bonds": 16,
+      "smiles": "[O][C][Cr]12([C][O])([C][O])[C@@H]3[CH][C@H]1[CH][C@@]2(F)[CH]3",
+      "tm": [
+        {
+          "atom": "Cr0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Cr0",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "Cr0",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "Cr0",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "Cr0",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "O3",
+          "b": "C12",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "F1",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C9",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C9",
+          "b": "Cr0",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "O2",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "Cr0",
+          "order": "1"
+        },
+        {
+          "a": "C13",
+          "b": "O4",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/IWOLIP.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 14,
+      "n_bonds": 19,
+      "smiles": "[O+]#[C-]->[Cr]12345(<-[C-]#[O+])(<-[C-]#[O+])<-c6c->1c->2c->3(F)c->4c->56",
+      "tm": [
+        {
+          "atom": "Cr2",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "O0",
+          "fc": 1
+        },
+        {
+          "atom": "C1",
+          "fc": -1
+        },
+        {
+          "atom": "C3",
+          "fc": -1
+        },
+        {
+          "atom": "O4",
+          "fc": 1
+        },
+        {
+          "atom": "C5",
+          "fc": -1
+        },
+        {
+          "atom": "O6",
+          "fc": 1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "O0",
+          "b": "C1",
+          "order": "3"
+        },
+        {
+          "a": "C1",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C3",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C3",
+          "b": "O4",
+          "order": "3"
+        },
+        {
+          "a": "C5",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C5",
+          "b": "O6",
+          "order": "3"
+        },
+        {
+          "a": "C7",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "F11",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C9",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C10",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C12",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C13",
+          "b": "Cr2",
+          "order": "dative"
+        },
+        {
+          "a": "C13",
+          "b": "C7",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/IWOLIP.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/IWOLIP.png"
+  },
+  {
+    "id": "KCEYPT",
+    "xyz": "representative_complex/02_eta_pi_donor/KCEYPT_charge_minus1.xyz",
+    "charge": -1,
+    "category": "02_eta_pi_donor",
+    "openbabel": {
+      "n_atoms": 6,
+      "n_bonds": 2,
+      "smiles": "[CH2]C[Pt].[Cl].[Cl].[Cl]",
+      "tm": [
+        {
+          "atom": "Pt0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Pt0",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "C3",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/KCEYPT.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 6,
+      "n_bonds": 6,
+      "smiles": "[Cl-]->[Pt+2]1(<-[Cl-])(<-[Cl-])<-C=C->1",
+      "tm": [
+        {
+          "atom": "Pt1",
+          "fc": 2
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Cl0",
+          "fc": -1
+        },
+        {
+          "atom": "Pt1",
+          "fc": 2
+        },
+        {
+          "atom": "Cl2",
+          "fc": -1
+        },
+        {
+          "atom": "Cl3",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "Cl0",
+          "b": "Pt1",
+          "order": "dative"
+        },
+        {
+          "a": "Cl2",
+          "b": "Pt1",
+          "order": "dative"
+        },
+        {
+          "a": "Cl3",
+          "b": "Pt1",
+          "order": "dative"
+        },
+        {
+          "a": "C4",
+          "b": "Pt1",
+          "order": "dative"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "2"
+        },
+        {
+          "a": "C5",
+          "b": "Pt1",
+          "order": "dative"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/KCEYPT.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/KCEYPT.png"
+  },
+  {
+    "id": "VENWAN",
+    "xyz": "representative_complex/02_eta_pi_donor/VENWAN_charge_plus1.xyz",
+    "charge": 1,
+    "category": "02_eta_pi_donor",
+    "openbabel": {
+      "n_atoms": 13,
+      "n_bonds": 13,
+      "smiles": "Cl[Ti](C1[CH]C=C[CH]1)C1C=CC=C1.O",
+      "tm": [
+        {
+          "atom": "Ti0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Cl1",
+          "b": "Ti0",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "C12",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "Ti0",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C3",
+          "order": "2"
+        },
+        {
+          "a": "C9",
+          "b": "Ti0",
+          "order": "1"
+        },
+        {
+          "a": "C9",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C10",
+          "order": "2"
+        },
+        {
+          "a": "C12",
+          "b": "C7",
+          "order": "2"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/VENWAN.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 13,
+      "n_bonds": 22,
+      "smiles": "O->[Ti+4]12345678(<-[Cl-])(<-c9c->1c->2[cH-]->3c->49)<-c1c->5c->6[cH-]->7c->81",
+      "tm": [
+        {
+          "atom": "Ti1",
+          "fc": 4
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Ti1",
+          "fc": 4
+        },
+        {
+          "atom": "Cl2",
+          "fc": -1
+        },
+        {
+          "atom": "C6",
+          "fc": -1
+        },
+        {
+          "atom": "C11",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "O0",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "Cl2",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C3",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C3",
+          "b": "C4",
+          "order": "a"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "C6",
+          "order": "a"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C4",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C12",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C6",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C7",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C9",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C10",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C11",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C12",
+          "b": "Ti1",
+          "order": "dative"
+        },
+        {
+          "a": "C7",
+          "b": "C3",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/VENWAN.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/VENWAN.png"
+  },
+  {
+    "id": "ABELOK",
+    "xyz": "representative_complex/03_metal_carbene/ABELOK_charge_0.xyz",
+    "charge": 0,
+    "category": "03_metal_carbene",
+    "openbabel": {
+      "n_atoms": 28,
+      "n_bonds": 31,
+      "smiles": "Cc1cc(C)c(N2[C](c3ccccc3)SC([Au]Cl)=C2c2ccccc2)c(C)c1",
+      "tm": [
+        {
+          "atom": "Au0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Au0",
+          "b": "Cl2",
+          "order": "1"
+        },
+        {
+          "a": "S1",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "S1",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "N3",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "N3",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "Au0",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "C6",
+          "order": "2"
+        },
+        {
+          "a": "C5",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "N3",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C7",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C16",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C19",
+          "b": "C24",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "C21",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "C19",
+          "order": "a"
+        },
+        {
+          "a": "C21",
+          "b": "C22",
+          "order": "a"
+        },
+        {
+          "a": "C22",
+          "b": "C26",
+          "order": "1"
+        },
+        {
+          "a": "C22",
+          "b": "C23",
+          "order": "a"
+        },
+        {
+          "a": "C23",
+          "b": "C24",
+          "order": "a"
+        },
+        {
+          "a": "C24",
+          "b": "C27",
+          "order": "1"
+        },
+        {
+          "a": "C25",
+          "b": "C20",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/ABELOK.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 28,
+      "n_bonds": 31,
+      "smiles": "Cc1cc(C)c(N2C(c3ccccc3)=S=C(->[Au+]<-[Cl-])=C2c2ccccc2)c(C)c1",
+      "tm": [
+        {
+          "atom": "Au16",
+          "fc": 1
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Au16",
+          "fc": 1
+        },
+        {
+          "atom": "Cl17",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "C0",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "C2",
+          "order": "a"
+        },
+        {
+          "a": "C2",
+          "b": "C3",
+          "order": "a"
+        },
+        {
+          "a": "C3",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C5",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "N6",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C7",
+          "b": "S14",
+          "order": "2"
+        },
+        {
+          "a": "S14",
+          "b": "C15",
+          "order": "2"
+        },
+        {
+          "a": "C15",
+          "b": "Au16",
+          "order": "dative"
+        },
+        {
+          "a": "Cl17",
+          "b": "Au16",
+          "order": "dative"
+        },
+        {
+          "a": "C15",
+          "b": "C18",
+          "order": "2"
+        },
+        {
+          "a": "C18",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "C19",
+          "b": "C20",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "C21",
+          "order": "a"
+        },
+        {
+          "a": "C21",
+          "b": "C22",
+          "order": "a"
+        },
+        {
+          "a": "C22",
+          "b": "C23",
+          "order": "a"
+        },
+        {
+          "a": "C23",
+          "b": "C24",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "C25",
+          "order": "a"
+        },
+        {
+          "a": "C25",
+          "b": "C26",
+          "order": "1"
+        },
+        {
+          "a": "C25",
+          "b": "C27",
+          "order": "a"
+        },
+        {
+          "a": "C27",
+          "b": "C1",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "N6",
+          "order": "1"
+        },
+        {
+          "a": "C24",
+          "b": "C19",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "C8",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/ABELOK.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/ABELOK.png"
+  },
+  {
+    "id": "AFACUH",
+    "xyz": "representative_complex/03_metal_carbene/AFACUH_charge_0.xyz",
+    "charge": 0,
+    "category": "03_metal_carbene",
+    "openbabel": {
+      "n_atoms": 41,
+      "n_bonds": 44,
+      "smiles": "Cc1cc(C)c(-c2cccc(-c3c(C)cc(C)cc3C)c2O[Mo@]([CH]C(C)(C)C)([N]C(C)(C)C)n2cccc2)c(C)c1",
+      "tm": [
+        {
+          "atom": "Mo0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Mo0",
+          "b": "O16",
+          "order": "1"
+        },
+        {
+          "a": "Mo0",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "Mo0",
+          "b": "N11",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "C2",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C2",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "Mo0",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "N6",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C10",
+          "order": "1"
+        },
+        {
+          "a": "C9",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "N11",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "N11",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C15",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C18",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "O16",
+          "order": "1"
+        },
+        {
+          "a": "C18",
+          "b": "C23",
+          "order": "1"
+        },
+        {
+          "a": "C19",
+          "b": "C18",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "C21",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "C19",
+          "order": "a"
+        },
+        {
+          "a": "C21",
+          "b": "C22",
+          "order": "a"
+        },
+        {
+          "a": "C22",
+          "b": "C32",
+          "order": "1"
+        },
+        {
+          "a": "C22",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C23",
+          "b": "C28",
+          "order": "a"
+        },
+        {
+          "a": "C24",
+          "b": "C23",
+          "order": "a"
+        },
+        {
+          "a": "C24",
+          "b": "C25",
+          "order": "a"
+        },
+        {
+          "a": "C25",
+          "b": "C26",
+          "order": "a"
+        },
+        {
+          "a": "C26",
+          "b": "C27",
+          "order": "a"
+        },
+        {
+          "a": "C26",
+          "b": "C30",
+          "order": "1"
+        },
+        {
+          "a": "C28",
+          "b": "C31",
+          "order": "1"
+        },
+        {
+          "a": "C28",
+          "b": "C27",
+          "order": "a"
+        },
+        {
+          "a": "C29",
+          "b": "C24",
+          "order": "1"
+        },
+        {
+          "a": "C32",
+          "b": "C37",
+          "order": "a"
+        },
+        {
+          "a": "C33",
+          "b": "C34",
+          "order": "a"
+        },
+        {
+          "a": "C33",
+          "b": "C32",
+          "order": "a"
+        },
+        {
+          "a": "C34",
+          "b": "C35",
+          "order": "a"
+        },
+        {
+          "a": "C35",
+          "b": "C36",
+          "order": "a"
+        },
+        {
+          "a": "C36",
+          "b": "C37",
+          "order": "a"
+        },
+        {
+          "a": "C37",
+          "b": "C40",
+          "order": "1"
+        },
+        {
+          "a": "C38",
+          "b": "C33",
+          "order": "1"
+        },
+        {
+          "a": "C39",
+          "b": "C35",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/AFACUH.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 41,
+      "n_bonds": 44,
+      "smiles": "Cc1cc(C)c(-c2cccc(-c3c(C)cc(C)cc3C)c2[O-]->[Mo+4](<-[CH]C(C)(C)C)(<-[N-2]C(C)(C)C)<-[n-]2cccc2)c(C)c1",
+      "tm": [
+        {
+          "atom": "Mo22",
+          "fc": 4
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "O21",
+          "fc": -1
+        },
+        {
+          "atom": "Mo22",
+          "fc": 4
+        },
+        {
+          "atom": "N28",
+          "fc": -2
+        },
+        {
+          "atom": "N33",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "C0",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "C2",
+          "order": "a"
+        },
+        {
+          "a": "C2",
+          "b": "C3",
+          "order": "a"
+        },
+        {
+          "a": "C3",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C5",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "a"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C15",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C18",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C20",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "O21",
+          "order": "1"
+        },
+        {
+          "a": "O21",
+          "b": "Mo22",
+          "order": "dative"
+        },
+        {
+          "a": "C23",
+          "b": "Mo22",
+          "order": "dative"
+        },
+        {
+          "a": "C23",
+          "b": "C24",
+          "order": "1"
+        },
+        {
+          "a": "C24",
+          "b": "C25",
+          "order": "1"
+        },
+        {
+          "a": "C24",
+          "b": "C26",
+          "order": "1"
+        },
+        {
+          "a": "C24",
+          "b": "C27",
+          "order": "1"
+        },
+        {
+          "a": "N28",
+          "b": "Mo22",
+          "order": "dative"
+        },
+        {
+          "a": "N28",
+          "b": "C29",
+          "order": "1"
+        },
+        {
+          "a": "C29",
+          "b": "C30",
+          "order": "1"
+        },
+        {
+          "a": "C29",
+          "b": "C31",
+          "order": "1"
+        },
+        {
+          "a": "C29",
+          "b": "C32",
+          "order": "1"
+        },
+        {
+          "a": "N33",
+          "b": "Mo22",
+          "order": "dative"
+        },
+        {
+          "a": "N33",
+          "b": "C34",
+          "order": "a"
+        },
+        {
+          "a": "C34",
+          "b": "C35",
+          "order": "a"
+        },
+        {
+          "a": "C35",
+          "b": "C36",
+          "order": "a"
+        },
+        {
+          "a": "C36",
+          "b": "C37",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "C38",
+          "order": "a"
+        },
+        {
+          "a": "C38",
+          "b": "C39",
+          "order": "1"
+        },
+        {
+          "a": "C38",
+          "b": "C40",
+          "order": "a"
+        },
+        {
+          "a": "C40",
+          "b": "C1",
+          "order": "a"
+        },
+        {
+          "a": "C20",
+          "b": "C6",
+          "order": "a"
+        },
+        {
+          "a": "C37",
+          "b": "N33",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C11",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/AFACUH.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/AFACUH.png"
+  },
+  {
+    "id": "AKONAR",
+    "xyz": "representative_complex/03_metal_carbene/AKONAR_charge_0.xyz",
+    "charge": 0,
+    "category": "03_metal_carbene",
+    "openbabel": {
+      "n_atoms": 30,
+      "n_bonds": 34,
+      "smiles": "CC(C)c1cccc(C(C)C)c1N1[C@]([Cu]Cl)[C@]2(CC1(C)C)[C@@H]1C[C@H]3C[C@@H](C1)C[C@@H]2C3",
+      "tm": [
+        {
+          "atom": "Cu0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Cl1",
+          "b": "Cu0",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "C18",
+          "order": "a"
+        },
+        {
+          "a": "C2",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C3",
+          "b": "C2",
+          "order": "1"
+        },
+        {
+          "a": "N4",
+          "b": "C15",
+          "order": "1"
+        },
+        {
+          "a": "N4",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "C25",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "Cu0",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "N4",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C12",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C24",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C27",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C23",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C13",
+          "b": "C24",
+          "order": "1"
+        },
+        {
+          "a": "C14",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C28",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "C26",
+          "order": "1"
+        },
+        {
+          "a": "C17",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C19",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C20",
+          "b": "C21",
+          "order": "1"
+        },
+        {
+          "a": "C21",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C22",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C23",
+          "b": "C29",
+          "order": "1"
+        },
+        {
+          "a": "C23",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "C24",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C27",
+          "b": "C20",
+          "order": "1"
+        },
+        {
+          "a": "C27",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C29",
+          "b": "C21",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/AKONAR.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 30,
+      "n_bonds": 34,
+      "smiles": "CC(C)c1cccc(C(C)C)c1N1[C](->[Cu+]<-[Cl-])C2(CC1(C)C)C1CC3CC(C1)CC2C3",
+      "tm": [
+        {
+          "atom": "Cu14",
+          "fc": 1
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Cu14",
+          "fc": 1
+        },
+        {
+          "atom": "Cl15",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "C0",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "C2",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C4",
+          "order": "a"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "C6",
+          "order": "a"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "a"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C10",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "N12",
+          "order": "1"
+        },
+        {
+          "a": "N12",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "C13",
+          "b": "Cu14",
+          "order": "dative"
+        },
+        {
+          "a": "Cl15",
+          "b": "Cu14",
+          "order": "dative"
+        },
+        {
+          "a": "C13",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "C17",
+          "order": "1"
+        },
+        {
+          "a": "C17",
+          "b": "C18",
+          "order": "1"
+        },
+        {
+          "a": "C18",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "C18",
+          "b": "C20",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "C21",
+          "order": "1"
+        },
+        {
+          "a": "C21",
+          "b": "C22",
+          "order": "1"
+        },
+        {
+          "a": "C22",
+          "b": "C23",
+          "order": "1"
+        },
+        {
+          "a": "C23",
+          "b": "C24",
+          "order": "1"
+        },
+        {
+          "a": "C24",
+          "b": "C25",
+          "order": "1"
+        },
+        {
+          "a": "C25",
+          "b": "C26",
+          "order": "1"
+        },
+        {
+          "a": "C25",
+          "b": "C27",
+          "order": "1"
+        },
+        {
+          "a": "C27",
+          "b": "C28",
+          "order": "1"
+        },
+        {
+          "a": "C28",
+          "b": "C29",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C3",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "N12",
+          "order": "1"
+        },
+        {
+          "a": "C26",
+          "b": "C21",
+          "order": "1"
+        },
+        {
+          "a": "C28",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "C29",
+          "b": "C23",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/AKONAR.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/AKONAR.png"
+  },
+  {
+    "id": "BEBVIN",
+    "xyz": "representative_complex/03_metal_carbene/BEBVIN_charge_0.xyz",
+    "charge": 0,
+    "category": "03_metal_carbene",
+    "openbabel": {
+      "n_atoms": 18,
+      "n_bonds": 20,
+      "smiles": "[O][C][Mn]1([C][O])([C](F)c2ccccc2)[C@@H]2[CH][C@H]1C=C2",
+      "tm": [
+        {
+          "atom": "Mn0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Mn0",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "Mn0",
+          "b": "C6",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "Mn0",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C4",
+          "order": "2"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "O7",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "Mn0",
+          "order": "1"
+        },
+        {
+          "a": "O9",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "F11",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "C12",
+          "order": "1"
+        },
+        {
+          "a": "C10",
+          "b": "Mn0",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C16",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/BEBVIN.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 18,
+      "n_bonds": 23,
+      "smiles": "[O+]#[C-]->[Mn+]1234(<-[C-]#[O+])(<-[C](F)c5ccccc5)<-c5c->1c->2[cH-]->3c->45",
+      "tm": [
+        {
+          "atom": "Mn2",
+          "fc": 1
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "O0",
+          "fc": 1
+        },
+        {
+          "atom": "C1",
+          "fc": -1
+        },
+        {
+          "atom": "Mn2",
+          "fc": 1
+        },
+        {
+          "atom": "C3",
+          "fc": -1
+        },
+        {
+          "atom": "O4",
+          "fc": 1
+        },
+        {
+          "atom": "C16",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "O0",
+          "b": "C1",
+          "order": "3"
+        },
+        {
+          "a": "C1",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C3",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C3",
+          "b": "O4",
+          "order": "3"
+        },
+        {
+          "a": "C5",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C5",
+          "b": "F6",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C13",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C15",
+          "b": "C16",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C15",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C16",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C17",
+          "b": "Mn2",
+          "order": "dative"
+        },
+        {
+          "a": "C12",
+          "b": "C7",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C13",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/BEBVIN.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/BEBVIN.png"
+  },
+  {
+    "id": "PEHJEU",
+    "xyz": "representative_complex/03_metal_carbene/PEHJEU_charge_0.xyz",
+    "charge": 0,
+    "category": "03_metal_carbene",
+    "openbabel": {
+      "n_atoms": 19,
+      "n_bonds": 20,
+      "smiles": "[O][C][Re](Br)([C][O])([C][O])([C][O])[C]1Nc2ccccc2N1",
+      "tm": [
+        {
+          "atom": "Re0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Re0",
+          "b": "C4",
+          "order": "1"
+        },
+        {
+          "a": "Re0",
+          "b": "Br1",
+          "order": "1"
+        },
+        {
+          "a": "Re0",
+          "b": "C15",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "Re0",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "N12",
+          "order": "1"
+        },
+        {
+          "a": "C2",
+          "b": "N9",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "Re0",
+          "order": "1"
+        },
+        {
+          "a": "C4",
+          "b": "O6",
+          "order": "1"
+        },
+        {
+          "a": "O5",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "O7",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "N9",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "N12",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "C13",
+          "b": "Re0",
+          "order": "1"
+        },
+        {
+          "a": "C14",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C15",
+          "b": "O10",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C16",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C17",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/PEHJEU.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 19,
+      "n_bonds": 20,
+      "smiles": "[O+]#[C-]->[Re+](<-[Br-])(<-[C-]#[O+])(<-[C-]#[O+])(<-[C-]#[O+])<-[C]1Nc2ccccc2N1",
+      "tm": [
+        {
+          "atom": "Re2",
+          "fc": 1
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "O0",
+          "fc": 1
+        },
+        {
+          "atom": "C1",
+          "fc": -1
+        },
+        {
+          "atom": "Re2",
+          "fc": 1
+        },
+        {
+          "atom": "Br3",
+          "fc": -1
+        },
+        {
+          "atom": "C4",
+          "fc": -1
+        },
+        {
+          "atom": "O5",
+          "fc": 1
+        },
+        {
+          "atom": "C6",
+          "fc": -1
+        },
+        {
+          "atom": "O7",
+          "fc": 1
+        },
+        {
+          "atom": "C8",
+          "fc": -1
+        },
+        {
+          "atom": "O9",
+          "fc": 1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "O0",
+          "b": "C1",
+          "order": "3"
+        },
+        {
+          "a": "C1",
+          "b": "Re2",
+          "order": "dative"
+        },
+        {
+          "a": "Br3",
+          "b": "Re2",
+          "order": "dative"
+        },
+        {
+          "a": "C4",
+          "b": "Re2",
+          "order": "dative"
+        },
+        {
+          "a": "C4",
+          "b": "O5",
+          "order": "3"
+        },
+        {
+          "a": "C6",
+          "b": "Re2",
+          "order": "dative"
+        },
+        {
+          "a": "C6",
+          "b": "O7",
+          "order": "3"
+        },
+        {
+          "a": "C8",
+          "b": "Re2",
+          "order": "dative"
+        },
+        {
+          "a": "C8",
+          "b": "O9",
+          "order": "3"
+        },
+        {
+          "a": "C10",
+          "b": "Re2",
+          "order": "dative"
+        },
+        {
+          "a": "C10",
+          "b": "N11",
+          "order": "1"
+        },
+        {
+          "a": "N11",
+          "b": "C12",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "C13",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "C14",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C15",
+          "b": "C16",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "N18",
+          "order": "1"
+        },
+        {
+          "a": "N18",
+          "b": "C10",
+          "order": "1"
+        },
+        {
+          "a": "C17",
+          "b": "C12",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/PEHJEU.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/PEHJEU.png"
+  },
+  {
+    "id": "AKOSEZ",
+    "xyz": "representative_complex/04_additional_motifs/AKOSEZ_charge_0.xyz",
+    "charge": 0,
+    "category": "04_additional_motifs",
+    "openbabel": {
+      "n_atoms": 19,
+      "n_bonds": 18,
+      "smiles": "BC1N(C)C=CN1C.OC[Cr](CO)(CO)(CO)CO",
+      "tm": [
+        {
+          "atom": "Cr0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Cr0",
+          "b": "C5",
+          "order": "1"
+        },
+        {
+          "a": "Cr0",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "Cr0",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "O2",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "Cr0",
+          "order": "1"
+        },
+        {
+          "a": "O4",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C5",
+          "b": "O6",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "O8",
+          "order": "1"
+        },
+        {
+          "a": "C9",
+          "b": "Cr0",
+          "order": "1"
+        },
+        {
+          "a": "O10",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "B11",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "N13",
+          "order": "1"
+        },
+        {
+          "a": "C12",
+          "b": "N16",
+          "order": "1"
+        },
+        {
+          "a": "N13",
+          "b": "C14",
+          "order": "1"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "2"
+        },
+        {
+          "a": "N16",
+          "b": "C15",
+          "order": "1"
+        },
+        {
+          "a": "C17",
+          "b": "N13",
+          "order": "1"
+        },
+        {
+          "a": "C18",
+          "b": "N16",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/AKOSEZ.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 19,
+      "n_bonds": 18,
+      "smiles": "Bc1n(C)cc[n+]1C.[O+]#[C-]->[CrH-](<-[C-]#[O+])(<-[C-]#[O+])(<-[C-]#[O+])<-[C-]#[O+]",
+      "tm": [
+        {
+          "atom": "Cr10",
+          "fc": -1
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "N6",
+          "fc": 1
+        },
+        {
+          "atom": "O8",
+          "fc": 1
+        },
+        {
+          "atom": "C9",
+          "fc": -1
+        },
+        {
+          "atom": "Cr10",
+          "fc": -1
+        },
+        {
+          "atom": "C11",
+          "fc": -1
+        },
+        {
+          "atom": "O12",
+          "fc": 1
+        },
+        {
+          "atom": "C13",
+          "fc": -1
+        },
+        {
+          "atom": "O14",
+          "fc": 1
+        },
+        {
+          "atom": "C15",
+          "fc": -1
+        },
+        {
+          "atom": "O16",
+          "fc": 1
+        },
+        {
+          "atom": "C17",
+          "fc": -1
+        },
+        {
+          "atom": "O18",
+          "fc": 1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "B0",
+          "b": "C1",
+          "order": "1"
+        },
+        {
+          "a": "C1",
+          "b": "N2",
+          "order": "a"
+        },
+        {
+          "a": "N2",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "N2",
+          "b": "C4",
+          "order": "a"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "N6",
+          "order": "a"
+        },
+        {
+          "a": "N6",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "O8",
+          "b": "C9",
+          "order": "3"
+        },
+        {
+          "a": "C9",
+          "b": "Cr10",
+          "order": "dative"
+        },
+        {
+          "a": "C11",
+          "b": "Cr10",
+          "order": "dative"
+        },
+        {
+          "a": "C11",
+          "b": "O12",
+          "order": "3"
+        },
+        {
+          "a": "C13",
+          "b": "Cr10",
+          "order": "dative"
+        },
+        {
+          "a": "C13",
+          "b": "O14",
+          "order": "3"
+        },
+        {
+          "a": "C15",
+          "b": "Cr10",
+          "order": "dative"
+        },
+        {
+          "a": "C15",
+          "b": "O16",
+          "order": "3"
+        },
+        {
+          "a": "C17",
+          "b": "Cr10",
+          "order": "dative"
+        },
+        {
+          "a": "C17",
+          "b": "O18",
+          "order": "3"
+        },
+        {
+          "a": "N6",
+          "b": "C1",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/AKOSEZ.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/AKOSEZ.png"
+  },
+  {
+    "id": "FIQPIG",
+    "xyz": "representative_complex/04_additional_motifs/FIQPIG_charge_0.xyz",
+    "charge": 0,
+    "category": "04_additional_motifs",
+    "openbabel": {
+      "n_atoms": 55,
+      "n_bonds": 66,
+      "smiles": "O=[N+]([O-])c1ccc(C2=c3ccc4n3[Au]35=C6C(=CC=C6C(c6ccccc6)=c6ccc(n63)=C(c3ccc([N+](=O)[O-])cc3)c3ccc2n35)C=4c2ccccc2)cc1",
+      "tm": [
+        {
+          "atom": "Au0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "N4",
+          "fc": 1
+        },
+        {
+          "atom": "N5",
+          "fc": 1
+        },
+        {
+          "atom": "O7",
+          "fc": -1
+        },
+        {
+          "atom": "O8",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "Au0",
+          "b": "C30",
+          "order": "2"
+        },
+        {
+          "a": "Au0",
+          "b": "N1",
+          "order": "1"
+        },
+        {
+          "a": "N2",
+          "b": "Au0",
+          "order": "1"
+        },
+        {
+          "a": "N2",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "N3",
+          "b": "Au0",
+          "order": "1"
+        },
+        {
+          "a": "N3",
+          "b": "C25",
+          "order": "a"
+        },
+        {
+          "a": "N3",
+          "b": "C28",
+          "order": "a"
+        },
+        {
+          "a": "N4",
+          "b": "C34",
+          "order": "1"
+        },
+        {
+          "a": "N4",
+          "b": "O8",
+          "order": "1"
+        },
+        {
+          "a": "N5",
+          "b": "O7",
+          "order": "1"
+        },
+        {
+          "a": "O6",
+          "b": "N5",
+          "order": "2"
+        },
+        {
+          "a": "O9",
+          "b": "N4",
+          "order": "2"
+        },
+        {
+          "a": "C10",
+          "b": "C29",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C12",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "C12",
+          "order": "a"
+        },
+        {
+          "a": "C13",
+          "b": "N2",
+          "order": "a"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "2"
+        },
+        {
+          "a": "C14",
+          "b": "C13",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "N1",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C17",
+          "order": "a"
+        },
+        {
+          "a": "C16",
+          "b": "C15",
+          "order": "a"
+        },
+        {
+          "a": "C17",
+          "b": "C18",
+          "order": "a"
+        },
+        {
+          "a": "C18",
+          "b": "C19",
+          "order": "2"
+        },
+        {
+          "a": "C18",
+          "b": "N1",
+          "order": "a"
+        },
+        {
+          "a": "C19",
+          "b": "C20",
+          "order": "1"
+        },
+        {
+          "a": "C20",
+          "b": "C30",
+          "order": "1"
+        },
+        {
+          "a": "C20",
+          "b": "C21",
+          "order": "2"
+        },
+        {
+          "a": "C22",
+          "b": "C21",
+          "order": "1"
+        },
+        {
+          "a": "C22",
+          "b": "C23",
+          "order": "2"
+        },
+        {
+          "a": "C23",
+          "b": "C24",
+          "order": "1"
+        },
+        {
+          "a": "C24",
+          "b": "C25",
+          "order": "2"
+        },
+        {
+          "a": "C24",
+          "b": "C43",
+          "order": "1"
+        },
+        {
+          "a": "C25",
+          "b": "C26",
+          "order": "a"
+        },
+        {
+          "a": "C26",
+          "b": "C27",
+          "order": "a"
+        },
+        {
+          "a": "C28",
+          "b": "C29",
+          "order": "2"
+        },
+        {
+          "a": "C28",
+          "b": "C27",
+          "order": "a"
+        },
+        {
+          "a": "C29",
+          "b": "C49",
+          "order": "1"
+        },
+        {
+          "a": "C30",
+          "b": "C23",
+          "order": "1"
+        },
+        {
+          "a": "C31",
+          "b": "C14",
+          "order": "1"
+        },
+        {
+          "a": "C31",
+          "b": "C36",
+          "order": "a"
+        },
+        {
+          "a": "C32",
+          "b": "C31",
+          "order": "a"
+        },
+        {
+          "a": "C33",
+          "b": "C32",
+          "order": "a"
+        },
+        {
+          "a": "C33",
+          "b": "C34",
+          "order": "a"
+        },
+        {
+          "a": "C34",
+          "b": "C35",
+          "order": "a"
+        },
+        {
+          "a": "C35",
+          "b": "C36",
+          "order": "a"
+        },
+        {
+          "a": "C37",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "C37",
+          "b": "C38",
+          "order": "a"
+        },
+        {
+          "a": "C39",
+          "b": "C38",
+          "order": "a"
+        },
+        {
+          "a": "C40",
+          "b": "C39",
+          "order": "a"
+        },
+        {
+          "a": "C41",
+          "b": "C42",
+          "order": "a"
+        },
+        {
+          "a": "C41",
+          "b": "C40",
+          "order": "a"
+        },
+        {
+          "a": "C42",
+          "b": "C37",
+          "order": "a"
+        },
+        {
+          "a": "C43",
+          "b": "C44",
+          "order": "a"
+        },
+        {
+          "a": "C44",
+          "b": "C45",
+          "order": "a"
+        },
+        {
+          "a": "C46",
+          "b": "C45",
+          "order": "a"
+        },
+        {
+          "a": "C47",
+          "b": "C46",
+          "order": "a"
+        },
+        {
+          "a": "C48",
+          "b": "C47",
+          "order": "a"
+        },
+        {
+          "a": "C48",
+          "b": "C43",
+          "order": "a"
+        },
+        {
+          "a": "C49",
+          "b": "C54",
+          "order": "a"
+        },
+        {
+          "a": "C50",
+          "b": "C51",
+          "order": "a"
+        },
+        {
+          "a": "C50",
+          "b": "C49",
+          "order": "a"
+        },
+        {
+          "a": "C51",
+          "b": "C52",
+          "order": "a"
+        },
+        {
+          "a": "C52",
+          "b": "N5",
+          "order": "1"
+        },
+        {
+          "a": "C52",
+          "b": "C53",
+          "order": "a"
+        },
+        {
+          "a": "C54",
+          "b": "C53",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/FIQPIG.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 55,
+      "n_bonds": 66,
+      "smiles": "O=[N+]([O-])c1ccc(C2=c3ccc4[n-]3->[Au+3]35<-[C]6[C+]([CH-][CH+][C-]6C(c6ccccc6)=c6ccc([n-]->36)=C(c3ccc([N+](=O)[O-])cc3)c3ccc2[n-]->53)C=4c2ccccc2)cc1",
+      "tm": [
+        {
+          "atom": "Au13",
+          "fc": 3
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "N1",
+          "fc": 1
+        },
+        {
+          "atom": "O2",
+          "fc": -1
+        },
+        {
+          "atom": "N12",
+          "fc": -1
+        },
+        {
+          "atom": "Au13",
+          "fc": 3
+        },
+        {
+          "atom": "C15",
+          "fc": 1
+        },
+        {
+          "atom": "C16",
+          "fc": -1
+        },
+        {
+          "atom": "C17",
+          "fc": 1
+        },
+        {
+          "atom": "C18",
+          "fc": -1
+        },
+        {
+          "atom": "N30",
+          "fc": -1
+        },
+        {
+          "atom": "N36",
+          "fc": 1
+        },
+        {
+          "atom": "O38",
+          "fc": -1
+        },
+        {
+          "atom": "N45",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "O0",
+          "b": "N1",
+          "order": "2"
+        },
+        {
+          "a": "N1",
+          "b": "O2",
+          "order": "1"
+        },
+        {
+          "a": "N1",
+          "b": "C3",
+          "order": "1"
+        },
+        {
+          "a": "C3",
+          "b": "C4",
+          "order": "a"
+        },
+        {
+          "a": "C4",
+          "b": "C5",
+          "order": "a"
+        },
+        {
+          "a": "C5",
+          "b": "C6",
+          "order": "a"
+        },
+        {
+          "a": "C6",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "2"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "N12",
+          "order": "a"
+        },
+        {
+          "a": "N12",
+          "b": "Au13",
+          "order": "dative"
+        },
+        {
+          "a": "C14",
+          "b": "Au13",
+          "order": "dative"
+        },
+        {
+          "a": "C14",
+          "b": "C15",
+          "order": "1"
+        },
+        {
+          "a": "C15",
+          "b": "C16",
+          "order": "1"
+        },
+        {
+          "a": "C16",
+          "b": "C17",
+          "order": "1"
+        },
+        {
+          "a": "C17",
+          "b": "C18",
+          "order": "1"
+        },
+        {
+          "a": "C18",
+          "b": "C19",
+          "order": "1"
+        },
+        {
+          "a": "C19",
+          "b": "C20",
+          "order": "1"
+        },
+        {
+          "a": "C20",
+          "b": "C21",
+          "order": "a"
+        },
+        {
+          "a": "C21",
+          "b": "C22",
+          "order": "a"
+        },
+        {
+          "a": "C22",
+          "b": "C23",
+          "order": "a"
+        },
+        {
+          "a": "C23",
+          "b": "C24",
+          "order": "a"
+        },
+        {
+          "a": "C24",
+          "b": "C25",
+          "order": "a"
+        },
+        {
+          "a": "C19",
+          "b": "C26",
+          "order": "2"
+        },
+        {
+          "a": "C26",
+          "b": "C27",
+          "order": "a"
+        },
+        {
+          "a": "C27",
+          "b": "C28",
+          "order": "a"
+        },
+        {
+          "a": "C28",
+          "b": "C29",
+          "order": "a"
+        },
+        {
+          "a": "C29",
+          "b": "N30",
+          "order": "a"
+        },
+        {
+          "a": "C29",
+          "b": "C31",
+          "order": "2"
+        },
+        {
+          "a": "C31",
+          "b": "C32",
+          "order": "1"
+        },
+        {
+          "a": "C32",
+          "b": "C33",
+          "order": "a"
+        },
+        {
+          "a": "C33",
+          "b": "C34",
+          "order": "a"
+        },
+        {
+          "a": "C34",
+          "b": "C35",
+          "order": "a"
+        },
+        {
+          "a": "C35",
+          "b": "N36",
+          "order": "1"
+        },
+        {
+          "a": "N36",
+          "b": "O37",
+          "order": "2"
+        },
+        {
+          "a": "N36",
+          "b": "O38",
+          "order": "1"
+        },
+        {
+          "a": "C35",
+          "b": "C39",
+          "order": "a"
+        },
+        {
+          "a": "C39",
+          "b": "C40",
+          "order": "a"
+        },
+        {
+          "a": "C31",
+          "b": "C41",
+          "order": "1"
+        },
+        {
+          "a": "C41",
+          "b": "C42",
+          "order": "a"
+        },
+        {
+          "a": "C42",
+          "b": "C43",
+          "order": "a"
+        },
+        {
+          "a": "C43",
+          "b": "C44",
+          "order": "a"
+        },
+        {
+          "a": "C44",
+          "b": "N45",
+          "order": "a"
+        },
+        {
+          "a": "C15",
+          "b": "C46",
+          "order": "1"
+        },
+        {
+          "a": "C46",
+          "b": "C47",
+          "order": "1"
+        },
+        {
+          "a": "C47",
+          "b": "C48",
+          "order": "a"
+        },
+        {
+          "a": "C48",
+          "b": "C49",
+          "order": "a"
+        },
+        {
+          "a": "C49",
+          "b": "C50",
+          "order": "a"
+        },
+        {
+          "a": "C50",
+          "b": "C51",
+          "order": "a"
+        },
+        {
+          "a": "C51",
+          "b": "C52",
+          "order": "a"
+        },
+        {
+          "a": "C6",
+          "b": "C53",
+          "order": "a"
+        },
+        {
+          "a": "C53",
+          "b": "C54",
+          "order": "a"
+        },
+        {
+          "a": "C54",
+          "b": "C3",
+          "order": "a"
+        },
+        {
+          "a": "C44",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "C52",
+          "b": "C47",
+          "order": "a"
+        },
+        {
+          "a": "N12",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "N30",
+          "b": "Au13",
+          "order": "dative"
+        },
+        {
+          "a": "C40",
+          "b": "C32",
+          "order": "a"
+        },
+        {
+          "a": "N45",
+          "b": "C41",
+          "order": "a"
+        },
+        {
+          "a": "C46",
+          "b": "C11",
+          "order": "2"
+        },
+        {
+          "a": "N45",
+          "b": "Au13",
+          "order": "dative"
+        },
+        {
+          "a": "C18",
+          "b": "C14",
+          "order": "1"
+        },
+        {
+          "a": "C25",
+          "b": "C20",
+          "order": "a"
+        },
+        {
+          "a": "N30",
+          "b": "C26",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/FIQPIG.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/FIQPIG.png"
+  },
+  {
+    "id": "PAXDEA",
+    "xyz": "representative_complex/04_additional_motifs/PAXDEA_charge_minus1.xyz",
+    "charge": -1,
+    "category": "04_additional_motifs",
+    "openbabel": {
+      "n_atoms": 8,
+      "n_bonds": 7,
+      "smiles": "CS(C)([O])[Pt](Cl)(Cl)Cl",
+      "tm": [
+        {
+          "atom": "Pt0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "Pt0",
+          "b": "Cl1",
+          "order": "1"
+        },
+        {
+          "a": "Pt0",
+          "b": "Cl3",
+          "order": "1"
+        },
+        {
+          "a": "Pt0",
+          "b": "S4",
+          "order": "1"
+        },
+        {
+          "a": "Cl2",
+          "b": "Pt0",
+          "order": "1"
+        },
+        {
+          "a": "S4",
+          "b": "O5",
+          "order": "1"
+        },
+        {
+          "a": "C6",
+          "b": "S4",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "S4",
+          "order": "1"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/PAXDEA.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 8,
+      "n_bonds": 7,
+      "smiles": "CS(C)(=O)->[Pt+2](<-[Cl-])(<-[Cl-])<-[Cl-]",
+      "tm": [
+        {
+          "atom": "Pt4",
+          "fc": 2
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "Pt4",
+          "fc": 2
+        },
+        {
+          "atom": "Cl5",
+          "fc": -1
+        },
+        {
+          "atom": "Cl6",
+          "fc": -1
+        },
+        {
+          "atom": "Cl7",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "C0",
+          "b": "S1",
+          "order": "1"
+        },
+        {
+          "a": "S1",
+          "b": "C2",
+          "order": "1"
+        },
+        {
+          "a": "S1",
+          "b": "O3",
+          "order": "2"
+        },
+        {
+          "a": "S1",
+          "b": "Pt4",
+          "order": "dative"
+        },
+        {
+          "a": "Cl5",
+          "b": "Pt4",
+          "order": "dative"
+        },
+        {
+          "a": "Cl6",
+          "b": "Pt4",
+          "order": "dative"
+        },
+        {
+          "a": "Cl7",
+          "b": "Pt4",
+          "order": "dative"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/PAXDEA.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/PAXDEA.png"
+  },
+  {
+    "id": "SAJCIP",
+    "xyz": "representative_complex/04_additional_motifs/SAJCIP_charge_0.xyz",
+    "charge": 0,
+    "category": "04_additional_motifs",
+    "openbabel": {
+      "n_atoms": 12,
+      "n_bonds": 12,
+      "smiles": "[O][W](F)(F)(F)(F)N1[CH]C=CC=C1",
+      "tm": [
+        {
+          "atom": "W0",
+          "fc": 0
+        }
+      ],
+      "formal_charges": [],
+      "bonds": [
+        {
+          "a": "W0",
+          "b": "O5",
+          "order": "1"
+        },
+        {
+          "a": "W0",
+          "b": "F4",
+          "order": "1"
+        },
+        {
+          "a": "F1",
+          "b": "W0",
+          "order": "1"
+        },
+        {
+          "a": "F2",
+          "b": "W0",
+          "order": "1"
+        },
+        {
+          "a": "F3",
+          "b": "W0",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "C11",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "C7",
+          "order": "1"
+        },
+        {
+          "a": "N6",
+          "b": "W0",
+          "order": "1"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "1"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "2"
+        },
+        {
+          "a": "C10",
+          "b": "C9",
+          "order": "1"
+        },
+        {
+          "a": "C11",
+          "b": "C10",
+          "order": "2"
+        }
+      ],
+      "png": "representative_complex/perception_images/openbabel/SAJCIP.png"
+    },
+    "xyz2mol_tm": {
+      "n_atoms": 12,
+      "n_bonds": 12,
+      "smiles": "[O-2]->[W+6](<-[F-])(<-[F-])(<-[F-])(<-[F-])<-n1ccccc1",
+      "tm": [
+        {
+          "atom": "W1",
+          "fc": 6
+        }
+      ],
+      "formal_charges": [
+        {
+          "atom": "O0",
+          "fc": -2
+        },
+        {
+          "atom": "W1",
+          "fc": 6
+        },
+        {
+          "atom": "F2",
+          "fc": -1
+        },
+        {
+          "atom": "F3",
+          "fc": -1
+        },
+        {
+          "atom": "F4",
+          "fc": -1
+        },
+        {
+          "atom": "F5",
+          "fc": -1
+        }
+      ],
+      "bonds": [
+        {
+          "a": "O0",
+          "b": "W1",
+          "order": "dative"
+        },
+        {
+          "a": "F2",
+          "b": "W1",
+          "order": "dative"
+        },
+        {
+          "a": "F3",
+          "b": "W1",
+          "order": "dative"
+        },
+        {
+          "a": "F4",
+          "b": "W1",
+          "order": "dative"
+        },
+        {
+          "a": "F5",
+          "b": "W1",
+          "order": "dative"
+        },
+        {
+          "a": "N6",
+          "b": "W1",
+          "order": "dative"
+        },
+        {
+          "a": "N6",
+          "b": "C7",
+          "order": "a"
+        },
+        {
+          "a": "C7",
+          "b": "C8",
+          "order": "a"
+        },
+        {
+          "a": "C8",
+          "b": "C9",
+          "order": "a"
+        },
+        {
+          "a": "C9",
+          "b": "C10",
+          "order": "a"
+        },
+        {
+          "a": "C10",
+          "b": "C11",
+          "order": "a"
+        },
+        {
+          "a": "C11",
+          "b": "N6",
+          "order": "a"
+        }
+      ],
+      "png": "representative_complex/perception_images/xyz2mol_tm/SAJCIP.png"
+    },
+    "comparison_png": "representative_complex/perception_images/comparison/SAJCIP.png"
+  }
+]

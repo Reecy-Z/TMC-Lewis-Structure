@@ -1,0 +1,23 @@
+tmQM-G ILP + RDKit SMILES batch summary
+============================================================
+Input CSV:        ilp_mismatch_rerun_current/DUGSIH.csv
+XYZ directory:    /data/jingyuan_data/tmqmg
+Engine:           /home/zhujingyuan/TMC_Lewis_Structure/Lewis-engine-ILP.py
+Skip lists:       (none)
+Skipped (list):   0
+Rows processed:   1
+Wall time (s):    0.06
+Wall time (min):  0.00
+
+Missing XYZ:      0
+ILP success:      1
+ILP failed:       0
+Other errors:     0
+
+SMILES generated: 1
+RDKit parse OK:   1
+RDKit parse fail: 0
+
+Error XYZ dir:    ilp_mismatch_rerun_current/result_DUGSIH/error
+Error XYZ saved:  0
+RDKit OK / ILP OK:  100.00%

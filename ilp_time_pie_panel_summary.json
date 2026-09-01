@@ -1,0 +1,15 @@
+{
+  "n_complexes": 59596,
+  "n_total_outcomes": 59596,
+  "ilp_seconds": {
+    "median": 0.0906,
+    "mean": 0.12577492616954158
+  },
+  "pie_slices": {
+    "smiles_not_parseable": 28,
+    "not_solved": 22
+  },
+  "pie_size_scale": 2.5,
+  "pie_legend_height_ratio": 0.28,
+  "output_png": "/home/zhujingyuan/TMC_Lewis_Structure/ilp_time_pie_panel.png"
+}

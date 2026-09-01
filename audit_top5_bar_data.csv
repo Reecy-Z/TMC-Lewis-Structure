@@ -1,0 +1,11 @@
+pair,on_FN_figure,on_FP_figure,missed_cov_plus_0.45_pct,missed_cov_plus_0.45_fn_over_nbond,missed_p99_plus_0.05_pct,missed_p99_plus_0.05_fn_over_nbond,spurious_cov_plus_0.45_pct,spurious_cov_plus_0.45_fp_over_nnonbond,spurious_p99_plus_0.05_pct,spurious_p99_plus_0.05_fp_over_nnonbond
+Hg-O,yes,no,89.43,474/530,0.0,0/530,0.0,0/1071,1.68,18/1071
+Hg-N,yes,no,40.18,483/1202,0.0,0/1202,0.0,0/1879,0.53,10/1879
+Ag-O,yes,no,33.44,201/601,0.0,0/601,0.0,0/3028,1.59,48/3028
+Cu-O,yes,no,12.96,92/710,0.0,0/710,0.0,0/3836,0.52,20/3836
+Cd-O,yes,no,11.05,316/2859,0.0,0/2859,0.0,0/3590,0.22,8/3590
+La-N,no,yes,0.0,0/216,0.0,0/216,39.56,89/225,0.0,0/225
+Zr-P,no,yes,0.0,0/267,0.0,0/267,22.09,55/249,8.43,21/249
+Ti-P,no,yes,0.0,0/217,0.92,2/217,19.76,49/248,7.66,19/248
+Fe-Si,no,yes,0.0,0/210,0.48,1/210,17.81,132/741,1.08,8/741
+Ti-S,no,yes,0.0,0/283,0.71,2/283,14.05,34/242,11.16,27/242

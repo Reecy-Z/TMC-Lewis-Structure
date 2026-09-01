@@ -1,0 +1,14 @@
+{
+  "common_all_four": 41251,
+  "candidate_union": 3054,
+  "tier_counts": {
+    "A": 62,
+    "B": 1175,
+    "C": 1817
+  },
+  "metric_counts": {
+    "ligand_equiv": 1449,
+    "metal_connectivity": 1415,
+    "metal_oxidation": 1489
+  }
+}

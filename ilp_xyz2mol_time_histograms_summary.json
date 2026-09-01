@@ -1,0 +1,30 @@
+{
+  "n_complexes": 59596,
+  "skip_list_size": 1117,
+  "ilp_seconds": {
+    "median": 0.0906,
+    "mean": 0.12577492616954158,
+    "p95": 0.372925,
+    "p99": 0.5502150000000009,
+    "max": 1.7111
+  },
+  "xyz2mol_elapsed_s": {
+    "median": 0.1311,
+    "mean": 0.7232776763541177,
+    "p95": 0.412,
+    "p99": 2.2572450000000144,
+    "max": 300.0,
+    "n_ge_300s": 57,
+    "n_gt_5s": 402
+  },
+  "ilp_n_gt_5s": 0,
+  "histogram_xmax_s": 300.0,
+  "output_png": "/home/zhujingyuan/TMC_Lewis_Structure/ilp_xyz2mol_time_histograms.png",
+  "output_panel_png": "/home/zhujingyuan/TMC_Lewis_Structure/ilp_heuristic_time_histograms.png",
+  "output_ilp_png": "/home/zhujingyuan/TMC_Lewis_Structure/ilp_time_histogram.png",
+  "output_xyz2mol_png": "/home/zhujingyuan/TMC_Lewis_Structure/xyz2mol_time_histogram.png",
+  "xyz2mol_histogram_bins": "20 fine bins of 0.1 s in 0\u20132 s + 3 wider coarse bins (2\u20135, 5\u2013100, 100\u2013300 s)",
+  "ilp_histogram_bins": "20 bins of 0.1 s in 0\u20132 s",
+  "xyz2mol_coarse_bar_width": 1.0,
+  "xyz2mol_axis_break_style": "zigzag"
+}

@@ -1,0 +1,24 @@
+{
+  "input_csv": "/home/zhujingyuan/TMC_Lewis_Structure/tmqmg_smiles.csv",
+  "xyz_directory": "/data/jingyuan_data/tmqmg",
+  "engine": "/home/zhujingyuan/TMC_Lewis_Structure/Lewis-engine-ILP.py",
+  "start_offset": 0,
+  "limit": null,
+  "skip_csd_lists": [
+    "/home/zhujingyuan/TMC_Lewis_Structure/csd_codes_boron_ge6.txt",
+    "/home/zhujingyuan/TMC_Lewis_Structure/list_error_geometry.txt"
+  ],
+  "skipped_excluded": 1117,
+  "wall_time_seconds": 8099.001,
+  "total_processed": 59682,
+  "missing_xyz": 86,
+  "ilp_success": 59574,
+  "ilp_failed": 22,
+  "other_errors": 0,
+  "smiles_generated": 59574,
+  "rdkit_parse_ok": 59546,
+  "rdkit_parse_fail": 28,
+  "rdkit_parse_ok_fraction_of_ilp_success": 0.9995,
+  "error_xyz_dir": "/home/zhujingyuan/TMC_Lewis_Structure/tmqmg_ilp_benchmark_output/error",
+  "error_xyz_saved": 50
+}

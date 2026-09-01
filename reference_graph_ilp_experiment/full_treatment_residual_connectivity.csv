@@ -1,0 +1,85 @@
+IDs,in_graph_consensus,treatment,status,both_parsed,ligand_canonical,ligand_equiv,metal_connectivity,metal_oxidation,full_connectivity,ox_ilp,ox_reference,neighbors_ilp,neighbors_reference,residual_class,coordination_delta,raw_ml_count,reference_ml_count
+ACEKAU,1,full,ok,1,1,1,0,1,0,0,0,N P P,C N P P,fewer_output_metal_contacts,-1,4,4
+AMIPOC,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+AYEFOA,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+BIPANI,1,full,ok,1,1,1,0,1,0,0,0,C C C,C C C C,fewer_output_metal_contacts,-1,4,4
+BUDHIR,1,full,ok,1,1,1,0,1,0,4,4,Cl Cl Cl Cl O,Cl Cl Cl Cl O O,fewer_output_metal_contacts,-1,6,6
+CENYEB,1,full,ok,0,0,0,0,0,0,,2,,Br Br C C,fewer_output_metal_contacts,-4,4,4
+CIYJUP,1,full,ok,1,1,1,0,1,0,1,1,C C P P P,C C C P P P,fewer_output_metal_contacts,-1,6,6
+DAKNEI,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+DANLAF,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+DIYXUE,1,full,ok,1,0,1,0,1,0,2,2,N N O O O,N N O O O O,fewer_output_metal_contacts,-1,6,6
+FIWTAG,1,full,ok,1,1,1,0,1,0,6,6,C C N N,C C C N N,fewer_output_metal_contacts,-1,5,5
+FOSMOP,1,full,ok,1,1,1,0,1,0,4,4,Cl Cl Cl Cl O,Cl Cl Cl Cl O O,fewer_output_metal_contacts,-1,6,6
+GESZEJ,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+GIMVIJ,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+GOMLUP,1,full,ok,1,1,1,0,1,0,4,4,Cl Cl Cl Cl O,Cl Cl Cl Cl O O,fewer_output_metal_contacts,-1,6,6
+GULMEF,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+HAMVOG,1,full,ok,1,1,1,0,1,0,1,1,C I S,C C I S,fewer_output_metal_contacts,-1,4,4
+HEDGEE,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+HEDGOO,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+HEDRIU,1,full,ok,1,1,1,0,1,0,2,2,C C C C C C Cl,C C C C C C C Cl,fewer_output_metal_contacts,-1,8,8
+HEDRUG,1,full,ok,1,1,1,0,1,0,2,2,C C C C C C Cl,C C C C C C C Cl,fewer_output_metal_contacts,-1,8,8
+IWULUH,1,full,ok,1,1,1,0,1,0,1,1,C Cl Cl,C C Cl Cl,fewer_output_metal_contacts,-1,4,4
+IZAGEW,1,full,ok,1,1,1,0,1,0,1,1,C Cl Cl,C C Cl Cl,fewer_output_metal_contacts,-1,4,4
+JEGNIS,1,full,ok,1,1,1,0,1,0,1,1,C Cl N,C C Cl N,fewer_output_metal_contacts,-1,4,4
+JEGPEQ,1,full,ok,1,1,1,0,1,0,1,1,C Cl N,C C Cl N,fewer_output_metal_contacts,-1,4,4
+JEGPUG,1,full,ok,1,1,1,0,1,0,1,1,C Cl N,C C Cl N,fewer_output_metal_contacts,-1,4,4
+JEGQAN,1,full,ok,1,1,1,0,1,0,1,1,Br C N,Br C C N,fewer_output_metal_contacts,-1,4,4
+JEGQER,1,full,ok,1,1,1,0,1,0,1,1,C I N,C C I N,fewer_output_metal_contacts,-1,4,4
+KAQYIK,1,full,ok,1,1,1,0,1,0,1,1,C Cl P,C C Cl P,fewer_output_metal_contacts,-1,4,4
+KAQYOQ,1,full,ok,1,1,1,0,1,0,1,1,Br C P,Br C C P,fewer_output_metal_contacts,-1,4,4
+KEDRIU,1,full,ok,1,1,1,0,1,0,1,1,C C C C C C C C,C C C C C C C C C,fewer_output_metal_contacts,-1,9,9
+KUSNAP,1,full,ok,1,1,1,0,1,0,4,4,Cl Cl Cl Cl O,Cl Cl Cl Cl O O,fewer_output_metal_contacts,-1,6,6
+KUVRID,1,full,ok,1,1,1,0,1,0,1,1,C P,C C P,fewer_output_metal_contacts,-1,3,3
+LADXOF,1,full,ok,1,1,1,0,1,0,1,1,C Cl Cl,C C Cl Cl,fewer_output_metal_contacts,-1,4,4
+LAGYUP,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+LAGZAW,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+LIGFUD,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+LOFLAT,1,full,ok,1,1,1,0,1,0,1,1,C C C C C C C C,C C C C C C C C C,fewer_output_metal_contacts,-1,9,9
+LOGWEJ,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+MABDOJ,1,full,ok,1,1,1,0,1,0,2,2,C C C C C C P P,C C C C C C C P P,fewer_output_metal_contacts,-1,9,9
+MEJXIK,1,full,ok,1,1,1,0,1,0,1,1,C C P P,C C C P P,fewer_output_metal_contacts,-1,5,5
+MOSWAS,1,full,ok,1,1,1,0,1,0,0,0,N P P,C N P P,fewer_output_metal_contacts,-1,4,4
+MOSWEW,1,full,ok,1,1,1,0,1,0,0,0,N P P,C N P P,fewer_output_metal_contacts,-1,4,4
+NOSZEA,1,full,ok,1,1,1,0,1,0,1,1,C Cl Cl,C C Cl Cl,fewer_output_metal_contacts,-1,4,4
+NOSZIE,1,full,ok,1,1,1,0,1,0,1,1,Br Br C,Br Br C C,fewer_output_metal_contacts,-1,4,4
+OKOGIE,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+PEBXAV,1,full,ok,1,1,1,0,1,0,4,4,Cl Cl Cl Cl O,Cl Cl Cl Cl O O,fewer_output_metal_contacts,-1,6,6
+PUJNIR,1,full,ilp_failed,0,0,0,0,0,0,,1,,C C N N,fewer_output_metal_contacts,-4,2,4
+PUXSUX,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+QEJHUJ,1,full,ok,1,1,1,0,1,0,1,1,C N N,C C N N,fewer_output_metal_contacts,-1,4,4
+QOCJAU,1,full,ok,1,1,1,0,1,0,1,1,C C C C C C P,C C C C C C C P,fewer_output_metal_contacts,-1,8,8
+QOPZUR,1,full,ok,1,1,1,0,1,0,1,1,C Cl,C C Cl,fewer_output_metal_contacts,-1,3,3
+RINGON,1,full,ok,1,1,1,0,1,0,1,1,C C P P,C C C P P,fewer_output_metal_contacts,-1,5,5
+ROBLOL,1,full,ok,1,0,0,0,1,0,1,1,C C C,C C C C C,fewer_output_metal_contacts,-2,5,5
+ROBLUR,1,full,ok,1,0,0,0,1,0,1,1,C C C,C C C C C,fewer_output_metal_contacts,-2,5,5
+ROFSAG,1,full,ok,1,1,1,0,1,0,0,0,C C C P P,C C C C P P,fewer_output_metal_contacts,-1,6,6
+ROYFUI,1,full,ok,1,1,1,0,1,0,1,1,C P,C C P,fewer_output_metal_contacts,-1,3,3
+SAFMUK,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+SILVUE,1,full,ok,1,1,1,0,1,0,4,4,C Cl Cl N P P,C C Cl Cl N P P,fewer_output_metal_contacts,-1,7,7
+SILZOC,1,full,ok,1,1,1,0,1,0,0,0,C C C P P,C C C C P P,fewer_output_metal_contacts,-1,6,6
+TAWHAB,1,full,ok,1,1,1,0,1,0,0,0,C C C C C C,C C C C C C C,fewer_output_metal_contacts,-1,7,7
+TAWHEF,1,full,ok,1,1,1,0,1,0,0,0,C C C C C C,C C C C C C C,fewer_output_metal_contacts,-1,7,7
+TAWHIJ,1,full,ok,1,1,1,0,1,0,0,0,C C C C C C,C C C C C C C,fewer_output_metal_contacts,-1,7,7
+TEXWEY,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+UXAJOT,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+UYEQAR,1,full,ok,1,1,1,0,1,0,0,0,C C N P,C C C N P,fewer_output_metal_contacts,-1,5,5
+UYEQOF,1,full,ok,1,1,1,0,1,0,0,0,C C N P,C C C N P,fewer_output_metal_contacts,-1,5,5
+VIRXAW,1,full,ok,1,0,0,1,0,0,4,2,N N P P,N N P P,same_shell_graph_difference,0,4,4
+WEPVOC,1,full,ok,1,1,1,0,1,0,0,0,C C P,C C C C P,fewer_output_metal_contacts,-2,5,5
+XAGNOI,1,full,ok,1,0,0,0,1,0,1,1,Br C C,Br C C C C,fewer_output_metal_contacts,-2,5,5
+XAGNUO,1,full,ok,1,0,0,0,1,0,1,1,C C I,C C C C I,fewer_output_metal_contacts,-2,5,5
+XARRAK,1,full,ok,1,1,1,0,1,0,0,0,C C C C C,C C C C C C,fewer_output_metal_contacts,-1,6,6
+XARREO,1,full,ok,1,1,1,0,1,0,0,0,C C C C P,C C C C C P,fewer_output_metal_contacts,-1,6,6
+XARRIS,1,full,ok,1,1,1,0,1,0,0,0,C C C P P,C C C C P P,fewer_output_metal_contacts,-1,6,6
+XECSON,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+XEMYAR,1,full,ok,1,1,1,0,1,0,1,1,C Cl Cl,C C Cl Cl,fewer_output_metal_contacts,-1,4,4
+XEPVAP,1,full,ok,1,1,1,0,1,0,6,6,Cl Cl O O O,Cl Cl O O O O,fewer_output_metal_contacts,-1,6,6
+XIGHOK,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+XIKNOV,1,full,ok,1,1,1,0,1,0,0,0,C P P,C C P P,fewer_output_metal_contacts,-1,4,4
+YAMGEY,1,full,ok,1,1,1,0,1,0,1,1,C C C C O,C C C C O O,fewer_output_metal_contacts,-1,6,6
+YAVCEE,1,full,ok,0,0,0,0,0,0,,2,,Br Br C C,fewer_output_metal_contacts,-4,4,4
+YOKZAC,1,full,ok,1,1,1,1,1,0,3,3,N N N O O O,N N N O O O,same_shell_graph_difference,0,6,6
+YULBOY,1,full,ok,1,0,0,0,0,0,4,0,B B B B,B B B B C C C C,fewer_output_metal_contacts,-4,8,8
+ZAXXEB,1,full,ok,1,1,1,0,1,0,2,2,C Cl Cl Cl,C C Cl Cl Cl,fewer_output_metal_contacts,-1,5,5

@@ -1,0 +1,23 @@
+tmQM-G ILP + RDKit SMILES batch summary
+============================================================
+Input CSV:        ilp_mismatch_rerun_current/shards/shard_0.csv
+XYZ directory:    /data/jingyuan_data/tmqmg
+Engine:           /home/zhujingyuan/TMC_Lewis_Structure/Lewis-engine-ILP.py
+Skip lists:       /home/zhujingyuan/TMC_Lewis_Structure/list_error_geometry.txt
+Skipped (list):   0
+Rows processed:   2659
+Wall time (s):    286.15
+Wall time (min):  4.77
+
+Missing XYZ:      0
+ILP success:      2659
+ILP failed:       0
+Other errors:     0
+
+SMILES generated: 2659
+RDKit parse OK:   2659
+RDKit parse fail: 0
+
+Error XYZ dir:    ilp_mismatch_rerun_current/results_0/error
+Error XYZ saved:  0
+RDKit OK / ILP OK:  100.00%

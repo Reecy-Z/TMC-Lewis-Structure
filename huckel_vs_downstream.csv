@@ -1,0 +1,547 @@
+IDs,status,error_type,n_atoms,q_complex,ox_ilp,q_huckel_sum,q_ilp_sum,sum_match,n_lig,n_charge_wrong,n_charge_right,n_unmatched,n_huckel_cause,n_both_fail,n_downstream,n_both_ok,detail
+ABEJAS,ok,ArgumentError,83,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C35P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+AFUXOP,ok,IndexError,33,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C4NS2Se2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+AGEBIA,ok,AttributeError,75,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C24N4O2S2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C12N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+AGEVAJ,ok,AttributeError,65,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C26N3P2S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+AHEXAM,ok,AttributeError,73,0,2,-2,-2,1,1,0,1,0,0,0,0,1,C31N4O5S2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+AJIDOM,ok,AttributeError,81,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C35N5O4S2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+ANEBIF,ok,ArgumentError,72,0,3,0,-2,0,2,1,1,0,0,0,0,1,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C31SiP2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+ANECIG,ok,ArgumentError,78,0,3,0,-2,0,2,1,1,0,0,0,0,1,C31SiP2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C2O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ANECOM,ok,ArgumentError,76,0,3,-1,-3,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C31SiP2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+APUGIC,ok,ArgumentError,77,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C17N2F3P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11NF2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11NF2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ASAFIK,ok,ArgumentError,77,1,2,-3,-1,0,4,0,2,2,0,0,0,2,CSe:H=-1/ILP=? acH=1 | C20PSe:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C14P:H=-1/ILP=? acH=1
+ASAGAD,ok,ArgumentError,73,1,2,-3,-1,0,4,0,2,2,0,0,0,2,CSe:H=-1/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16F3PS:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C14P:H=-1/ILP=? acH=1
+ATOSUY,ok,AttributeError,84,1,2,-3,-1,0,3,1,2,0,0,0,0,2,C11N2P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+AXEQUP,ok,ArgumentError,51,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C21NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+AXEREA,ok,ArgumentError,57,1,3,-2,-2,1,3,0,3,0,0,0,0,3,C21NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+AYOXER,ok,ArgumentError,72,1,4,-1,-1,1,2,0,2,0,0,0,0,2,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+AYOXIV,ok,ArgumentError,71,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+BAFLUS,ok,AttributeError,51,-1,1,-2,-2,1,4,0,4,0,0,0,0,4,C20O2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+BASBEE,ok,mol_is_none,70,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C31N4:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+BASTAT,ok,AttributeError,76,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C24N4O2S2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C9N3:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+BAYTIE,ok,AttributeError,46,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C13N2OS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BEGFOL,ok,AttributeError,82,0,3,-1,-3,0,3,1,2,0,0,0,0,2,C34N4P:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BENPAL,ok,KekulizeException,22,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C6O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3NO3:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+BENQIW,ok,AttributeError,47,-1,0,-1,-1,1,6,0,6,0,0,0,0,6,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C20O3P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BILQUI,ok,mol_is_none,74,1,2,3,-1,0,2,1,1,0,1,0,0,1,C12P4:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C16:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BIMLEP,ok,AttributeError,66,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C17NPS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+BIMLIT,ok,AttributeError,52,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C17NPS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+BOCZAU,ok,ArgumentError,66,0,4,-6,-4,0,6,1,5,0,0,0,0,5,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-3/ILP=-1 acH=1 acILP=False huckel_wrong_ac_ok_anyway | C6P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+BOLDOW,ok,ArgumentError,75,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C38NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BOQTIL,ok,ArgumentError,69,0,2,-4,-2,0,4,1,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C33OP2:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+BOQTOR,ok,ArgumentError,69,0,2,-4,-2,0,4,1,3,0,0,0,0,3,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C33OP2:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+BOQTUX,ok,ArgumentError,69,0,2,-4,-2,0,4,1,3,0,0,0,0,3,C33OP2:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BOQVAF,ok,ArgumentError,69,0,2,-4,-2,0,4,1,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C33OP2:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+BOZMIN,ok,AttributeError,45,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C7N4S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5O2F6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5O2F6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BUNFEW,ok,ArgumentError,77,0,4,-4,-4,1,2,0,2,0,0,0,0,2,C15N4Si3:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok | C6P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BUPMIK,ok,AttributeError,77,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C34NO8PBr:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BUPMOQ,ok,AttributeError,77,0,2,-2,-2,1,2,0,2,0,0,0,0,2,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C34NO8PI:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+BUYMIS,ok,AttributeError,55,0,6,-6,-6,1,4,0,4,0,0,0,0,4,C22N3OSBr:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+BUYMOY,ok,AttributeError,64,0,6,-6,-6,1,4,0,4,0,0,0,0,4,C21N3OSBr:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C5O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+CAFPIJ,ok,AttributeError,49,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C17O2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+CAJPUY,ok,ArgumentError,78,0,4,-4,-4,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C28N2Si2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+CAMSAM,ok,AttributeError,74,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C20N2O3S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16NO:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+CASWIC,ok,AttributeError,42,0,0,-2,0,0,2,1,1,0,0,0,0,1,C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C12N3OS:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+CAWSAU,ok,AttributeError,64,0,2,-4,-2,0,4,1,3,0,0,0,0,3,C7NO2S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | BC15N6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+CAWYUX,ok,ArgumentError,67,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C21NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+CEDMED,ok,AttributeError,56,0,0,-2,0,0,4,1,3,0,0,0,0,3,C22N2P:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+CEGGON,ok,AttributeError,81,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C28O6PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | F:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+CEGPOW,ok,AttributeError,81,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C28O6PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+CEHHAB,ok,mol_is_none,73,0,2,-6,-2,0,1,1,0,0,1,0,0,0,BC26N6O6:H=-6/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+CEJBEZ,ok,ArgumentError,75,0,3,-3,-3,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C35F19P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+CIGJIN,ok,KekulizeException,78,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30N6O6S2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+CIJJUA,ok,AttributeError,39,0,1,-1,-1,1,6,0,6,0,0,0,0,6,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C12O5P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+CILFOV,ok,AttributeError,78,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C24N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+CODXID,ok,ArgumentError,83,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+COFWUP,ok,AttributeError,67,0,0,-2,0,0,3,1,2,0,0,0,0,2,C22OP:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+COLPOI,ok,AttributeError,35,0,2,-2,-2,1,5,0,5,0,0,0,0,5,C5N3P3Cl4:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+COMWUX,ok,AttributeError,82,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C21P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DACPOO,ok,KekulizeException,49,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C12N2S3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12N2S3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DAJDAT,ok,ArgumentError,47,0,1,-1,-1,1,5,0,5,0,0,0,0,5,C17PCl2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+DAJSAJ,ok,ArgumentError,63,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C21N3P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+DALLIN,ok,AttributeError,58,1,1,-2,0,0,4,1,3,0,0,0,0,3,C22P:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DAPBON,ok,AttributeError,75,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C20O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7NO:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+DAVQIA,ok,ArgumentError,77,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C20P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DEPWAW,ok,AttributeError,71,0,1,-1,-1,1,6,0,6,0,0,0,0,6,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C18O3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C12O4P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DEWMOH,ok,ArgumentError,75,0,1,-3,-1,0,2,1,1,0,1,0,0,1,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-2/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+DEXLEY,ok,mol_is_none,57,0,2,2,-2,0,3,1,2,0,1,0,0,2,C12N2O6P4:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DIGMIS,ok,ArgumentError,72,0,2,0,-2,0,2,1,1,0,0,0,0,1,C2O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C25P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+DILDAG,ok,AttributeError,64,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C4N4O3S2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C6N3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+DIVVEM,ok,ArgumentError,85,0,6,-6,-6,1,3,0,3,0,0,0,0,3,C36N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | N:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DIVVIQ,ok,ArgumentError,73,0,6,-6,-6,1,3,0,3,0,0,0,0,3,C32N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | N:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DIVVOW,ok,ArgumentError,73,0,6,-6,-6,1,3,0,3,0,0,0,0,3,C32N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | N:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DOGGEM,ok,ArgumentError,84,0,4,-4,-4,1,2,0,2,0,0,0,0,2,C9As:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N4Si3:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok
+DOGGIQ,ok,ArgumentError,85,0,4,-4,-4,1,2,0,2,0,0,0,0,2,C12As:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N4Si3:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok
+DOPZOA,ok,mol_is_none,81,0,2,2,-2,0,2,1,1,0,1,0,0,1,C13SiP3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C12N:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+DORHEY,ok,ArgumentError,62,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C14SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DOTMOQ,ok,ArgumentError,65,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16N2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16N2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+DOTNAD,ok,mol_is_none,63,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C32N4S2:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+DUGSIH,ok,KekulizeException,18,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+DUMVIQ,ok,mol_is_none,60,0,1,3,-1,0,2,1,1,0,1,0,0,1,C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C7:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+EBUFIQ,ok,mol_is_none,39,0,2,0,-2,0,6,1,5,0,0,1,0,5,BC6NSi2:H=0/ILP=-2 acH=0 acILP=False huckel_wrong_ac_fail_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+ECOTAR,ok,ArgumentError,57,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C29P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+ECOTEV,ok,ArgumentError,63,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C29P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+EDOZAA,ok,ArgumentError,65,0,2,0,-2,0,2,1,1,0,0,0,0,1,C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+EFOCEH,ok,ArgumentError,67,0,3,0,-2,0,4,1,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16SiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+EFOCOR,ok,ArgumentError,78,0,1,1,-1,0,4,1,3,0,0,0,0,3,C16SiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+EGAYAM,ok,AttributeError,60,1,3,0,-2,0,1,1,0,0,0,0,0,0,C29N2O2S2:H=0/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+EGEGON,ok,AttributeError,62,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C21NS:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+EGEGUT,ok,AttributeError,73,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C27N2P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+EHAZUI,ok,AttributeError,37,0,4,-2,-4,0,2,1,1,0,0,0,0,1,C7N3OS:H=-1/ILP=-3 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C7N3OS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+EJODUE,ok,mol_is_none,83,0,2,-6,-2,0,1,1,0,0,1,0,0,0,B2C34N8O6F2:H=-6/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+ENUZOD,ok,AttributeError,71,1,2,-1,-1,1,3,0,3,0,0,0,0,3,C21O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+EQURAL,ok,AttributeError,73,0,1,-1,-1,1,5,0,5,0,0,0,0,5,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C25N4As:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+ETOHAY,ok,ArgumentError,75,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C28P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ETOHEC,ok,AttributeError,73,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C28P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ETORIQ,ok,AttributeError,77,0,2,-6,-2,0,2,2,0,0,0,0,0,0,C19N2O3S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C19N2O3S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+ETUSIV,ok,ArgumentError,83,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C24N2Si4P2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+EWEXUZ,ok,ArgumentError,75,1,3,-2,-2,1,3,0,3,0,0,0,0,3,C25P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+EXEZUE,ok,AttributeError,76,0,1,-3,-1,0,2,1,1,0,0,0,0,1,C13N2O5S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C21P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+FACHOH,ok,ArgumentError,54,1,3,-2,-2,1,3,0,3,0,0,0,0,3,C24P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FAHJAA,ok,AttributeError,61,1,2,-3,-1,0,4,1,3,0,0,0,0,3,C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C9:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+FAVNEV,ok,mol_is_none,71,0,3,-3,-3,1,5,0,5,0,0,0,1,4,C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C9N4P:H=0/ILP=0 acH=0 acILP=None huckel_ok_ac_fail | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FAYBIS,ok,AttributeError,62,1,1,0,0,1,3,0,3,0,0,0,0,3,C19N4P:H=1/ILP=1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FESKET,ok,ArgumentError,57,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C18As3:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FIBZOG,ok,AttributeError,76,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C28N4F8P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | F:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | F:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FIGKUC,ok,ArgumentError,77,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C24N2Si4As2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FIGLAJ,ok,ArgumentError,77,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C24N2Si4As2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FILJUG,ok,AttributeError,70,0,3,-3,-3,1,2,0,2,0,0,0,0,2,C21N2O2S:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FOCNER,ok,ArgumentError,73,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C18OSiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FOFDOT,ok,ArgumentError,56,1,4,-3,-3,1,3,0,3,0,0,0,0,3,C16F6P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+FOJSOO,ok,ArgumentError,51,0,2,-4,-2,0,2,1,1,0,0,0,0,1,C16N3S3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6N2O3:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+FONKOL,ok,AttributeError,62,0,2,-4,-2,0,3,0,1,2,0,0,0,1,C26N2PSe:H=-2/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=? acH=1
+FOPQAD,ok,AttributeError,58,0,6,-6,-6,1,4,0,4,0,0,0,0,4,C21N3OS:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C3O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+FOQLUV,ok,mol_is_none,69,1,2,0,0,1,2,0,2,0,0,0,1,1,C19N3P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | BN:H=0/ILP=0 acH=0 acILP=None huckel_ok_ac_fail
+FORSEK,ok,ArgumentError,55,0,1,0,-1,0,3,1,2,0,0,0,0,2,C16SiP:H=1/ILP=0 acH=1 acILP=False huckel_wrong_ac_ok_anyway | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+FOSNEI,ok,mol_is_none,77,0,2,-6,-2,0,1,1,0,0,1,0,0,0,B2C28N8O6:H=-6/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+FUTWAT,ok,mol_is_none,84,1,2,3,-1,0,2,1,1,0,1,0,0,1,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24P4:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+GABSEI,ok,ArgumentError,72,1,2,-1,-1,1,2,0,2,0,0,0,0,2,C28NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+GAGBUO,ok,AttributeError,66,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C6O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GAHJEG,ok,mol_is_none,73,1,2,5,-1,0,3,2,1,0,2,0,0,1,C13SiP3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C5P2:H=2/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GENTUO,ok,ArgumentError,71,1,4,-3,-3,1,2,0,2,0,0,0,0,2,C34P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GENYAB,ok,ArgumentError,61,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GENYIJ,ok,ArgumentError,61,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GENYOP,ok,ArgumentError,61,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GIJNOD,ok,AttributeError,54,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C23N4O2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GIJZAA,ok,ArgumentError,85,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GINQID,ok,ArgumentError,73,0,5,-5,-5,1,4,0,4,0,0,0,0,4,C24N2Si2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GIPTUU,ok,ArgumentError,45,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C20P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GIPWAD,ok,ArgumentError,47,1,4,-3,-3,1,3,0,3,0,0,0,0,3,C20P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+GIPWOR,ok,ArgumentError,49,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C20P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | CNS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CNS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GIRCOC,ok,KekulizeException,42,0,4,-2,-4,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18N2O4S:H=0/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+GITMIF,ok,AttributeError,68,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GIXSAH,ok,ArgumentError,79,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GIZFUQ,ok,ArgumentError,74,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+GOGBAF,ok,AttributeError,81,0,4,-6,-4,0,2,1,1,0,0,0,0,1,C20N5S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C20N5S:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok
+GOHDUF,ok,AttributeError,65,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C21O6PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GOJQUT,ok,AttributeError,69,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C14N3O3S:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GUQFOO,ok,AttributeError,77,0,2,-2,-2,1,1,0,1,0,0,0,0,1,C32N4O4S4:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GUVNIV,ok,AttributeError,53,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C27N2P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GUXPAS,ok,ArgumentError,72,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GUXPIA,ok,ArgumentError,72,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GUXVEC,ok,ArgumentError,76,0,2,0,-2,0,2,1,1,0,0,0,0,1,C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C6O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GUZMAR,ok,ArgumentError,57,0,4,-4,-4,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GUZMEV,ok,ArgumentError,57,0,4,-4,-4,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GUZMIZ,ok,ArgumentError,57,0,4,-4,-4,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GUZMOF,ok,ArgumentError,85,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C26N2Si2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+GUZNAS,ok,ArgumentError,69,0,4,-4,-4,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C26N2Si2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+GUZNIA,ok,ArgumentError,65,0,4,-4,-4,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+HAGKIL,ok,AttributeError,66,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C20O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+HAJLAG,ok,ArgumentError,59,1,3,-2,-2,1,3,0,3,0,0,0,0,3,C25P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HAXLOH,ok,AttributeError,47,0,3,-1,-3,0,1,1,0,0,0,0,0,0,C17N6O2S2:H=-1/ILP=-3 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+HAYZIS,ok,mol_is_none,48,0,1,-9,-1,0,3,2,1,0,2,0,0,1,C10N4:H=-4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C10N4:H=-4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C2O2F3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HAZKOI,ok,AttributeError,58,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C9NO4P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HERKAQ,ok,ArgumentError,55,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HERQEA,ok,ArgumentError,55,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C23P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HEYYER,ok,ArgumentError,78,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C39N2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HEZTUB,ok,AttributeError,36,0,0,-2,0,0,6,1,5,0,0,0,0,5,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C15:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+HIHSOH,ok,AttributeError,63,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C20O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+HINLOF,ok,ArgumentError,51,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C20SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+HINLUL,ok,ArgumentError,67,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C20SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+HINMAS,ok,ArgumentError,47,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C20SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+HINMIA,ok,ArgumentError,47,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HINMUM,ok,ArgumentError,50,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HINNAT,ok,ArgumentError,57,0,3,-3,-3,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6F5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HINNEX,ok,ArgumentError,57,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C20SiP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6F6:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+HISCAN,ok,ArgumentError,84,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C6P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HITBAO,ok,AttributeError,83,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HIXZEU,ok,AttributeError,57,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C27NP:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HIXZIY,ok,AttributeError,73,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C27NP:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+HOGRAZ,ok,mol_is_none,54,0,1,-5,-1,0,2,1,1,0,1,0,0,1,C6NSi2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6N8:H=-4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+HOXDON,ok,ArgumentError,83,0,2,0,-2,0,2,1,1,0,0,0,0,1,C34P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C8:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HOXFIJ,ok,ArgumentError,72,0,2,0,-2,0,2,1,1,0,0,0,0,1,C34P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CN:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HOXFOP,ok,ArgumentError,71,0,2,0,-2,0,2,1,1,0,0,0,0,1,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C34P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+HUGWUC,ok,AttributeError,69,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C21P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C13P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HUHSAF,ok,ArgumentError,69,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C17NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+HUJVUD,ok,AttributeError,37,0,0,-2,0,0,1,1,0,0,0,0,0,0,C12N4OS:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+HUJWAK,ok,AttributeError,44,0,0,-2,0,0,1,1,0,0,0,0,0,0,C17N4OS:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+HUJWEO,ok,AttributeError,37,0,2,-2,-2,1,1,0,1,0,0,0,0,1,C14N4OS:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+IBUKAR,ok,ArgumentError,64,1,4,-3,-3,1,3,0,3,0,0,0,0,3,C16NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+IDEHII,ok,ArgumentError,73,0,2,0,-2,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C31SiP2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+IDEHOO,ok,ArgumentError,75,0,2,0,-2,0,4,1,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C31SiP2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+IFOPAW,ok,AttributeError,79,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C28O7PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+IHAJUW,ok,ArgumentError,83,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ILEKIV,ok,AttributeError,68,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C23P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ILEKOB,ok,AttributeError,68,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C23P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ILIVAB,ok,AttributeError,85,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C20N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+IMESUP,ok,ArgumentError,83,1,3,0,-2,0,4,1,3,0,0,0,0,3,C15P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16FSiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+IMUHAA,ok,AttributeError,69,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C35N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+IPEPOK,ok,ArgumentError,65,0,2,0,-2,0,2,1,1,0,0,0,0,1,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+IPEPUQ,ok,ArgumentError,84,0,2,0,-2,0,2,1,1,0,0,0,0,1,C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C8NS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+IROWIW,ok,mol_is_none,54,0,3,-7,-3,0,4,1,3,0,1,0,0,3,C18N4:H=-5/ILP=-1 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C7NO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+IROXET,ok,mol_is_none,44,0,3,-7,-3,0,4,1,3,0,1,0,0,3,C18N4:H=-5/ILP=-1 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+IRUTUL,ok,AttributeError,61,0,4,-2,-4,0,2,1,1,0,0,0,0,1,C14N3PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C14N3PS:H=-1/ILP=-3 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+ITARIF,ok,AttributeError,46,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16N3S3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5NS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ITEGIY,ok,AttributeError,82,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C34O7PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ITEVUA,ok,mol_is_none,57,0,2,-8,-2,0,1,1,0,0,1,0,0,0,B2C22N6O6:H=-8/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+IVUSOJ,ok,AttributeError,62,0,1,-1,-1,1,5,0,5,0,0,0,0,5,C26N3P2S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+IVUSUP,ok,AttributeError,62,0,1,-1,-1,1,5,0,5,0,0,0,0,5,C26N3P2Se2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+IWAZAJ,ok,AttributeError,44,1,1,0,0,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20N2PS:H=1/ILP=1 acH=1 acILP=None huckel_ok_ac_ok
+IXUFUE,ok,AttributeError,40,0,5,-5,-5,1,3,0,3,0,0,0,0,3,C19N4S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+IXUGEP,ok,AttributeError,30,0,5,-5,-5,1,3,0,3,0,0,0,0,3,C13N4S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+IXUTOK,ok,ArgumentError,57,1,3,-2,-2,1,3,0,3,0,0,0,0,3,C25P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+IYINEK,ok,ArgumentError,85,1,3,2,-2,0,2,2,0,0,0,0,0,0,C20SiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C20SiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+JAHHAC,ok,ArgumentError,64,0,2,-2,-2,1,4,0,4,0,0,0,0,4,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18FP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JATDAM,ok,AttributeError,36,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C10N3OSBr:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C3N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+JEJPUK,ok,ArgumentError,75,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C18N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JEKQAS,ok,AttributeError,63,0,2,-2,-2,1,2,0,2,0,0,0,0,2,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C31N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JELCOS,ok,ArgumentError,79,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C14P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12OP:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C12OP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JEYROU,ok,ArgumentError,65,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JIZNOW,ok,ArgumentError,55,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C14P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JIZSIW,ok,mol_is_none,38,0,2,-6,-2,0,3,1,2,0,1,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17N5:H=-4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+JOMZES,ok,AttributeError,71,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C15N4O2SBr:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N4O2SBr:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JOTJEK,ok,KekulizeException,63,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C17N2O3S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JOXLAJ,ok,AttributeError,83,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C19N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+JUQQAN,ok,ArgumentError,55,0,4,-4,-4,1,5,0,5,0,0,0,0,5,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KACDOI,ok,ArgumentError,74,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KACFAW,ok,ArgumentError,61,1,2,-1,-1,1,3,0,3,0,0,0,0,3,C25P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KACFEA,ok,ArgumentError,51,1,2,-1,-1,1,3,0,3,0,0,0,0,3,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KADJIK,error:AtomValenceException,,,,,,,,,,,,,,,,
+KAKVUO,ok,mol_is_none,57,1,3,2,-2,0,4,1,3,0,1,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KAKWAV,ok,mol_is_none,57,1,3,2,-2,0,4,1,3,0,1,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KAKWEZ,ok,mol_is_none,64,1,3,2,-2,0,4,1,3,0,1,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C8P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KAVWUA,ok,mol_is_none,47,0,2,-4,-2,0,1,1,0,0,0,1,0,0,C22N6:H=-4/ILP=-2 acH=0 acILP=False huckel_wrong_ac_fail_anyway
+KEGTEV,ok,AttributeError,51,0,6,-4,-6,0,4,1,3,0,0,0,0,3,C11N3S2:H=-1/ILP=-3 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5NS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+KESYEP,ok,invalid_charge,43,0,2,-2,-2,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KEWQOS,ok,ArgumentError,36,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C17P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+KIHTAZ,ok,AttributeError,81,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C18N4O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18N4O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+KIHVIH,ok,AttributeError,67,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+KIRXOA,ok,AttributeError,79,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KISZAN,ok,AttributeError,62,0,0,-2,0,0,3,1,2,0,0,0,0,2,C9OSi2PSe:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+KOCXIK,ok,AttributeError,51,1,3,-2,-2,1,4,0,4,0,0,0,0,4,C4N4S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C4N4S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+KOLCOE,ok,AttributeError,53,0,2,-6,-2,0,2,1,1,0,0,0,0,1,C22N5O4S:H=-5/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | NO3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+KOMCIZ,ok,AttributeError,63,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C21O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LACNOS,ok,ArgumentError,84,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C13N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LAXCOF,ok,mol_is_none,65,0,2,-6,-2,0,1,1,0,0,1,0,0,0,B2C21N6O7:H=-6/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+LECZEZ,ok,ArgumentError,66,0,2,-1,-1,1,3,0,3,0,0,0,0,3,C7P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C6P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LELMEV,ok,ArgumentError,85,0,2,-2,-2,1,4,0,4,0,0,0,0,4,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C13OP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C26O2P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LENQUQ,ok,ArgumentError,47,1,3,-2,-2,1,2,0,2,0,0,0,0,2,C10N3S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10N3S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LEPFUJ,ok,AttributeError,55,1,2,-3,-1,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N3OS:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LEPGAQ,ok,AttributeError,55,1,2,-3,-1,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N3OS:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LEZWAO,ok,ArgumentError,77,0,2,2,-2,0,2,2,0,0,0,0,0,0,C16SiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C16SiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+LIBHOT,ok,ArgumentError,45,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LIBHUZ,ok,ArgumentError,41,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LIBWIE,ok,AttributeError,75,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16N3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LICFUB,ok,AttributeError,55,0,4,-2,-4,0,4,1,3,0,0,0,0,3,C16O5P:H=-1/ILP=-3 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LIFXOQ,ok,ArgumentError,39,0,2,-2,-2,1,5,0,5,0,0,0,0,5,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LIKXIN,ok,AttributeError,77,0,2,-2,-2,1,1,0,1,0,0,0,0,1,C32N4O4S4:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+LILCAL,ok,ArgumentError,67,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C31P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LIMBAL,ok,ArgumentError,75,0,4,-4,-4,1,2,0,2,0,0,0,0,2,C6P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N4Si3:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok
+LIRLAZ,ok,ArgumentError,75,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C33P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LIRLED,ok,ArgumentError,69,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C29P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LIWQOY,ok,ArgumentError,70,1,3,-2,-2,1,4,0,4,0,0,0,0,4,BC22N4P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LOCGAL,ok,AttributeError,82,1,2,-3,-1,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C21P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C15:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+LODVOQ,ok,AttributeError,74,0,1,-1,-1,1,5,0,5,0,0,0,0,5,C36N3P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LUJFUR,ok,ArgumentError,69,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LUKYEV,ok,AttributeError,62,0,3,-3,-3,1,2,0,2,0,0,0,0,2,C19O3P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+LUNRIX,ok,invalid_charge,19,0,2,-2,-2,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3NO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3NO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+LUQNIV,ok,AttributeError,85,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C18NP:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C9N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MAFMUE,ok,mol_is_none,47,0,2,-8,-2,0,1,1,0,0,1,0,0,0,B2C16N8O6:H=-8/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+MAMNOE,ok,ArgumentError,74,0,3,1,-1,0,3,1,2,0,0,0,0,2,C15SiP:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+MAQWEG,ok,AttributeError,55,1,2,-3,-1,0,3,1,2,0,0,0,0,2,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C23OP:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MASSEH,ok,AttributeError,58,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C18N2O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MASSUX,ok,AttributeError,73,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C18N2O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+MIDLIW,ok,IndexError,36,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C5NS2Se2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MIJTUV,ok,AttributeError,67,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C20O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C7N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MITYUL,ok,ArgumentError,57,1,3,-4,-2,0,4,0,2,2,0,0,0,2,C6Se:H=-1/ILP=? acH=1 | C8S:H=-1/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MIWFAB,ok,AttributeError,61,0,2,-4,-2,0,3,1,2,0,0,0,0,2,C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C16N2O4S:H=-4/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway | O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+MIYWUM,ok,ArgumentError,52,0,1,-1,-1,1,5,0,5,0,0,0,0,5,C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+MIZXIF,ok,mol_is_none,82,0,3,1,-3,0,2,1,1,0,1,0,0,1,C32Si2P:H=2/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MOHSIN,ok,AttributeError,46,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C10N3OSBr:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C7N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+MOMQUB,ok,AttributeError,76,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C13N2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C13N2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C13N2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MOQQEO,ok,ArgumentError,51,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C20P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MULZIC,ok,ArgumentError,59,1,2,-3,-1,0,3,0,1,2,0,0,0,1,C22NP:H=-1/ILP=? acH=1 | C6Se:H=-1/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MUNFOR,ok,AttributeError,66,0,2,-4,-2,0,4,1,3,0,0,0,0,3,C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20OP:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+MUTSOL,ok,AttributeError,73,1,0,-1,1,0,1,1,0,0,0,0,0,0,C29NP2:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+MUTTEC,ok,AttributeError,75,1,2,-1,-1,1,2,0,2,0,0,0,0,2,C29NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+MUZNIE,ok,mol_is_none,58,1,2,-1,-1,1,3,0,3,0,0,0,1,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10N2O2P:H=0/ILP=0 acH=0 acILP=None huckel_ok_ac_fail | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+MYNBCO,ok,mol_is_none,45,0,3,-7,-3,0,3,1,2,0,1,0,0,2,C11N4O2:H=-5/ILP=-1 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+NAGXOL,ok,IndexError,78,0,5,-5,-5,1,2,0,2,0,0,0,0,2,C40N4O3:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+NAHXID,ok,mol_is_none,45,0,3,1,-3,0,4,1,3,0,1,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+NAJVUS,ok,AttributeError,71,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C16N3OS:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+NASHIY,ok,mol_is_none,82,1,2,3,-1,0,3,1,2,0,1,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12P4:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+NATZOZ,ok,AttributeError,51,0,6,-6,-6,1,4,0,4,0,0,0,0,4,C20N3OS:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+NAWHEA,ok,ArgumentError,51,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C22N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+NAWHIE,ok,ArgumentError,54,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C22N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+NAXDOI,ok,ArgumentError,81,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C37P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+NECLUD,ok,ArgumentError,44,0,2,-1,-1,1,3,0,3,0,0,0,0,3,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+NEZXUL,ok,ArgumentError,53,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2O2F3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2O2F3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+NICCIM,ok,ArgumentError,76,0,2,0,-2,0,3,1,2,0,0,0,0,2,C18P2:H=2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+NIGLEW,ok,KekulizeException,81,0,5,-5,-5,1,2,0,2,0,0,0,0,2,C45N4O:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+NIVFUV,ok,ArgumentError,47,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C15P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+NIVGAC,ok,ArgumentError,45,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C15P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+NOFKOJ,ok,ArgumentError,38,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C10N3S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5NS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | N3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+NOLPIN,ok,mol_is_none,64,0,3,1,-3,0,4,1,3,0,1,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+NONHUU,ok,ArgumentError,65,0,2,0,-2,0,2,1,1,0,0,0,0,1,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+NOSHEI,ok,ArgumentError,63,0,2,0,-2,0,2,1,1,0,0,0,0,1,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C26P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+NOSHIM,ok,ArgumentError,83,0,2,0,-2,0,2,1,1,0,0,0,0,1,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C38P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+NOSHOS,ok,ArgumentError,71,0,2,0,-2,0,2,1,1,0,0,0,0,1,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C34P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+NOZROJ,ok,ArgumentError,66,0,2,-2,-2,1,1,0,1,0,0,0,0,1,C30N3O2PS:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+NUWWAD,ok,ArgumentError,85,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ODAKUZ,ok,mol_is_none,52,0,2,0,-2,0,6,1,5,0,0,1,0,5,BC9Si4:H=0/ILP=-2 acH=0 acILP=False huckel_wrong_ac_fail_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+ODUBAS,ok,ArgumentError,71,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ODUNIM,ok,AttributeError,66,0,4,-2,-4,0,3,1,2,0,0,0,0,2,C19O6PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2OS:H=0/ILP=-2 acH=1 acILP=False huckel_wrong_ac_ok_anyway
+OFOBEQ,ok,AttributeError,67,0,1,-3,-1,0,3,1,2,0,0,0,0,2,C9P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C15:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+OKAPEX,ok,ArgumentError,76,0,2,-1,-1,1,3,0,3,0,0,0,0,3,C29NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+OKAPIB,ok,ArgumentError,73,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C29NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+OLITUZ,ok,ArgumentError,67,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C29P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+OPUPUL,ok,KekulizeException,48,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16N3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+OTAXUD,ok,ArgumentError,44,0,2,-4,-2,0,4,0,2,2,0,0,0,2,C14P:H=-1/ILP=? acH=1 | C6Se:H=-1/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+OTAYAK,ok,ArgumentError,37,0,2,-4,-2,0,4,0,2,2,0,0,0,2,C14P:H=-1/ILP=? acH=1 | CSe:H=-1/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+OWUZEN,ok,mol_is_none,79,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C46N4:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+OXEZUN,ok,ArgumentError,65,0,2,0,-2,0,2,1,1,0,0,0,0,1,C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+OXIBAZ,ok,ArgumentError,68,0,2,0,-2,0,2,1,1,0,0,0,0,1,C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+OYOLUK,ok,ArgumentError,47,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C17P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+OZOKAQ,ok,AttributeError,74,0,2,-2,-2,1,3,0,3,0,0,0,0,3,BC20O2F3P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PACCUT,ok,mol_is_none,45,1,4,1,-3,0,3,2,1,0,1,1,0,1,C6P2:H=2/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | BC2N:H=0/ILP=-2 acH=0 acILP=False huckel_wrong_ac_fail_anyway
+PADQOA,error:AtomValenceException,,,,,,,,,,,,,,,,
+PADQUG,error:AtomValenceException,,,,,,,,,,,,,,,,
+PASLON,ok,AttributeError,53,0,2,-4,-2,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N3O2F2S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C2OS:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+PAYPOU,ok,AttributeError,30,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C11S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+PAYPUA,ok,AttributeError,37,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C16S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+PBPNEP,ok,ArgumentError,64,0,4,-2,-4,0,4,1,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C14N:H=0/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C4:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+PEPPAE,ok,ArgumentError,75,0,2,-1,-1,1,4,0,4,0,0,0,0,4,C18PSe:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+PEVDAV,ok,ArgumentError,84,0,0,0,0,1,6,0,6,0,0,0,0,6,C38SiP2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+PIWNUH,ok,ArgumentError,80,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C31N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PIWPAP,ok,ArgumentError,83,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C32N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PIWPOD,ok,ArgumentError,74,0,2,-1,-1,1,1,0,1,0,0,0,0,1,C31N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PIWPUJ,ok,ArgumentError,77,0,2,-1,-1,1,1,0,1,0,0,0,0,1,C32N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PIXKEP,ok,AttributeError,64,0,2,-4,-2,0,2,1,1,0,0,0,0,1,C34N2OS2:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PIYSEV,ok,ArgumentError,71,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+POQKOY,ok,mol_is_none,62,0,3,1,-3,0,4,1,3,0,1,0,0,3,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C24Si2P:H=2/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PUNTAV,ok,AtomValenceException,66,0,2,-1,-1,1,1,0,1,0,0,0,0,1,C29N5P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+PUPNIZ,ok,ArgumentError,44,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C20P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+PUPNOF,ok,ArgumentError,47,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C21P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+QAHGUC,ok,ArgumentError,53,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C23P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+QAHZII,ok,AttributeError,52,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C20O4P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+QECFUZ,ok,AttributeError,56,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C7OP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+QEDBOT,ok,ArgumentError,79,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C18NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+QEJSEG,ok,KekulizeException,63,0,2,-2,-2,1,1,0,1,0,0,0,0,1,C37N2Se:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+QEKLAU,ok,AttributeError,66,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C17NPS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+QIDZUY,ok,AttributeError,67,1,0,1,1,1,4,0,4,0,0,0,0,4,C33P:H=1/ILP=1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+QIJWIS,ok,AttributeError,43,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C8N7S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C8N7S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+QIZREZ,ok,ArgumentError,84,1,4,-3,-3,1,3,0,3,0,0,0,0,3,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+QOQGEK,ok,AtomValenceException,81,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C29N5P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4Si:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+QOQGIO,ok,AtomValenceException,66,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C29N5P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+QOQGUA,ok,AtomValenceException,72,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C29N5P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+QUBPIM,ok,AttributeError,46,0,0,-2,0,0,1,1,0,0,0,0,0,0,C16N6OS2:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+QUJBUU,ok,AttributeError,65,0,4,-2,-4,0,1,1,0,0,0,0,0,0,C27N2O2S:H=-2/ILP=-4 acH=1 acILP=False huckel_wrong_ac_ok_anyway
+RABVEW,ok,ArgumentError,82,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C23P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+RANNIE,ok,ArgumentError,77,1,2,-1,-1,1,2,0,2,0,0,0,0,2,C29P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+RAPPUU,ok,mol_is_none,83,0,4,-8,-4,0,2,1,1,0,0,1,0,1,C32N8:H=-6/ILP=-2 acH=0 acILP=False huckel_wrong_ac_fail_anyway | C13N2O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+RAZDIG,ok,ArgumentError,83,0,2,-2,-2,1,4,0,4,0,0,0,0,4,BC26P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+REHFEP,ok,AttributeError,81,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C18N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+REKVUB,ok,ArgumentError,79,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20N2S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+REZCIK,ok,mol_is_none,51,0,6,-2,-6,0,5,1,4,0,0,1,1,3,C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C8N:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | B:H=-1/ILP=-1 acH=0 acILP=None huckel_ok_ac_fail | B:H=1/ILP=-3 acH=0 acILP=False huckel_wrong_ac_fail_anyway
+RILVOX,ok,mol_is_none,63,-1,5,-12,-6,0,3,3,0,0,0,1,0,0,NO2:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C32N8:H=-6/ILP=-4 acH=0 acILP=False huckel_wrong_ac_fail_anyway | NO2:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+RITCIJ,ok,AttributeError,54,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C12N2O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+RITXUN,ok,ArgumentError,54,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C12NSi2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+RITYAU,ok,ArgumentError,55,0,4,-2,-4,0,4,1,3,0,0,0,0,3,COS:H=0/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C12NSi2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ROJWEV,ok,AttributeError,54,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C14N3FS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+ROJWOF,ok,AttributeError,55,0,3,-3,-3,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C14N3FS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ROMFEE,ok,ArgumentError,85,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C32P2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6F5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6F5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ROSGEL,ok,AttributeError,57,1,3,-2,-2,1,4,0,4,0,0,0,0,4,C9N3OS:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+RUCBEY,ok,AttributeError,79,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C5O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C19O6PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+RUJQIW,ok,AttributeError,52,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C9N3O2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+RUKWOL,ok,KekulizeException,67,1,3,0,-2,0,2,1,1,0,0,0,0,1,B2C22N6:H=0/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+SACGIO,ok,ArgumentError,83,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C19OP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+SACLUG,ok,AttributeError,67,0,2,-4,-2,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N3O2S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+SACMAN,ok,AttributeError,57,0,2,-4,-2,0,3,1,2,0,0,0,0,2,C13N3O2S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+SACMIV,ok,AttributeError,73,0,2,-4,-2,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N3O2S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C12:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+SAKPEA,ok,AttributeError,80,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C40NOP3:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+SAKSIJ,ok,ArgumentError,77,0,2,0,-2,0,2,1,1,0,0,0,0,1,C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C4O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SAKTAC,ok,ArgumentError,78,0,2,0,-2,0,2,1,1,0,0,0,0,1,C24P3:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C4O3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SEDRUO,error:AtomValenceException,,,,,,,,,,,,,,,,
+SEFNUO,ok,ArgumentError,59,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C3NS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3NS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N4P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SEKMIG,ok,mol_is_none,45,1,4,1,-3,0,3,2,1,0,1,1,0,1,C6P2:H=2/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | BC2N:H=0/ILP=-2 acH=0 acILP=False huckel_wrong_ac_fail_anyway
+SEMCUK,ok,ArgumentError,61,0,2,-2,-2,1,2,0,2,0,0,0,0,2,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SEWCEC,ok,ArgumentError,47,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C15P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SIDBUF,ok,ArgumentError,72,1,3,-4,-2,0,4,1,3,0,0,0,0,3,C32N3OP:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | NO3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | NO3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SIGXIR,ok,AttributeError,71,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C31N3OP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SILLEG,ok,ArgumentError,39,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C8NS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6N3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+SOHFOL,ok,AttributeError,27,-1,1,-2,-2,1,1,0,1,0,0,0,0,1,C8N3O6S2Br:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+SOLVEU,ok,ArgumentError,84,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C30PAs:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SOMZAV,ok,ArgumentError,82,0,1,-3,-1,0,2,1,1,0,0,0,0,1,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+SOQLOZ,ok,ArgumentError,82,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SOWCIR,ok,ArgumentError,85,0,4,-4,-4,1,2,0,2,0,0,0,0,2,C15N4Si3:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok | C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SUCBAT,ok,KekulizeException,67,1,3,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C26N8O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SUNROK,ok,ArgumentError,66,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C18P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+SUNXAB,ok,mol_is_none,75,0,4,-6,-4,0,1,1,0,0,0,1,0,0,C44N4O2:H=-6/ILP=-4 acH=0 acILP=False huckel_wrong_ac_fail_anyway
+SUVVOU,ok,mol_is_none,48,0,0,4,0,0,4,1,3,0,1,0,0,3,C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+TAYWIA,ok,AttributeError,67,1,1,2,0,0,2,1,1,0,0,0,0,1,C20P2S:H=2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C7:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+TEDGIS,ok,ArgumentError,45,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+TEDYIK,ok,AttributeError,54,0,4,-2,-4,0,2,1,1,0,0,0,0,1,C20N2O2S2:H=-2/ILP=-4 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+TIBBIP,ok,ArgumentError,85,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C18P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C9P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C9P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+TIHSOS,ok,ArgumentError,56,0,4,-4,-4,1,6,0,6,0,0,0,0,6,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C25P2:H=1/ILP=1 acH=1 acILP=None huckel_ok_ac_ok
+TIWHAJ,ok,AttributeError,69,0,2,-2,-2,1,2,0,2,0,0,0,0,2,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C35N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+TIWHEN,ok,AttributeError,59,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C29N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+TIWHIR,ok,AttributeError,75,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C35N3O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+TONPIW,ok,AttributeError,62,0,1,-1,-1,1,4,0,4,0,0,0,0,4,C27NS:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+TOXBOX,ok,ArgumentError,83,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C18P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+TPHDFC,ok,ArgumentError,54,1,0,-1,1,0,4,1,3,0,0,0,0,3,C24P:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+TUBVAP,ok,AttributeError,81,1,3,-2,-2,1,2,0,2,0,0,0,0,2,C18N5S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18N5S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UCIGAP,ok,KekulizeException,63,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16N5S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16N5S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UCIGUJ,ok,KekulizeException,63,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16N5S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16N5S2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UCILIE,ok,mol_is_none,82,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C46N4S:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+UDOCIA,ok,mol_is_none,39,0,2,0,-2,0,6,1,5,0,0,1,0,5,BC6NSi2:H=0/ILP=-2 acH=0 acILP=False huckel_wrong_ac_fail_anyway | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+UDOPOT,ok,AttributeError,69,0,4,-2,-4,0,1,1,0,0,0,0,0,0,C37N3S3:H=-2/ILP=-4 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+UDOQEK,ok,AttributeError,75,0,4,-2,-4,0,1,1,0,0,0,0,0,0,C40N4S4Cl8:H=-2/ILP=-4 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+UFUHEL,ok,ArgumentError,39,0,2,-2,-2,1,4,0,4,0,0,0,0,4,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12PSe:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UJITAI,ok,ArgumentError,69,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C20NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ULONOY,ok,ArgumentError,42,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UQUXAG,ok,ArgumentError,33,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C8S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+USEKEJ,ok,AttributeError,56,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C11S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UTANIO,ok,AttributeError,71,0,2,-4,-2,0,3,1,2,0,0,0,0,2,C20N3O3S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+UTANOU,ok,AttributeError,67,0,2,-4,-2,0,3,1,2,0,0,0,0,2,C19N3O2SBr:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+UTANUA,ok,AttributeError,67,0,2,-4,-2,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N3O2SBr:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C10:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+UTAPAI,ok,AttributeError,68,0,3,-5,-3,0,3,1,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N3O2S:H=-3/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UTEGEG,ok,ArgumentError,68,0,3,-3,-3,1,4,0,4,0,0,0,0,4,C22N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UTOWEH,ok,ArgumentError,85,0,3,-2,-2,1,2,0,2,0,0,0,0,2,C33NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UTOXEI,ok,ArgumentError,85,0,3,-1,-1,1,1,0,1,0,0,0,0,1,C33NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UVEXIE,ok,ArgumentError,69,0,4,-4,-4,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C26N2Si2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+UVIWON,ok,ArgumentError,81,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C32N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+UVIXAA,ok,ArgumentError,65,0,4,-4,-4,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C32N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+UVIXEE,ok,ArgumentError,77,0,4,-4,-4,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C36N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+UVIXII,ok,ArgumentError,65,0,4,-4,-4,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C32N2P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+VAHMOG,ok,AttributeError,84,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C27NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VAJMEA,ok,AttributeError,62,0,3,-3,-3,1,1,0,1,0,0,0,1,0,C35N4F10S:H=-3/ILP=-3 acH=0 acILP=None huckel_ok_ac_fail
+VAMCER,ok,ArgumentError,50,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C18P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VEBCOV,ok,AttributeError,77,1,2,-1,-1,1,4,0,4,0,0,0,0,4,C19N3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VEKTIO,ok,AttributeError,61,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C9OSi2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VEKTOU,ok,AttributeError,61,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C9OSi2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VENHED,ok,ArgumentError,64,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VEXJOZ,ok,KekulizeException,71,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C27N8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VEXKAM,ok,KekulizeException,71,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C27N8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VIDCOA,ok,AttributeError,55,0,4,-4,-4,1,4,0,4,0,0,0,0,4,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8O2P2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C6P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+VIRXAW,ok,ArgumentError,67,0,4,-2,-4,0,2,1,1,0,0,0,0,1,C15N2PS:H=-1/ILP=-3 acH=1 acILP=False huckel_wrong_ac_ok_anyway | C15N2PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VIRXIE,ok,ArgumentError,75,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C19N2PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N2PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VIRXOK,ok,ArgumentError,61,0,4,-2,-4,0,2,1,1,0,0,0,0,1,C14N3PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C14N3PS:H=-1/ILP=-3 acH=1 acILP=False huckel_wrong_ac_ok_anyway
+VIWCAG,ok,ArgumentError,69,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C29P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO3F3S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VIWPIB,ok,ArgumentError,61,0,4,-2,-4,0,2,1,1,0,0,0,0,1,C14N3PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C14N3PS:H=-1/ILP=-3 acH=1 acILP=False huckel_wrong_ac_ok_anyway
+VOGLIM,ok,AttributeError,61,0,3,-3,-3,1,1,0,1,0,0,0,0,1,BC33N6P:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok
+VOMBEE,ok,ArgumentError,59,1,1,0,0,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17P2:H=1/ILP=1 acH=1 acILP=None huckel_ok_ac_ok | C7:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+VOVSOQ,ok,AttributeError,61,0,6,-6,-6,1,4,0,4,0,0,0,0,4,C24N3OSCl:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+VOVSUW,ok,AttributeError,67,0,6,-6,-6,1,4,0,4,0,0,0,0,4,C24N3OSCl:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C3O:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+VOXRIJ,ok,ArgumentError,45,0,3,-3,-3,1,4,0,4,0,0,0,0,4,C9P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+VUDMAJ,ok,AttributeError,72,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C21N5O4S2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C2OS:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C2OS:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+VUDTUL,ok,ArgumentError,65,0,0,-2,0,0,2,1,1,0,0,0,0,1,C18PSe:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8SiP:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+VUGCAD,ok,ArgumentError,82,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C28P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+VUNLOF,ok,ArgumentError,76,0,1,-3,-1,0,2,1,1,0,0,0,0,1,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+VUNMEW,ok,ArgumentError,81,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WAQBAU,ok,ArgumentError,77,0,4,-4,-4,1,4,0,4,0,0,0,0,4,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C38NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WARQEO,ok,mol_is_none,79,0,2,-6,-2,0,1,1,0,0,1,0,0,0,B2C30N6O6:H=-6/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+WAWPAO,ok,ArgumentError,47,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C21PBr:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WAXFEI,ok,AttributeError,72,1,1,2,0,0,2,1,1,0,0,0,0,1,C20P2S:H=2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WAYKIQ,ok,AttributeError,72,1,3,0,-2,0,2,1,1,0,0,0,0,1,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C35F18P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+WEDYIO,ok,mol_is_none,65,1,2,3,-1,0,2,1,1,0,1,0,0,1,C8Si:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C12P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+WEGQIL,ok,AttributeError,64,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C19O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WEPGIJ,timeout45,,,,,,,,,,,,,,,,
+WEPTUI,ok,ArgumentError,82,1,2,-1,-1,1,2,0,2,0,0,0,0,2,C40N2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WEPXEW,ok,AttributeError,85,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18OP:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WETGOS,ok,AttributeError,77,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C36N3P2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WEWHEL,ok,AttributeError,55,1,3,0,-2,0,1,1,0,0,0,0,0,0,C22N2O4S2:H=0/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+WEXZUX,ok,ArgumentError,63,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C30NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CNS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WIDPIK,ok,AttributeError,60,1,4,-1,-3,0,2,1,1,0,0,0,0,1,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C28N4P:H=0/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+WIJREN,ok,ArgumentError,65,1,2,-1,-1,1,2,0,2,0,0,0,0,2,C23P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WILVOE,ok,invalid_charge,61,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C16NO3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16NO3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WILVUK,ok,invalid_charge,32,0,2,-2,-2,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N2O2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WINJIO,ok,invalid_charge,65,0,1,-1,-1,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C15N2O2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WIPJUD,ok,AttributeError,80,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C24NOP:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C18P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WISHIR,ok,invalid_charge,77,0,2,-6,-2,0,4,2,2,0,0,0,0,2,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17N4:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C17N4:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+WISHOX,ok,invalid_charge,52,0,2,-4,-2,0,4,1,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3NO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C17N4:H=-2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+WITCOR,ok,AttributeError,73,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C8N4O4S3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8N4O4S3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4N3:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WIYHOB,ok,ArgumentError,55,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C25P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WOFQEP,ok,ArgumentError,57,1,3,-4,-2,0,4,0,2,2,0,0,0,2,C6Se:H=-1/ILP=? acH=1 | C8S:H=-1/ILP=? acH=1 | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WOJDAB,ok,AttributeError,61,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C20O5PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WOKMAL,ok,AttributeError,83,0,0,-2,0,0,3,1,2,0,0,0,0,2,C19PS:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C7N2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C7:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WORCOV,ok,ArgumentError,83,0,3,-3,-3,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C35Si2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+WOWDIX,ok,AttributeError,50,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C25NPS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WUHJUF,ok,ArgumentError,64,0,5,-5,-5,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C32N2O2P:H=-4/ILP=-4 acH=1 acILP=None huckel_ok_ac_ok
+WUHKAM,ok,ArgumentError,65,0,5,-5,-5,1,2,0,2,0,0,0,0,2,O:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C32N2O2P:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok
+WUHLAM,ok,mol_is_none,85,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C36N4:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+WUHLEQ,ok,mol_is_none,77,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C32N4:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+WUNCIR,ok,ArgumentError,77,1,3,-2,-2,1,2,0,2,0,0,0,0,2,C36F19P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+WUPDOA,ok,ArgumentError,54,0,3,-3,-3,1,3,0,3,0,0,0,0,3,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C25P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XANREK,ok,ArgumentError,76,0,5,-5,-5,1,3,0,3,0,0,0,0,3,C14P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C14P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4N:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+XEMTUG,ok,AttributeError,27,1,2,-1,-1,1,2,0,2,0,0,0,0,2,C12NS:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XEPVAQ,ok,AttributeError,81,0,1,-1,-1,1,5,0,5,0,0,0,0,5,C37NP2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+XESBUU,ok,ArgumentError,44,0,2,-1,-1,1,3,0,3,0,0,0,0,3,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XESCAB,ok,ArgumentError,44,0,2,-1,-1,1,3,0,3,0,0,0,0,3,CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XESCEF,ok,ArgumentError,44,0,2,-2,-2,1,4,0,4,0,0,0,0,4,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XESCIJ,ok,ArgumentError,44,0,2,-2,-2,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XESCOP,ok,ArgumentError,44,0,2,-2,-2,1,4,0,4,0,0,0,0,4,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+XESCUV,ok,ArgumentError,44,0,2,-2,-2,1,4,0,4,0,0,0,0,4,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XESDAC,ok,ArgumentError,44,0,2,-2,-2,1,4,0,4,0,0,0,0,4,Br:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C19P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XEVMAN,ok,mol_is_none,68,1,2,3,-1,0,2,1,1,0,1,0,0,1,C13P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C8Si:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XIFREM,ok,mol_is_none,83,0,2,-8,-2,0,1,1,0,0,1,0,0,0,B2C35N6O6F2Si:H=-8/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+XILQAM,ok,AttributeError,81,0,3,-3,-3,1,3,0,3,0,0,0,0,3,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C28NOP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XITJAN,ok,mol_is_none,44,0,0,-1,0,0,4,1,3,0,0,1,0,3,BC6NSi2:H=0/ILP=1 acH=0 acILP=False huckel_wrong_ac_fail_anyway | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+XIWHAO,ok,ArgumentError,59,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16N2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XOSTUW,ok,ArgumentError,64,0,3,-2,-2,1,3,0,3,0,0,0,0,3,C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | BC9N6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XOSVAC,ok,ArgumentError,76,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C18P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XOWMUT,ok,AttributeError,43,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C21S3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XUJXUV,ok,mol_is_none,57,1,3,2,-2,0,3,1,2,0,1,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C5O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XUJYAC,ok,mol_is_none,57,1,3,2,-2,0,3,1,2,0,1,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11P3:H=4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct | C5O2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XUKWUX,ok,ArgumentError,82,0,3,-3,-3,1,3,0,3,0,0,0,0,3,C8P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C21N3:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XUPJAU,ok,ArgumentError,75,0,3,-3,-3,1,4,0,4,0,0,0,0,4,C27O2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+XUPJEY,ok,ArgumentError,76,0,2,-1,-1,1,3,0,3,0,0,0,0,3,C28O2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C3P:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+YAFSAC,ok,mol_is_none,53,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C30N4:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+YAQCIC,ok,ArgumentError,73,0,4,-4,-4,1,4,0,4,0,0,0,0,4,C24P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YAVFEG,ok,AttributeError,80,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C19N2Si2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YEBYIQ,ok,AttributeError,50,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C20N5O2S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YEHBAP,ok,AttributeError,84,1,1,2,0,0,2,1,1,0,0,0,0,1,C24P2S:H=2/ILP=0 acH=1 acILP=True huckel_wrong_ac_ok_anyway | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+YEXNIB,ok,mol_is_none,38,0,2,-6,-2,0,3,1,2,0,1,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17N5:H=-4/ILP=0 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+YIBVAG,ok,AttributeError,66,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C11N2O4P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YIBVIO,ok,AttributeError,53,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C8NO2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YIJLAE,ok,ArgumentError,75,1,3,0,-2,0,2,1,1,0,0,0,0,1,C36F18P2:H=1/ILP=-1 acH=1 acILP=True huckel_wrong_ac_ok_anyway | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YIXGAO,ok,ArgumentError,75,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C23OP2:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C2N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YIZCUF,ok,ArgumentError,68,0,4,-4,-4,1,4,0,4,0,0,0,0,4,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C6:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YOGQAO,ok,AttributeError,65,0,2,-2,-2,1,3,0,3,0,0,0,0,3,C21O6PS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5N:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+YOHRAO,ok,AttributeError,70,0,4,-4,-4,1,3,0,3,0,0,0,0,3,C7P:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YOJCOP,ok,AttributeError,60,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C9N3O2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YOLHOX,ok,ArgumentError,83,1,3,-2,-2,1,4,0,4,0,0,0,0,4,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C35P3:H=1/ILP=1 acH=1 acILP=None huckel_ok_ac_ok | C2O:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YOXKUS,ok,ArgumentError,52,0,3,-3,-3,1,4,0,4,0,0,0,0,4,I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | I:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C22P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+YOXLAZ,ok,ArgumentError,52,0,1,-1,-1,1,3,0,3,0,0,0,0,3,C22P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+YOXYUF,ok,ArgumentError,82,0,3,-2,-2,1,2,0,2,0,0,0,0,2,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4N:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+YOXZAM,ok,ArgumentError,84,0,3,-2,-2,1,2,0,2,0,0,0,0,2,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C4:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZAPJEF,ok,ArgumentError,83,1,3,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C38P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZAPJIJ,ok,ArgumentError,83,1,3,-2,-2,1,2,0,2,0,0,0,0,2,C38P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZAPQIT,ok,AttributeError,63,1,3,-2,-2,1,2,0,2,0,0,0,0,2,C15N4S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N4S:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZAPQUF,ok,AttributeError,71,1,3,-2,-2,1,2,0,2,0,0,0,0,2,C16N4OS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C16N4OS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZAXFEL,ok,ArgumentError,38,1,2,-3,-1,0,3,0,1,2,0,0,0,1,C6Se:H=-1/ILP=? acH=1 | C10NS:H=-1/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZAXFUB,ok,ArgumentError,40,1,2,-3,-1,0,3,0,1,2,0,0,0,1,C6Se:H=-1/ILP=? acH=1 | C10NS:H=-1/ILP=? acH=1 | Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZEQFEG,ok,ArgumentError,46,0,5,-3,-3,1,3,0,3,0,0,0,0,3,C12P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZEQXIC,ok,ArgumentError,75,0,4,-4,-4,1,2,0,2,0,0,0,0,2,C6P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15N4Si3:H=-3/ILP=-3 acH=1 acILP=None huckel_ok_ac_ok
+ZERFAG,ok,ArgumentError,69,0,2,-2,-2,1,2,0,2,0,0,0,0,2,C15NS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C15NS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZERFEK,ok,ArgumentError,70,1,2,-1,-1,1,2,0,2,0,0,0,0,2,C15NS2:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C15NS2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZEWKAQ,ok,mol_is_none,83,0,4,-4,-4,1,1,0,1,0,0,0,1,0,C44N4:H=-4/ILP=-4 acH=0 acILP=None huckel_ok_ac_fail
+ZIGHOO,ok,ArgumentError,85,0,1,-1,-1,1,2,0,2,0,0,0,0,2,C29NP:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C8:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok
+ZISBAE,ok,ArgumentError,85,0,3,-3,-3,1,2,0,2,0,0,0,0,2,C30NSi2P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-2/ILP=-2 acH=1 acILP=None huckel_ok_ac_ok
+ZITSIH,ok,mol_is_none,47,0,2,-8,-2,0,1,1,0,0,1,0,0,0,B2C16N8O6:H=-8/ILP=-2 acH=0 acILP=True huckel_wrong_ac_ok_if_correct
+ZOCBEY,ok,AttributeError,75,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C27O4P2:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZOGCON,ok,AttributeError,42,0,6,-4,-6,0,3,2,1,0,0,0,0,1,C5:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C9:H=0/ILP=-3 acH=1 acILP=False huckel_wrong_ac_ok_anyway | C9:H=-3/ILP=-2 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+ZOHTOF,ok,mol_is_none,40,0,4,-6,-4,0,2,1,1,0,0,1,0,1,CNS:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C11N4O2:H=-5/ILP=-3 acH=0 acILP=False huckel_wrong_ac_fail_anyway
+ZOMQEX,error:AtomValenceException,,,,,,,,,,,,,,,,
+ZOMVIG,ok,AttributeError,58,0,2,-2,-2,1,4,0,4,0,0,0,0,4,C9NO4As:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | CO:H=0/ILP=0 acH=1 acILP=None huckel_ok_ac_ok | C10:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok
+ZORNOL,ok,ArgumentError,73,0,0,-2,0,0,2,1,1,0,0,0,0,1,C18PSe:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C17P:H=-1/ILP=1 acH=1 acILP=True huckel_wrong_ac_ok_anyway
+ZOSMIG,ok,ArgumentError,77,0,2,-2,-2,1,2,0,2,0,0,0,0,2,Cl:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok | C32N2P:H=-1/ILP=-1 acH=1 acILP=None huckel_ok_ac_ok

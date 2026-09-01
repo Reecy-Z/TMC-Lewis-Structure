@@ -1,0 +1,10 @@
+metal	id	charge	n	x	en	vn	reason	filename
+Cr	NEVROV	+0	0	4	10	4	EN<12	Cr_NEVROV_charge_+0_EN10_VN4.xyz
+Cr	LUSVEC	+0	0	5	11	5	EN<12	Cr_LUSVEC_charge_+0_EN11_VN5.xyz
+Cr	HISRAF	+1	1	3	11	3	EN<12	Cr_HISRAF_charge_+1_EN11_VN3.xyz
+Cr	XUGTUO	+0	5	3	19	3	EN>18	Cr_XUGTUO_charge_+0_EN19_VN3.xyz
+Cr	VUNVEF	+1	6	1	19	1	EN>18	Cr_VUNVEF_charge_+1_EN19_VN1.xyz
+Cr	JELSIC	+1	4	5	19	5	EN>18	Cr_JELSIC_charge_+1_EN19_VN5.xyz
+Cr	TUTBIU	+0	0	7	13	7	VN>6	Cr_TUTBIU_charge_+0_EN13_VN7.xyz
+Mo	GIYBUN	+0	1	7	15	7	VN>6	Mo_GIYBUN_charge_+0_EN15_VN7.xyz
+Mo	HOGMEV	-1	0	7	13	7	VN>6	Mo_HOGMEV_charge_-1_EN13_VN7.xyz

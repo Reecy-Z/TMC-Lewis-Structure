@@ -1,0 +1,173 @@
+[
+  {
+    "id": "ACUZEG",
+    "figure": 2,
+    "panel": "A",
+    "category_folder": "01_werner_type",
+    "category": "Werner-type coordination complexes",
+    "cbc": "L4X2",
+    "charge": 1,
+    "xyz": "01_werner_type/ACUZEG_charge_plus1.xyz"
+  },
+  {
+    "id": "ROKMIN",
+    "figure": 2,
+    "panel": "B",
+    "category_folder": "01_werner_type",
+    "category": "Werner-type coordination complexes",
+    "cbc": "L4X2",
+    "charge": 1,
+    "xyz": "01_werner_type/ROKMIN_charge_plus1.xyz"
+  },
+  {
+    "id": "WUYHEF",
+    "figure": 2,
+    "panel": "C",
+    "category_folder": "01_werner_type",
+    "category": "Werner-type coordination complexes",
+    "cbc": "L4X2",
+    "charge": 1,
+    "xyz": "01_werner_type/WUYHEF_charge_plus1.xyz"
+  },
+  {
+    "id": "KCEYPT",
+    "figure": 3,
+    "panel": "A",
+    "category_folder": "02_eta_pi_donor",
+    "category": "eta-coordinated pi-donor ligand complexes",
+    "cbc": "L1X3",
+    "charge": -1,
+    "xyz": "02_eta_pi_donor/KCEYPT_charge_minus1.xyz"
+  },
+  {
+    "id": "IWOLIP",
+    "figure": 3,
+    "panel": "B",
+    "category_folder": "02_eta_pi_donor",
+    "category": "eta-coordinated pi-donor ligand complexes",
+    "cbc": "L6",
+    "charge": 0,
+    "xyz": "02_eta_pi_donor/IWOLIP_charge_0.xyz"
+  },
+  {
+    "id": "VENWAN",
+    "figure": 3,
+    "panel": "C",
+    "category_folder": "02_eta_pi_donor",
+    "category": "eta-coordinated pi-donor ligand complexes",
+    "cbc": "L5X3",
+    "charge": 1,
+    "xyz": "02_eta_pi_donor/VENWAN_charge_plus1.xyz"
+  },
+  {
+    "id": "GAHCOH",
+    "figure": 3,
+    "panel": "D",
+    "category_folder": "02_eta_pi_donor",
+    "category": "eta-coordinated pi-donor ligand complexes",
+    "cbc": "L4X4",
+    "charge": 0,
+    "xyz": "02_eta_pi_donor/GAHCOH_charge_0.xyz"
+  },
+  {
+    "id": "CUKMIG",
+    "figure": 3,
+    "panel": "E",
+    "category_folder": "02_eta_pi_donor",
+    "category": "eta-coordinated pi-donor ligand complexes",
+    "cbc": "L5X4",
+    "charge": -1,
+    "xyz": "02_eta_pi_donor/CUKMIG_charge_minus1.xyz"
+  },
+  {
+    "id": "PEHJEU",
+    "figure": 4,
+    "panel": "A",
+    "category_folder": "03_metal_carbene",
+    "category": "Metal-carbene complexes",
+    "cbc": "L5X1",
+    "charge": 0,
+    "xyz": "03_metal_carbene/PEHJEU_charge_0.xyz"
+  },
+  {
+    "id": "ABELOK",
+    "figure": 4,
+    "panel": "B",
+    "category_folder": "03_metal_carbene",
+    "category": "Metal-carbene complexes",
+    "cbc": "L1X1",
+    "charge": 0,
+    "xyz": "03_metal_carbene/ABELOK_charge_0.xyz"
+  },
+  {
+    "id": "AKONAR",
+    "figure": 4,
+    "panel": "C",
+    "category_folder": "03_metal_carbene",
+    "category": "Metal-carbene complexes",
+    "cbc": "L1X1",
+    "charge": 0,
+    "xyz": "03_metal_carbene/AKONAR_charge_0.xyz"
+  },
+  {
+    "id": "BEBVIN",
+    "figure": 4,
+    "panel": "D",
+    "category_folder": "03_metal_carbene",
+    "category": "Metal-carbene complexes",
+    "cbc": "L4X3",
+    "charge": 0,
+    "xyz": "03_metal_carbene/BEBVIN_charge_0.xyz"
+  },
+  {
+    "id": "FIQPIG",
+    "figure": 5,
+    "panel": "A",
+    "category_folder": "04_additional_motifs",
+    "category": "Additional structural and bonding motifs",
+    "cbc": "L1X3",
+    "charge": 0,
+    "xyz": "04_additional_motifs/FIQPIG_charge_0.xyz"
+  },
+  {
+    "id": "PAXDEA",
+    "figure": 5,
+    "panel": "B",
+    "category_folder": "04_additional_motifs",
+    "category": "Additional structural and bonding motifs",
+    "cbc": "L1X3",
+    "charge": -1,
+    "xyz": "04_additional_motifs/PAXDEA_charge_minus1.xyz"
+  },
+  {
+    "id": "AKOSEZ",
+    "figure": 5,
+    "panel": "C",
+    "category_folder": "04_additional_motifs",
+    "category": "Additional structural and bonding motifs",
+    "cbc": "L6",
+    "charge": 0,
+    "xyz": "04_additional_motifs/AKOSEZ_charge_0.xyz"
+  },
+  {
+    "id": "SAJCIP",
+    "figure": 5,
+    "panel": "D",
+    "category_folder": "04_additional_motifs",
+    "category": "Additional structural and bonding motifs",
+    "cbc": "L1X6",
+    "charge": 0,
+    "xyz": "04_additional_motifs/SAJCIP_charge_0.xyz"
+  },
+  {
+    "id": "AFACUH",
+    "figure": 4,
+    "panel": "E",
+    "category_folder": "03_metal_carbene",
+    "category": "Metal-carbene complexes",
+    "cbc": "X6",
+    "charge": 0,
+    "xyz": "03_metal_carbene/AFACUH.xyz",
+    "note": "Not in tmQMg. Disordered CSD export cleaned to one alkylidene/imido occupancy (C37H48MoN2O1)."
+  }
+]

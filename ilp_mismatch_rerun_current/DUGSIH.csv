@@ -1,0 +1,2 @@
+IDs,smiles_NBO_DFT_xyz,formula_heaviest_fragment,charge,smiles_CSD_fix,smiles_huckel_CSD_xyz,smiles_huckel_DFT_xyz
+DUGSIH,,C9 H11 Cl2 Mo1,0.0,[Cl-]->[Mo+3]1234567(<-[Cl-])(<-C=C->1C->2=C->3)<-c1c->4c->5[cH-]->6c->71,,[Cl-]->[Mo+4]123456(<-[Cl-])(<-C=C->1C->2=C->3)<-[C-]1=[C-]->4C->52=C=C->612

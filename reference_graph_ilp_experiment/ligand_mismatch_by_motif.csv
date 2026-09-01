@@ -1,0 +1,11 @@
+motif_class,cohort_count,mismatch_count,mismatch_percent
+S_Se_donor_no_M_C,1776,177,9.966216216216216
+C_N_donor_cyanide_or_isocyanide,395,33,8.354430379746836
+carbonyl_like,3261,181,5.5504446488807115
+N_O_only_coordination,4498,195,4.335260115606936
+other_C_bound_ligand,4024,167,4.150099403578529
+heterocyclic_carbene_like,2156,89,4.128014842300557
+haptic_or_adjacent_multi_C,4673,167,3.5737213781296813
+P_donor_no_M_C,3484,111,3.185993111366246
+halide_containing_no_M_C,4665,72,1.5434083601286173
+other_non_C_donor,16,0,0.0

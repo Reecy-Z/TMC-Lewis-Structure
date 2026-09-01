@@ -1,0 +1,5 @@
+mechanism_class,old_mismatches,fixed,remain,fixed_percent
+coupled_ligand_charge_and_oxidation,588,154,434,26.19047619047619
+feature_extraction_failure,2,0,2,0.0
+metal_disconnection_or_ligand_partition,121,3,118,2.479338842975207
+unresolved_positional_or_equivalence,19,1,18,5.2631578947368425

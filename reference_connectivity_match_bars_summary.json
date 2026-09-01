@@ -1,0 +1,26 @@
+{
+  "n_complexes": 28948,
+  "n_reparsed_from_reruns": 1189,
+  "n_reparse_fail": 1,
+  "rates": {
+    "ligand_equiv": {
+      "label": "Ligand",
+      "n_match": 28376,
+      "n_mismatch": 572,
+      "percent": 98.02404311178665
+    },
+    "metal_connectivity": {
+      "label": "Metal connectivity",
+      "n_match": 28867,
+      "n_mismatch": 81,
+      "percent": 99.72018792317259
+    },
+    "metal_oxidation": {
+      "label": "Metal oxidation",
+      "n_match": 28493,
+      "n_mismatch": 455,
+      "percent": 98.42821611164847
+    }
+  },
+  "output_png": "/home/zhujingyuan/TMC_Lewis_Structure/reference_connectivity_match_bars.png"
+}

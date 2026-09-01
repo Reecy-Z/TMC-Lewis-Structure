@@ -1,0 +1,8 @@
+id	charge	n	x	en	vn	label	filename
+CAMVIV	+0	4	4	18	4	L₄X₄	CAMVIV_charge_+0_EN18_VN4.xyz
+CPCBCR	+0	4	4	18	4	L₄X₄	CPCBCR_charge_+0_EN18_VN4.xyz
+DEFVIT	+0	4	4	18	4	L₄X₄	DEFVIT_charge_+0_EN18_VN4.xyz
+FOGDUA	+0	4	4	18	4	L₄X₄	FOGDUA_charge_+0_EN18_VN4.xyz
+LESLIE	+0	4	4	18	4	L₄X₄	LESLIE_charge_+0_EN18_VN4.xyz
+XIRGIQ	+0	4	4	18	4	L₄X₄	XIRGIQ_charge_+0_EN18_VN4.xyz
+XIRHEN	+0	4	4	18	4	L₄X₄	XIRHEN_charge_+0_EN18_VN4.xyz

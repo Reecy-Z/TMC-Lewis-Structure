@@ -1,0 +1,17 @@
+{
+  "n_total": 59596,
+  "ilp_ok_smiles_parseable": 59546,
+  "ilp_ok_smiles_not_parseable": 28,
+  "ilp_failed": 22,
+  "pie_slices": {
+    "smiles_not_parseable": 28,
+    "not_solved": 22
+  },
+  "ilp_solved": 59574,
+  "ilp_solved_fraction": 0.9996308477078999,
+  "ilp_failed_fraction": 0.000369152292100141,
+  "smiles_parseable_fraction_of_solved": 0.9995299963071139,
+  "not_parseable_fraction_of_failures": 0.56,
+  "not_solved_fraction_of_failures": 0.44,
+  "output_png": "/home/zhujingyuan/TMC_Lewis_Structure/ilp_success_pie.png"
+}

@@ -1,0 +1,439 @@
+{
+  "metric_cohort_size": 29110,
+  "graph_cohort_size": 29068,
+  "validated_graph_cohort_size": 28948,
+  "agreement_rows": 116440,
+  "primary_summary": [
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "baseline",
+      "metric": "ligand_canonical",
+      "matches": 24612,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 85.0214177145226,
+      "comparable_percent": 85.03022974607013
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "baseline",
+      "metric": "ligand_equiv",
+      "matches": 27704,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 95.7026392151444,
+      "comparable_percent": 95.71255830022456
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "baseline",
+      "metric": "metal_connectivity",
+      "matches": 27966,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 96.60771037722813,
+      "comparable_percent": 96.6177232682674
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "baseline",
+      "metric": "metal_oxidation",
+      "matches": 27903,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 96.39007876191792,
+      "comparable_percent": 96.40006909656245
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "baseline",
+      "metric": "full_connectivity",
+      "matches": 27964,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 96.60080143705956,
+      "comparable_percent": 96.6108136120228
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ml_only",
+      "metric": "ligand_canonical",
+      "matches": 24665,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 85.20450462898991,
+      "comparable_percent": 85.21333563655209
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ml_only",
+      "metric": "ligand_equiv",
+      "matches": 27756,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 95.88227165952743,
+      "comparable_percent": 95.89220936258421
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ml_only",
+      "metric": "metal_connectivity",
+      "matches": 28866,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 99.7167334530883,
+      "comparable_percent": 99.72706857833823
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ml_only",
+      "metric": "metal_oxidation",
+      "matches": 27928,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 96.47644051402514,
+      "comparable_percent": 96.48643979961997
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ml_only",
+      "metric": "full_connectivity",
+      "matches": 28864,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 99.70982451291972,
+      "comparable_percent": 99.72015892209363
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ligand_only",
+      "metric": "ligand_canonical",
+      "matches": 24613,
+      "total": 28948,
+      "comparable": 28946,
+      "fixed_denominator_percent": 85.02487218460688,
+      "comparable_percent": 85.03074690803565
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ligand_only",
+      "metric": "ligand_equiv",
+      "matches": 27705,
+      "total": 28948,
+      "comparable": 28946,
+      "fixed_denominator_percent": 95.70609368522868,
+      "comparable_percent": 95.7127064188489
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ligand_only",
+      "metric": "metal_connectivity",
+      "matches": 27967,
+      "total": 28948,
+      "comparable": 28946,
+      "fixed_denominator_percent": 96.61116484731242,
+      "comparable_percent": 96.61784011607821
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ligand_only",
+      "metric": "metal_oxidation",
+      "matches": 27904,
+      "total": 28948,
+      "comparable": 28946,
+      "fixed_denominator_percent": 96.39353323200221,
+      "comparable_percent": 96.40019346369101
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "ligand_only",
+      "metric": "full_connectivity",
+      "matches": 27965,
+      "total": 28948,
+      "comparable": 28946,
+      "fixed_denominator_percent": 96.60425590714384,
+      "comparable_percent": 96.61093069854212
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "full",
+      "metric": "ligand_canonical",
+      "matches": 24665,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 85.20450462898991,
+      "comparable_percent": 85.21333563655209
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "full",
+      "metric": "ligand_equiv",
+      "matches": 27756,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 95.88227165952743,
+      "comparable_percent": 95.89220936258421
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "full",
+      "metric": "metal_connectivity",
+      "matches": 28866,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 99.7167334530883,
+      "comparable_percent": 99.72706857833823
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "full",
+      "metric": "metal_oxidation",
+      "matches": 27928,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 96.47644051402514,
+      "comparable_percent": 96.48643979961997
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "treatment": "full",
+      "metric": "full_connectivity",
+      "matches": 28864,
+      "total": 28948,
+      "comparable": 28945,
+      "fixed_denominator_percent": 99.70982451291972,
+      "comparable_percent": 99.72015892209363
+    }
+  ],
+  "primary_transitions": [
+    {
+      "treatment": "ml_only",
+      "metric": "ligand_canonical",
+      "fixed": 67,
+      "regressed": 14,
+      "net_gain": 53,
+      "stayed_match": 24598,
+      "stayed_mismatch": 4269
+    },
+    {
+      "treatment": "ml_only",
+      "metric": "ligand_equiv",
+      "fixed": 63,
+      "regressed": 11,
+      "net_gain": 52,
+      "stayed_match": 27693,
+      "stayed_mismatch": 1181
+    },
+    {
+      "treatment": "ml_only",
+      "metric": "metal_connectivity",
+      "fixed": 900,
+      "regressed": 0,
+      "net_gain": 900,
+      "stayed_match": 27966,
+      "stayed_mismatch": 82
+    },
+    {
+      "treatment": "ml_only",
+      "metric": "metal_oxidation",
+      "fixed": 31,
+      "regressed": 6,
+      "net_gain": 25,
+      "stayed_match": 27897,
+      "stayed_mismatch": 1014
+    },
+    {
+      "treatment": "ml_only",
+      "metric": "full_connectivity",
+      "fixed": 900,
+      "regressed": 0,
+      "net_gain": 900,
+      "stayed_match": 27964,
+      "stayed_mismatch": 84
+    },
+    {
+      "treatment": "ligand_only",
+      "metric": "ligand_canonical",
+      "fixed": 1,
+      "regressed": 0,
+      "net_gain": 1,
+      "stayed_match": 24612,
+      "stayed_mismatch": 4335
+    },
+    {
+      "treatment": "ligand_only",
+      "metric": "ligand_equiv",
+      "fixed": 1,
+      "regressed": 0,
+      "net_gain": 1,
+      "stayed_match": 27704,
+      "stayed_mismatch": 1243
+    },
+    {
+      "treatment": "ligand_only",
+      "metric": "metal_connectivity",
+      "fixed": 1,
+      "regressed": 0,
+      "net_gain": 1,
+      "stayed_match": 27966,
+      "stayed_mismatch": 981
+    },
+    {
+      "treatment": "ligand_only",
+      "metric": "metal_oxidation",
+      "fixed": 1,
+      "regressed": 0,
+      "net_gain": 1,
+      "stayed_match": 27903,
+      "stayed_mismatch": 1044
+    },
+    {
+      "treatment": "ligand_only",
+      "metric": "full_connectivity",
+      "fixed": 1,
+      "regressed": 0,
+      "net_gain": 1,
+      "stayed_match": 27964,
+      "stayed_mismatch": 983
+    },
+    {
+      "treatment": "full",
+      "metric": "ligand_canonical",
+      "fixed": 67,
+      "regressed": 14,
+      "net_gain": 53,
+      "stayed_match": 24598,
+      "stayed_mismatch": 4269
+    },
+    {
+      "treatment": "full",
+      "metric": "ligand_equiv",
+      "fixed": 63,
+      "regressed": 11,
+      "net_gain": 52,
+      "stayed_match": 27693,
+      "stayed_mismatch": 1181
+    },
+    {
+      "treatment": "full",
+      "metric": "metal_connectivity",
+      "fixed": 900,
+      "regressed": 0,
+      "net_gain": 900,
+      "stayed_match": 27966,
+      "stayed_mismatch": 82
+    },
+    {
+      "treatment": "full",
+      "metric": "metal_oxidation",
+      "fixed": 31,
+      "regressed": 6,
+      "net_gain": 25,
+      "stayed_match": 27897,
+      "stayed_mismatch": 1014
+    },
+    {
+      "treatment": "full",
+      "metric": "full_connectivity",
+      "fixed": 900,
+      "regressed": 0,
+      "net_gain": 900,
+      "stayed_match": 27964,
+      "stayed_mismatch": 84
+    }
+  ],
+  "primary_factorial_attribution": [
+    {
+      "cohort": "validated_graph_consensus",
+      "metric": "ligand_canonical",
+      "baseline_percent": 85.0214177145226,
+      "ml_edge_effect_pp": 0.18308691446731018,
+      "ligand_edge_effect_pp": 0.0034544700842786824,
+      "full_effect_pp": 0.18308691446731018,
+      "interaction_pp": -0.0034544700842786824,
+      "residual_mismatch_percent": 14.795495371010091
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "metric": "ligand_equiv",
+      "baseline_percent": 95.7026392151444,
+      "ml_edge_effect_pp": 0.1796324443830315,
+      "ligand_edge_effect_pp": 0.0034544700842786824,
+      "full_effect_pp": 0.1796324443830315,
+      "interaction_pp": -0.0034544700842786824,
+      "residual_mismatch_percent": 4.117728340472567
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "metric": "metal_connectivity",
+      "baseline_percent": 96.60771037722813,
+      "ml_edge_effect_pp": 3.109023075860165,
+      "ligand_edge_effect_pp": 0.0034544700842928933,
+      "full_effect_pp": 3.109023075860165,
+      "interaction_pp": -0.0034544700842928933,
+      "residual_mismatch_percent": 0.2832665469117046
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "metric": "metal_oxidation",
+      "baseline_percent": 96.39007876191792,
+      "ml_edge_effect_pp": 0.08636175210722286,
+      "ligand_edge_effect_pp": 0.0034544700842928933,
+      "full_effect_pp": 0.08636175210722286,
+      "interaction_pp": -0.0034544700842928933,
+      "residual_mismatch_percent": 3.5235594859748574
+    },
+    {
+      "cohort": "validated_graph_consensus",
+      "metric": "full_connectivity",
+      "baseline_percent": 96.60080143705956,
+      "ml_edge_effect_pp": 3.109023075860165,
+      "ligand_edge_effect_pp": 0.0034544700842786824,
+      "full_effect_pp": 3.109023075860165,
+      "interaction_pp": -0.0034544700842786824,
+      "residual_mismatch_percent": 0.2901754870802762
+    }
+  ],
+  "full_treatment_residual_patterns": [
+    {
+      "pattern": "ligand_equiv=1|metal_connectivity=1|metal_oxidation=1|full_connectivity=1",
+      "count": 27673
+    },
+    {
+      "pattern": "ligand_equiv=0|metal_connectivity=1|metal_oxidation=0|full_connectivity=1",
+      "count": 1007
+    },
+    {
+      "pattern": "ligand_equiv=0|metal_connectivity=1|metal_oxidation=1|full_connectivity=1",
+      "count": 176
+    },
+    {
+      "pattern": "ligand_equiv=1|metal_connectivity=0|metal_oxidation=1|full_connectivity=0",
+      "count": 74
+    },
+    {
+      "pattern": "ligand_equiv=1|metal_connectivity=1|metal_oxidation=0|full_connectivity=1",
+      "count": 8
+    },
+    {
+      "pattern": "ligand_equiv=0|metal_connectivity=0|metal_oxidation=0|full_connectivity=0",
+      "count": 4
+    },
+    {
+      "pattern": "ligand_equiv=0|metal_connectivity=0|metal_oxidation=1|full_connectivity=0",
+      "count": 4
+    },
+    {
+      "pattern": "ligand_equiv=0|metal_connectivity=1|metal_oxidation=0|full_connectivity=0",
+      "count": 1
+    },
+    {
+      "pattern": "ligand_equiv=1|metal_connectivity=1|metal_oxidation=1|full_connectivity=0",
+      "count": 1
+    }
+  ],
+  "full_treatment_residual_connectivity_classes": {
+    "fewer_output_metal_contacts": 82,
+    "same_shell_graph_difference": 2
+  }
+}

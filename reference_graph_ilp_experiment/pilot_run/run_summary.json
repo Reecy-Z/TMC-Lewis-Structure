@@ -1,0 +1,21 @@
+{
+  "reference_rows": 5,
+  "validated_reference_rows": 5,
+  "edge_change_counts": {
+    "ml_only": 0,
+    "ligand_only": 0,
+    "full": 0
+  },
+  "structures_rerun": 0,
+  "treatment_status_counts": {
+    "ml_only": {
+      "ok": 5
+    },
+    "ligand_only": {
+      "ok": 5
+    },
+    "full": {
+      "ok": 5
+    }
+  }
+}

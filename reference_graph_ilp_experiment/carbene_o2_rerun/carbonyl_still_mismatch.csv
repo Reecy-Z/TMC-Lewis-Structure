@@ -1,0 +1,152 @@
+IDs,ox_ilp,ox_reference,ilp_ligands,reference_ligands
+ACPIRE,3,1,C[C-2]Nc1ccccc1 || C[C-]=O || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C-]=O || C[C]Nc1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+AFOYAV,2,0,CN(C)C(C=Cc1ccccc1)=N[C-2]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)C(C=Cc1ccccc1)=N[C]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+ALANRE,3,1,C[C-2]NC(C)C(=O)OCC || C[C-]=O || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C-]=O || C[C]NC(C)C(=O)OCC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+AYOPAF,4,2,C1=C[N-]C(=C2C=CC=C[N-]2)C=C1 || [C-]#[O+] || [Cl-] || c1ccc(Nc2ccccn2)nc1,[C-]#[O+] || [Cl-] || c1ccc(-c2ccccn2)nc1 || c1ccc(Nc2ccccn2)nc1
+AYUNIT,3,1,CNC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1cc2cc[n-]c3c4[n-]ccc5cccc(c(c1)c23)c54,CNC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1cc2ccnc3c4nccc5cccc(c(c1)c23)c54
+BUZYEB,4,2,C1=C[N-]c2c3c(ccc2=C1)=CC=C[N-]3 || [C-]#[O+] || [Cl-] || c1ccc(P(CCCCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1,[C-]#[O+] || [Cl-] || c1ccc(P(CCCCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1 || c1cnc2c(c1)ccc1cccnc12
+CAHHOI,2,0,[C-]#[O+] || [C-]#[O+] || [C-](=P(c1ccccc1)(c1ccccc1)c1ccccc1)[P-](c1ccccc1)(c1ccccc1)c1ccccc1,C(=P(c1ccccc1)(c1ccccc1)c1ccccc1)=P(c1ccccc1)(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+]
+CHVICR,2,0,C=C([C-2]NC1CCCCC1)OC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C=C([C]NC1CCCCC1)OC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+CIJWUN,2,0,COC1(C)C([N-]C2CCCCC2)=C([N-]C2CCCCC2)C1(C)OC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COC1(C)C(=NC2CCCCC2)C(=NC2CCCCC2)C1(C)OC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+CZBACR,2,0,CCN([C-2]C(C)C(=NC)c1ccccc1)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCN([C]C(C)C(=NC)c1ccccc1)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+DAWXEE,2,0,CCO[C-2]N=C(C(C)(C)C)C(C)(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCO[C]N=C(C(C)(C)C)C(C)(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+EGEYAQ,2,0,CCCC=C(C=Cc1ccccc1)N([C-2]OCC)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCCC=C(C=Cc1ccccc1)N([C]OCC)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+EHOCAG,3,1,CCCCc1c2[n-]c(c1C)C=Cc1[n-]c(c(CCCC)c1C)C=c1[n-]c(c(CC)c1CC)=C2 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCCCC1=C(C)c2ccc3[n-]c(cc4nc(cc1n2)C(CC)=C4CC)c(CCCC)c3C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+EHUSOP,2,0,CCC1(CC)C=C(C(=O)OC)[N-][N-]1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCC1(CC)C=C(C(=O)OC)N=N1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+EHUSUV,2,0,COC(=O)C1=CC(C)(C)[N-][N-]1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COC(=O)C1=CC(C)(C)N=N1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+EMACCR,2,0,CCO[C-2]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCO[C]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+ESODEW,2,0,N[C-2][Si](c1ccccc1)(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],N[C][Si](c1ccccc1)(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+EYORIV,2,0,[C-2](NC1CCCCC1)c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](NC1CCCCC1)c1ccco1
+EYORUH,2,0,N[C-2]c1cccs1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],N[C]c1cccs1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+EYOSAO,2,0,N[C-2]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],N[C]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FAWFIT,3,1,C1=C[N-]C2=C3[N-]C=CC=C3C3OC3C2=C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-] || c1cnc2c(c1)C1OC1c1cccnc1-2
+FIHNEP,2,0,CCOC([C-2]N)=CP(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCOC([C]N)=CP(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FINTEC,2,0,CN(C)[C-2]CP(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)[C]CP(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FINTIG,2,0,CN(C)[C-2]CP(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)[C]CP(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FINVAA,2,0,CSC([C-2]N(C)C)SC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CSC([C]N(C)C)SC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FINVII,2,0,CSC([C-2]N(C)C)SC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CSC([C]N(C)C)SC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FINVOO,2,0,CSC[C-2]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CSC[C]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FINVUU,2,0,CSC[C-2]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CSC[C]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FIRFAO,2,0,CN(C)[C-2]C=C(c1ccccc1)N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)[C]C=C(c1ccccc1)N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+FIRFES,2,0,CN(C)[C-2]C=C(c1ccccc1)N(C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)[C]C=C(c1ccccc1)N(C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+GABYUD,2,0,COC(=N[C-2]C(C)(C)C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COC(=N[C]C(C)(C)C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+GIGGOV,2,2,O=C(C=C1C=CC=C[N-]1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-](=Cc1ccccn1)c1ccccc1,[C-]#[O+] || [C-]#[O+] || [C-](=Cc1ccccn1)c1ccccc1 || [O-]C(=Cc1ccccn1)c1ccccc1
+GIWNEH,2,0,N[C-2]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],N[C]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+GIWPAF,2,0,Cn1cccc1[C-2]N || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],Cn1cccc1[C]N || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+GOCFOU,4,0,CO[C-2]N1CCOCC1 || [C-2](c1ccccc1)N1CCCC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CO[C]N1CCOCC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](c1ccccc1)N1CCCC1
+GOGGEO,1,-1,CC1=C[CH-]C(P(c2ccc(C)cc2)c2ccc(C)cc2)=C[CH-]1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],Cc1ccc(P(c2ccc(C)cc2)c2ccc(C)cc2)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+GUJCOD,0,2,N#CC(=S)C(=S)C#N || [C-]#[O+] || [C-]#[O+] || c1ccc(-c2cccc(-c3ccccn3)n2)nc1,N#CC([S-])=C([S-])C#N || [C-]#[O+] || [C-]#[O+] || c1ccc(-c2cccc(-c3ccccn3)n2)nc1
+GUNGUT,4,2,NC1=C[N-]C(=C[N-]c2ccccc2)C=C1 || O=C1NC(=O)c2c1c1cc(F)cnc1c1[n-]c3ccc(O)cc3c21 || [C-]#[O+] || [Cl-],Nc1ccc(C=Nc2ccccc2)nc1 || O=C1NC(=O)c2c1c1cc(F)cnc1c1[n-]c3ccc(O)cc3c21 || [C-]#[O+] || [Cl-]
+HACDOE,2,0,CCN([C-2]OC(=O)N(CC)CC)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCN([C]OC(=O)N(CC)CC)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+HAJHOP,3,1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [O-]C(=C([C-2]c1ccccc1)c1ccccc1)c1ccccc1,O=C(C(=[C-]c1ccccc1)c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+HALNAK,2,0,CN(C)[C-2]C=C(Sc1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)[C]C=C(Sc1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+HIGDOR,2,0,C[C-2]N1CCCC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(CCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1,C[C]N1CCCC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(CCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1
+HISLUT,2,0,CC(C)P(C1=C2Oc3c(P(C(C)C)C(C)C)cccc3C(C)(C)C2=C[CH-][CH-]1)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)P(c1cccc2c1Oc1c(P(C(C)C)C(C)C)cccc1C2(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+HODGAI,2,0,CC1(C)OCC(C(O)C2OC(C)(C)OC2[C-2]N)O1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC1(C)OCC(C(O)C2OC(C)(C)OC2[C]N)O1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+IQITOT,2,0,C1=C[CH-][CH-]C(P(c2ccccc2)c2ccccc2)=C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+IQUFEH,3,1,CC(=O)NCC1=CC(=C2C=C(CNC(C)=O)C=C[N-]2)[N-]C=C1 || [Br-] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(=O)NCc1ccnc(-c2cc(CNC(C)=O)ccn2)c1 || [Br-] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JAJYOI,2,0,COc1ccccc1[C-2]NCc1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COc1ccccc1[C]NCc1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JAWMOJ,4,2,CC([N-]c1ccc(C)cc1)=C(C)[N-]c1ccc(C)cc1 || [C-]#[O+] || [C-]#[O+] || [I-] || [I-],CC(=Nc1ccc(C)cc1)C(C)=Nc1ccc(C)cc1 || [C-]#[O+] || [C-]#[O+] || [I-] || [I-]
+JAXPAZ,1,1,Cc1ccc(NCN(C([C-]=[NH+]c2ccc(C)cc2)=Cc2ccc(Cl)cc2)c2ccc(C)cc2)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],Cc1ccc(N[C]C(=Cc2ccc(Cl)cc2)N([C]Nc2ccc(C)cc2)c2ccc(C)cc2)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JELFOW,2,0,CC[C-2]N=C(OC)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC[C]N=C(OC)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JELGAJ,2,0,COC(=N[C-2]c1ccc(C)cc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COC(=N[C]c1ccc(C)cc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JELGEN,2,0,C[C-2]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1,C[C]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+JELGIR,2,0,C[C-2]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1,C[C]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+JIXVUH,3,1,CC(C)(C)C1=CC(=C2C=C(C(C)(C)C)C=C[N-]2)[N-]C=C1 || [C-]#CC#Cc1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)(C)c1ccnc(-c2cc(C(C)(C)C)ccn2)c1 || [C-]#CC#Cc1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JUHTUB,2,0,Nc1ccccc1N[C-2]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],Nc1ccccc1N[C]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JUSWUP,2,0,CC=C[C-2]NC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC=C[C]NC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+JUSXEA,2,0,CC=C[C-2]N(C)C(=O)c1ccc(C(C)(C)C)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC=C[C]N(C)C(=O)c1ccc(C(C)(C)C)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+KAFMIO,2,0,C[C-2]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+KAFMUZ,2,0,C[C-2]N1CC=CC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C]N1CC=CC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+KAHNOZ,1,1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1c[n-]c(C(c2ccc[n-]2)=[N+]2CCOCCOCCOCCOCC2)c1 || c1ccncc1,C1=CC(=C(c2ccc[n-]2)N2CCOCCOCCOCCOCC2)N=C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccncc1
+KAJBIJ,1,1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(C[NH+]=C(c2ccc[n-]2)c2ccc[n-]2)cc1 || c1ccncc1,C1=CC(=C(NCc2ccccc2)c2ccc[n-]2)N=C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccncc1
+KAKWAU,2,0,[C-2](N=Cc1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](N=Cc1ccccc1)c1ccccc1
+KAPLAO,1,-1,CP(C)C1=C[CH-]C=C[CH-]1 || CP(C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CP(C)c1ccccc1 || CP(C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+KAXCUH,2,0,CC(C)(C)[C-2]N=C(OC(=O)c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)(C)[C]N=C(OC(=O)c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+KIDMAL,2,0,CC(Nc1ccccc1)=C(C)N([C-2]c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(Nc1ccccc1)=C(C)N([C]c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+KIZTAO,2,0,COC(=CCC[C-2]N(C)C)[Si](C)(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COC(=CCC[C]N(C)C)[Si](C)(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+LASKIZ,2,0,CN(C)c1ccc(C(=C[C-2]N=C(c2ccccc2)c2ccccc2)c2ccc(N(C)C)cc2)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)c1ccc(C(=C[C]N=C(c2ccccc2)c2ccccc2)c2ccc(N(C)C)cc2)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+LASKOF,2,0,CNN(C)[C-2]C=C(c1ccc(N(C)C)cc1)c1ccc(N(C)C)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CNN(C)[C]C=C(c1ccc(N(C)C)cc1)c1ccc(N(C)C)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+LILMUO,2,0,CCOC(=O)[C-2]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCOC(=O)[C]N=C(c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+LUNDON,2,0,CN(C)[C-2]C(=O)Cl || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)[C]C(=O)Cl || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+MALBUZ,4,2,C1=C[N-]C(=C2C=CC=C[N-]2)C=C1 || [Br-] || [Br-] || [C-]#[O+] || [C-]#[O+],[Br-] || [Br-] || [C-]#[O+] || [C-]#[O+] || c1ccc(-c2ccccn2)nc1
+MERJID,2,0,CCOC(=O)C1=C(c2ccccc2)N2CCOC23C([C-2]N2CCCC2)=C(c2ccccc2)C3(C)C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCOC(=O)C1=C(c2ccccc2)N2CCOC23C([C]N2CCCC2)=C(c2ccccc2)C3(C)C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+NADYAS,2,0,C=CC([C-2]N(CC)CC)=Cc1ccc(C)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C=CC([C]N(CC)CC)=Cc1ccc(C)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+NALVUR,1,-1,C1=C[CH-]C(P(c2ccccc2)c2ccccc2)=C[CH-]1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+NAMSIG,4,2,C1=C[N-]C(=C2C=CC=C[N-]2)C=C1 || CP(C)c1ccccc1 || CP(C)c1ccccc1 || O=C([O-])C(F)(F)F || [C-]#[O+],CP(C)c1ccccc1 || CP(C)c1ccccc1 || O=C([O-])C(F)(F)F || [C-]#[O+] || c1ccc(-c2ccccn2)nc1
+NASPAY,2,0,C[C-2]NP(N(C(C)C)C(C)C)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C]NP(N(C(C)C)C(C)C)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+NASPEC,2,0,C[C-2]NP(N(C(C)C)C(C)C)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C]NP(N(C(C)C)C(C)C)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+NASPIG,2,0,CC(C)N(C(C)C)P(N[C-2]c1ccccc1)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)N(C(C)C)P(N[C]c1ccccc1)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+NEDKOZ,0,0,Cc1c(C)[n+](C)c([Si-](Cl)Cl)n1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC1=C(C)N(C)C(=[Si](Cl)Cl)N1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+NEDKUF,0,0,Cc1c(C)[n+](C)c([SiH-])n1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC1=C(C)N(C)C(=[SiH2])N1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+NILKUO,2,0,[C-2](Nc1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](Nc1ccccc1)c1ccccc1
+NUCKEB,2,0,O=S(C1=C([C-2]N2CCCC2)OCC1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],O=S(C1=C([C]N2CCCC2)OCC1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+OFUQUB,2,0,C[N-]C1=C([N-]C)C(N(C)C)=C(N(C)C)C1=O || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN=c1c(N(C)C)c(N(C)C)c(=O)c1=NC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+OVAXAL,2,0,CCN([C-2]C(F)(F)F)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCN([C]C(F)(F)F)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+PAYCUN,3,1,C1=C[N-]C(=C2[N-]c3ccccc3N=C2c2ccccn2)C=C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-] || c1ccc(-c2nc3ccccc3nc2-c2ccccn2)nc1
+PHPCMN,1,-1,C1=C[CH-]C(P(c2ccccc2)c2ccccc2)=C[CH-]1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+PIVMEO,3,1,[C-]#[O+] || [C-]#[O+] || c1ccc(-c2cc(-c3ccccc3)c([N-]c3[n-]c(-c4ccccc4)cc3-c3ccccc3)[n-]2)cc1,C1=C(c2ccccc2)C(=Nc2[n-]c(-c3ccccc3)cc2-c2ccccc2)N=C1c1ccccc1 || [C-]#[O+] || [C-]#[O+]
+PIVMOY,3,1,COc1ccc(-c2cc(-c3ccccc3)c([N-]c3[n-]c(-c4ccc(OC)cc4)cc3-c3ccccc3)[n-]2)cc1 || [C-]#[O+] || [C-]#[O+],COc1ccc(C2=NC(=Nc3[n-]c(-c4ccc(OC)cc4)cc3-c3ccccc3)C(c3ccccc3)=C2)cc1 || [C-]#[O+] || [C-]#[O+]
+QABFOP,2,0,CC=C([C-2]N(C)C)C(C)=O || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC=C([C]N(C)C)C(C)=O || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+QEHQEZ,2,0,OCCN[C-2]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],OCCN[C]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+QEHQID,2,0,CC(=O)OCCN[C-2]C=C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(=O)OCCN[C]C=C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+QEHQOJ,2,0,CC=C[C-2]NCCO || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC=C[C]NCCO || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+QERLEE,2,0,CCOC(C)=C([C-2]N1CCOCC1)C(=CC(=O)OC)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCOC(C)=C([C]N1CCOCC1)C(=CC(=O)OC)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+QESYUI,2,0,Cc1ccc([C-2]N)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1,Cc1ccc([C]N)cc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+QESZET,2,0,C[C-2]N(Cc1ccccc1)N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C]N(Cc1ccccc1)N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+QUWPEE,2,0,CN[C-2]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN[C]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+RIRJUX,2,0,N[C-2]c1ccc2cc1CCc1cccc(c1)CC2 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],N[C]c1ccc2cc1CCc1cccc(c1)CC2 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+RIRKAE,2,0,C=CCN[C-2]c1ccc2cc1CCc1cccc(c1)CC2 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C=CCN[C]c1ccc2cc1CCc1cccc(c1)CC2 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+RUQVAA,2,0,[C-2](C1=C(c2ccccc2)P(c2ccccc2)C(c2ccccc2)C1c1ccccc1)N1CCCC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](C1=C(c2ccccc2)P(c2ccccc2)C(c2ccccc2)C1c1ccccc1)N1CCCC1
+SABGAE,3,1,C1=C[N-]C(=C2C=CC=C[N-]2)C=C1 || O=C(c1ccccc1)c1ccncc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],O=C(c1ccccc1)c1ccncc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(-c2ccccn2)nc1
+SIFCAN,1,1,CN1C(=[C-]c2n(C3CCCCC3)c3ccccc3[n+]2C)N(C2CCCCC2)c2ccccc21 || [C-]#[O+] || [C-]#[O+] || [Cl-],CN1C(=C=C2N(C)c3ccccc3N2C2CCCCC2)N(C2CCCCC2)c2ccccc21 || [C-]#[O+] || [C-]#[O+] || [Cl-]
+SIFCER,1,1,CC(C)N1C(=[C-]c2n(C)c3ccccc3[n+]2C(C)C)N(C)c2ccccc21 || [C-]#[O+] || [C-]#[O+] || [Cl-],CC(C)N1C(=C=C2N(C)c3ccccc3N2C(C)C)N(C)c2ccccc21 || [C-]#[O+] || [C-]#[O+] || [Cl-]
+SIMXIX,2,0,[C-2](NC1CCCCC1)c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](NC1CCCCC1)c1ccco1
+SIMXOD,2,0,NCCN[C-2]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],NCCN[C]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+SIMXUJ,2,0,NCCN[C-2]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],NCCN[C]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+SIRSAN,2,0,CC(=O)OC(c1ccccc1)N(C)[C-2]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(=O)OC(c1ccccc1)N(C)[C]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+SOXCUF,3,1,CC1=CC(=C2C=C(C)C=C[N-]2)[N-]C=C1 || COC(=O)C(Cc1ccccc1)NC(=O)c1n[n-]nc1C(F)(F)F || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COC(=O)C(Cc1ccccc1)NC(=O)c1n[n-]nc1C(F)(F)F || Cc1ccnc(-c2cc(C)ccn2)c1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+SUGMUE,2,0,[C-2](NC1CCCCC1)c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](NC1CCCCC1)c1ccco1
+SUGNAL,2,0,[C-2](NC1CCCCC1)c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](NC1CCCCC1)c1ccco1 || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+SUGNEP,2,0,N[C-2]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],N[C]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+SUGNIT,2,0,N[C-2]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1,N[C]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+SUGNOZ,2,0,N[C-2]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(CCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1,N[C]c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(CCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1
+SURFEQ,3,1,CCCCCCCN=c1c2ccc[n-]c-2c2[n-]cccc1-2 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-],CCCCCCCN=C1c2cccnc2-c2ncccc21 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-]
+TANJUO,3,1,CC(C)N([C-2][Si](c1ccccc1)(c1ccccc1)C(C)(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [Cl-],CC(C)N([C][Si](c1ccccc1)(c1ccccc1)C(C)(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [Cl-]
+TEXMAK,2,0,COCC1(C)CCCC2(C)c3cc(OC)c([C-2]N4CCOCC4)cc3CCC12 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],COCC1(C)CCCC2(C)c3cc(OC)c([C]N4CCOCC4)cc3CCC12 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+TEYCAB,2,0,C=C1CCCC2(C)c3cc(OC)c([C-2]N)cc3CCC12 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C=C1CCCC2(C)c3cc(OC)c([C]N)cc3CCC12 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+TILBUO,1,1,CC(C)P(c1ccccc1[Si-]c1ccccc1P(C(C)C)C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+],CC(C)P(c1ccccc1[SiH-]c1ccccc1P(C(C)C)C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+]
+TIWLET,1,1,O=C1c2c(c3c4ccccc4nc3c3[n-]cccc23)C(=O)N1Cc1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccncc1,O=C1c2c(c3c4ccccc4[n-]c3c3ncccc23)C(=O)N1Cc1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccncc1
+TOJYAV,1,1,CC(=O)c1ccc[n-]1 || CNC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC([O-])=C1C=CC=N1 || CNC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+TUHRAQ,1,1,CN1C([B-](C2=NC(C)(C)CO2)(C2=NC(C)(C)CO2)c2ccccc2)=[O+]CC1(C)C || [C-]#[O+] || [C-]#[O+],C[N+]1=C([B-](C2=NC(C)(C)CO2)(C2=NC(C)(C)CO2)c2ccccc2)OCC1(C)C || [C-]#[O+] || [C-]#[O+]
+TUXKUT,3,1,[Br-] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1cnc2c(c1)[N-]C1=C([N-]2)c2cccc3cccc1c23,[Br-] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1cc2c3c(cccc3c1)-c1nc3ncccc3nc1-2
+UDOBOG,2,0,CC(C)P(C(C)C)C(C)C || [C-2]=C=C(OC)N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)P(C(C)C)C(C)C || [C-]#CC(OC)=[N+](C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+UDOCAT,2,0,CC(C)P(C(C)C)C(C)C || [C-2]=C=C(OC)N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)P(C(C)C)C(C)C || [C-]#CC(OC)=[N+](C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+UDODAU,2,0,CP(C)C || [C-2]=C=C(N(C)C)N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CP(C)C || [C-]#CC(N(C)C)=[N+](C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+UNAMIF,2,0,CCN([C-2]C(C)=C1OC(C2COC(C)(C)O2)C2OC(C)(C)OC12)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCN([C]C(C)=C1OC(C2COC(C)(C)O2)C2OC(C)(C)OC12)CC || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+UNANAY,2,0,CC([C-2]N(Cc1ccccc1)N(C)C)C1CCCC(=O)C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC([C]N(Cc1ccccc1)N(C)C)C1CCCC(=O)C1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+UNANEC,2,0,CC([C-2]N(Cc1ccccc1)N(C)C)C(CC(=O)c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC([C]N(Cc1ccccc1)N(C)C)C(CC(=O)c1ccccc1)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+VAKXOU,0,0,CC(C)(C)p1[n-][s+]ns[nH]1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)(C)P1N=S=NSN1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+VENZOF,1,1,O=Cc1ccc[n-]1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccncc1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [O-]C=C1C=CC=N1 || c1ccncc1
+VESMUB,3,1,CP(C)C || CP(C)C || Cc1ccc([C-2]N([O-])C(C)(C)C)cc1 || [C-]#[O+] || [C-]#[O+],CP(C)C || CP(C)C || Cc1ccc([C]N([O-])C(C)(C)C)cc1 || [C-]#[O+] || [C-]#[O+]
+VIHHUS,1,1,CCN(c1cccc(=[N+](CC)P(C(C)C)C(C)C)[cH-]1)P(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CCN(c1cccc(N(CC)P(C(C)C)C(C)C)c1)P(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+WEDXIM,2,0,F[C-2]N1CCC(c2ccccc2)CC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],F[C]N1CCC(c2ccccc2)CC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+WEHFEW,2,0,CSC(=Nc1ccccc1)C(C)[C-2]N1CCCC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CSC(=Nc1ccccc1)C(C)[C]N1CCCC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+WENPIR,1,1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1 || c1ccc([Si-]c2ccccc2)cc1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1 || c1ccc([SiH-]c2ccccc2)cc1
+WIHTAI,0,0,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [CH2-]c1n(C)c(C)c(C)[n+]1C,C=C1N(C)C(C)=C(C)N1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+XEFQOP,4,2,C1=C[N-]c2c3c(ccc2=C1)=CC=C[N-]3 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-],[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-] || c1cnc2c(c1)ccc1cccnc12
+XETQEU,6,0,C[B-2]1N(C)[B-2](C)N(C)[B-2](C)N1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CB1N(C)B(C)N(C)B(C)N1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+XUHTIF,2,0,[C-2](NC1CCCCC1)c1ccco1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || c1ccc(P(c2ccccc2)c2ccccc2)cc1,[C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C](NC1CCCCC1)c1ccco1 || c1ccc(P(c2ccccc2)c2ccccc2)cc1
+XUTLEE,2,0,N[C-2]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],N[C]c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+YASPAM,4,2,C1=C[N-]C(=C2C=CC=C[N-]2)C=C1 || [C-]#[O+] || [Cl-] || c1ccc(P(CCCCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1,[C-]#[O+] || [Cl-] || c1ccc(-c2ccccn2)nc1 || c1ccc(P(CCCCP(c2ccccc2)c2ccccc2)c2ccccc2)cc1
+YIYCEP,2,0,Cc1c([C-2]N(C)C)cccc1C(=O)OC(C)c1cccc2ccccc12 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],Cc1c([C]N(C)C)cccc1C(=O)OC(C)c1cccc2ccccc12 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+YIYCIT,2,0,Cc1ccc(C(=O)OC(C)c2cccc3ccccc23)cc1[C-2]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],Cc1ccc(C(=O)OC(C)c2cccc3ccccc23)cc1[C]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+YIYCOZ,2,0,CC(C)c1ccc(C(=O)OC(C)c2cccc3ccccc23)cc1[C-2]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)c1ccc(C(=O)OC(C)c2cccc3ccccc23)cc1[C]N(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+YOJMEP,4,2,CC(C)[N-]C=C[N-]C(C)C || [C-]#[O+] || [C-]#[O+] || [I-] || [I-],CC(C)N=CC=NC(C)C || [C-]#[O+] || [C-]#[O+] || [I-] || [I-]
+YOQJAR,2,0,CN(C)[C-2]c1cccn1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)[C]c1cccn1C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+YUCKOW,2,0,O=c1n(-c2ccccc2)c([N-]c2ccccc2)c([N-]c2ccccc2)n1-c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],O=C1N(c2ccccc2)C(=Nc2ccccc2)C(=Nc2ccccc2)N1c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+YUJPOI,0,0,CC(C)N(C(C)C)P([N-][S+]=NC(C)(C)C)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CC(C)N(C(C)C)P(N=S=NC(C)(C)C)N(C(C)C)C(C)C || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+ZANHIF,2,0,C[C-2]N1CCSC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],C[C]N1CCSC1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+ZIKCOL,2,0,CN(C)C(=C[C-2]N)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+],CN(C)C(=C[C]N)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [C-]#[O+]
+ZIRVED,3,1,Cn1c[n+](C)c2c3c(c4c(c21)=CC=C[N-]4)[N-]C=CC=3 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-],Cn1c[n+](C)c2c3cccnc3c3ncccc3c21 || [C-]#[O+] || [C-]#[O+] || [C-]#[O+] || [Cl-]
+ZONTAX,4,2,CC(C)(C)N[C-2]c1ccccc1 || CP(C)c1ccccc1 || CP(C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [CH2-]C(=O)OCC,CC(C)(C)N[C]c1ccccc1 || CP(C)c1ccccc1 || CP(C)c1ccccc1 || [C-]#[O+] || [C-]#[O+] || [CH2-]C(=O)OCC

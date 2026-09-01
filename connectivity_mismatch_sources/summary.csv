@@ -1,0 +1,7 @@
+pair,denominator,full_match,metal_only,ligand_only_or_same-element-metal_ambiguity,ligand_and_metal
+ILP / CSD,53078,47906,4714,116,342
+ILP / NBO(DFT),46108,41280,4609,83,136
+ILP / Hückel(DFT),59391,51945,6353,485,608
+CSD / NBO(DFT),41392,38219,2799,146,228
+CSD / Hückel(DFT),53091,47619,4399,546,527
+NBO(DFT) / Hückel(DFT),46100,40864,4573,334,329

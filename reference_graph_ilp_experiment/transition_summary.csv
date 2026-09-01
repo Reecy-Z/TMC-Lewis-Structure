@@ -1,0 +1,16 @@
+treatment,metric,fixed,regressed,net_gain,stayed_match,stayed_mismatch
+ml_only,ligand_canonical,67,14,53,24598,4269
+ml_only,ligand_equiv,63,11,52,27693,1181
+ml_only,metal_connectivity,900,0,900,27966,82
+ml_only,metal_oxidation,31,6,25,27897,1014
+ml_only,full_connectivity,900,0,900,27964,84
+ligand_only,ligand_canonical,1,0,1,24612,4335
+ligand_only,ligand_equiv,1,0,1,27704,1243
+ligand_only,metal_connectivity,1,0,1,27966,981
+ligand_only,metal_oxidation,1,0,1,27903,1044
+ligand_only,full_connectivity,1,0,1,27964,983
+full,ligand_canonical,67,14,53,24598,4269
+full,ligand_equiv,63,11,52,27693,1181
+full,metal_connectivity,900,0,900,27966,82
+full,metal_oxidation,31,6,25,27897,1014
+full,full_connectivity,900,0,900,27964,84

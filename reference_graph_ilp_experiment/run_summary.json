@@ -1,0 +1,26 @@
+{
+  "reference_rows": 29110,
+  "validated_reference_rows": 28981,
+  "edge_change_counts": {
+    "ml_only": 919,
+    "ligand_only": 0,
+    "full": 919
+  },
+  "structures_rerun": 920,
+  "treatment_status_counts": {
+    "ml_only": {
+      "ok": 28980,
+      "reference_graph_unavailable": 129,
+      "ilp_failed": 1
+    },
+    "ligand_only": {
+      "ok": 28981,
+      "reference_graph_unavailable": 129
+    },
+    "full": {
+      "ok": 28980,
+      "reference_graph_unavailable": 129,
+      "ilp_failed": 1
+    }
+  }
+}

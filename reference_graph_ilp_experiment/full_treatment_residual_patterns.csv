@@ -1,0 +1,10 @@
+pattern,count
+ligand_equiv=1|metal_connectivity=1|metal_oxidation=1|full_connectivity=1,27673
+ligand_equiv=0|metal_connectivity=1|metal_oxidation=0|full_connectivity=1,1007
+ligand_equiv=0|metal_connectivity=1|metal_oxidation=1|full_connectivity=1,176
+ligand_equiv=1|metal_connectivity=0|metal_oxidation=1|full_connectivity=0,74
+ligand_equiv=1|metal_connectivity=1|metal_oxidation=0|full_connectivity=1,8
+ligand_equiv=0|metal_connectivity=0|metal_oxidation=0|full_connectivity=0,4
+ligand_equiv=0|metal_connectivity=0|metal_oxidation=1|full_connectivity=0,4
+ligand_equiv=0|metal_connectivity=1|metal_oxidation=0|full_connectivity=0,1
+ligand_equiv=1|metal_connectivity=1|metal_oxidation=1|full_connectivity=0,1

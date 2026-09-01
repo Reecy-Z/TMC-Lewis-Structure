@@ -1,0 +1,70 @@
+{
+  "old_ligand_mismatches": 572,
+  "jobs_solved": 572,
+  "skipped_unavailable_graph": 0,
+  "ilp_status_counts": {
+    "ok": 571,
+    "ilp_failed": 1
+  },
+  "ligand_equiv_fixed": 193,
+  "ligand_equiv_remain": 379,
+  "ligand_equiv_fixed_percent": 33.74125874125874,
+  "oxidation_now_match": 371,
+  "oxidation_still_mismatch": 201,
+  "fixed_by_motif": {
+    "carbonyl_like": {
+      "fixed": 66,
+      "remain": 69
+    },
+    "heterocyclic_carbene_like": {
+      "fixed": 28,
+      "remain": 39
+    },
+    "haptic_or_adjacent_multi_C": {
+      "fixed": 24,
+      "remain": 80
+    },
+    "N_O_only_coordination": {
+      "fixed": 23,
+      "remain": 79
+    },
+    "other_C_bound_ligand": {
+      "fixed": 20,
+      "remain": 35
+    },
+    "halide_containing_no_M_C": {
+      "fixed": 13,
+      "remain": 10
+    },
+    "P_donor_no_M_C": {
+      "fixed": 12,
+      "remain": 27
+    },
+    "S_Se_donor_no_M_C": {
+      "fixed": 4,
+      "remain": 33
+    },
+    "C_N_donor_cyanide_or_isocyanide": {
+      "fixed": 3,
+      "remain": 7
+    }
+  },
+  "fixed_by_mechanism": {
+    "coupled_ligand_charge_and_oxidation": {
+      "fixed": 177,
+      "remain": 257
+    },
+    "feature_extraction_failure": {
+      "fixed": 0,
+      "remain": 2
+    },
+    "metal_disconnection_or_ligand_partition": {
+      "fixed": 7,
+      "remain": 111
+    },
+    "unresolved_positional_or_equivalence": {
+      "fixed": 9,
+      "remain": 9
+    }
+  }
+}
