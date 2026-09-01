@@ -1140,7 +1140,7 @@ def _cbc_record_for_h_neighbor(
 
 
 # Post-ILP carbene labels for CBC notes: 0-based (metal_idx, c_idx)
-# -> "NHC"|"MIC"|"CAAC"|"OXA"|"ADC"|"PYZ".
+# -> "NHC"|"MIC"|"CAAC"|"OXA"|"IMD"|"ADC"|"PYZ".
 LAST_HETERO_CYCLIC_CARBENE_LABELS: dict[tuple[int, int], str] = {}
 
 # η² covalent→π upgrade (apply_eta_covalent_pi_corrections): 0-based (metal, lig) pairs
@@ -1369,6 +1369,67 @@ def _classify_adc_carbene(c_idx, atom_el, bo, connectivity_edges):
     return "ADC"
 
 
+def _imidazolidin_2_ylidene_ring(c_idx, atom_el, bo, connectivity_edges):
+    """
+    Saturated 5-ring with two N and three C, all Lewis singles.
+
+    Covers imidazolidin-2-ylidene (carbene C between two N) and the
+    C4/C5 connectivity seen when the carbene sits between N and CH2.
+    Returns the ring atom set, or None.
+    """
+    nm = _nonmetal_lewis_neighbors(c_idx, atom_el, bo)
+    if len(nm) != 2 or not all(order == 1 for _p, order, _s in nm):
+        return None
+    if not (
+        _is_nhc_carbene_connectivity(c_idx, atom_el, bo)
+        or _is_caac_carbene_connectivity(c_idx, atom_el, bo)
+    ):
+        return None
+    nbrs = {p for p, _o, _s in nm}
+    for ring in _minimal_ligand_rings_containing(c_idx, atom_el, connectivity_edges):
+        ring_set = set(ring)
+        if len(ring_set) != 5:
+            continue
+        if c_idx not in ring_set or not nbrs <= ring_set:
+            continue
+        if sum(1 for a in ring_set if atom_el.get(a) == "C") != 3:
+            continue
+        if sum(1 for a in ring_set if atom_el.get(a) == "N") != 2:
+            continue
+        n_in_ring = [a for a in ring_set if atom_el.get(a) == "N"]
+        if _lewis_bond_order(bo, n_in_ring[0], n_in_ring[1]) > 0:
+            continue
+        other_c = [a for a in ring_set if atom_el.get(a) == "C" and a != c_idx]
+        if len(other_c) != 2:
+            continue
+        if not all(_is_sp3_carbon(a, atom_el, bo) for a in other_c):
+            continue
+        ring_bonds_ok = True
+        for a in ring_set:
+            in_ring = [
+                p
+                for p, order, _s in _nonmetal_lewis_neighbors(a, atom_el, bo)
+                if p in ring_set
+            ]
+            if len(in_ring) != 2:
+                ring_bonds_ok = False
+                break
+            if any(_lewis_bond_order(bo, a, p) != 1 for p in in_ring):
+                ring_bonds_ok = False
+                break
+        if not ring_bonds_ok:
+            continue
+        return ring_set
+    return None
+
+
+def _classify_imidazolidin_2_ylidene(c_idx, atom_el, bo, connectivity_edges):
+    """Return \"IMD\" or None for a saturated imidazolidine carbene (2N 5-ring)."""
+    if _imidazolidin_2_ylidene_ring(c_idx, atom_el, bo, connectivity_edges) is None:
+        return None
+    return "IMD"
+
+
 def _edge_in_connectivity(a, b, edges) -> bool:
     return any({i, j} == {a, b} for i, j, *_ in edges)
 
@@ -1510,17 +1571,18 @@ def apply_heterocyclic_carbene_corrections(
     mol_charge=0,
 ):
     """
-    Post-ILP NHC / MIC / CAAC / OXA / ADC / PYZ pass: force M–C dative (drop M–C
+    Post-ILP NHC / MIC / CAAC / OXA / IMD / ADC / PYZ pass: force M–C dative (drop M–C
     Lewis order) and lp=1 (carbene C is 6e: two singles + one lone pair).
 
     NHC/MIC use aromatic_candidate_systems; CAAC uses non-aromatic 1N heterocycles;
     OXA is oxazolidin-2-ylidene (all-single 5-ring C–N–C–C–O);
+    IMD is imidazolidin-2-ylidene (saturated 5-ring, two non-adjacent N, all singles);
     ADC is acyclic diaminocarbene (C singly bonded to two -NR2, C not in a ring);
     PYZ is pyrazolin-5-ylidene (5-ring C–N–N–C–C, carbene between N and C).
     Fischer/Schrock alkylidenes outside these rules are unchanged.
 
     Returns (bonds, lp_out, fc_out, labels_0based) where labels_0based maps
-    (metal_idx, c_idx) 0-based -> "NHC"|"MIC"|"CAAC"|"OXA"|"ADC"|"PYZ".
+    (metal_idx, c_idx) 0-based -> "NHC"|"MIC"|"CAAC"|"OXA"|"IMD"|"ADC"|"PYZ".
     """
     atom_el = {a[0]: a[1] for a in atoms_packed}
     id_to_pos = {a[0]: k for k, a in enumerate(atoms_packed)}
@@ -1553,6 +1615,10 @@ def apply_heterocyclic_carbene_corrections(
             )
         if kind is None:
             kind = _classify_oxazolidin_2_ylidene(
+                c_idx, atom_el, bo, connectivity_edges
+            )
+        if kind is None:
+            kind = _classify_imidazolidin_2_ylidene(
                 c_idx, atom_el, bo, connectivity_edges
             )
         if kind is None:
@@ -2165,11 +2231,13 @@ def print_cbc_report(
         if cbc_char == "L":
             carbene_labels = getattr(base, "LAST_HETERO_CYCLIC_CARBENE_LABELS", {})
             carbene_kind = carbene_labels.get((metal_idx, rep))
-            if carbene_kind in ("NHC", "MIC", "CAAC", "OXA", "ADC", "PYZ"):
+            if carbene_kind in ("NHC", "MIC", "CAAC", "OXA", "IMD", "ADC", "PYZ"):
                 if carbene_kind == "CAAC":
                     return "C CAAC — cyclic alkylamino carbene, lone-pair σ-donor"
                 if carbene_kind == "OXA":
                     return "C OXA — oxazolidin-2-ylidene, lone-pair σ-donor"
+                if carbene_kind == "IMD":
+                    return "C IMD — imidazolidin-2-ylidene, lone-pair σ-donor"
                 if carbene_kind == "ADC":
                     return "C ADC — acyclic diaminocarbene, lone-pair σ-donor"
                 if carbene_kind == "PYZ":
