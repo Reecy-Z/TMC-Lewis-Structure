@@ -79,6 +79,9 @@ AROMATIC_PI_BY_RING_SIZE: dict[int, tuple[int | None, ...]] = {
 # Soft tie-break: similar M–L contact distances on the same ligand → same σ/dative class (z_cov).
 ML_DISTANCE_CLASS_EPSILON = 0.15  # Å; w_ij = max(0, ε − |d_i − d_j|)
 
+# Aromatic candidate rings: keep a minimal ring if plane RMSD is ≤ this (Å).
+AROMATIC_PLANARITY_RMSD_A = 0.12
+
 # η fragments: ≥2 contiguous TM-bound atoms on one ligand (see _eta_carbon_atom_ids).
 ETA_MIN_COORDINATING_GROUP_SIZE = 2
 
@@ -105,7 +108,7 @@ _TM_NONMETAL_LIMITS_JSON = os.path.join(
     os.path.dirname(__file__), "tm_nonmetal_bond_limits.json"
 )
 # TM–L connectivity cutoff: empirical p99_A + this margin (Å)
-TM_NONMETAL_P99_MARGIN_A = 0.05
+TM_NONMETAL_P99_MARGIN_A = 0.10
 
 TM_SET = {
     "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn",
@@ -213,6 +216,7 @@ VALENCE_ELECTRONS = dict(VALENCE)
 TM_MONATOMIC_COV_LIGANDS = frozenset({"F", "Cl", "Br", "I"})
 
 # Expanded octet when non-TM connectivity exceeds these (M–L edges ignored).
+# P degree 4 with four H or four C is kept at 8e (see _p_is_octet_phosphonium).
 _P_AS_EXPANDED_OCTET_NON_TM_DEG = 3
 _S_EXPANDED_OCTET_NON_TM_DEG = 2
 _HEAVY_HALOGEN_EXPANDED_OCTET_NON_TM_DEG = 1
@@ -2480,6 +2484,7 @@ def _subscript(n):
 # 7) Soft (optional): remote C → prefer lp = 0 (ILP_WEIGHT_REMOTE_C_LP_VIOLATION).
 # 7b) Expanded octet if non-TM degree > 3 (P/As), > 2 (S), or > 1 (Cl/Br/I);
 #     then 10e/12e(/14e), preferring lower (ILP_WEIGHT_EXPANDED_OCTET).
+#     P exception: degree 4 with four H or four C stays 8e (PH4+/PR4+).
 # 7c) Boron: non-TM degree 3 → 6e (neutral BR3); degree 4 → 8e ([BR4]−).
 #     Tricoordinate B also bonded to a TM is Z-type (b_tm=0, M→B dative).
 # 8) Hard (optional): mol_charge = Σfc(ligands) + Σox(TM) − Σb_tm (ILP_HARD_MOL_CHARGE_BALANCE).
@@ -2547,8 +2552,24 @@ def _is_tetracoordinate_boron(idx, atom_el, edges) -> bool:
     return atom_el.get(idx) == "B" and _non_tm_degree(idx, atom_el, edges) == 4
 
 
+def _p_is_octet_phosphonium(p_idx, atom_el, edges) -> bool:
+    """Tetracoordinate P with four H or four C non-TM neighbors stays 8e."""
+    neighbors = _non_tm_neighbors_in_edges(p_idx, atom_el, edges)
+    if len(neighbors) != 4:
+        return False
+    symbols = [atom_el[other] for other in neighbors]
+    return all(sym == "H" for sym in symbols) or all(sym == "C" for sym in symbols)
+
+
 def _p_allows_expanded_octet(p_idx, atom_el, edges) -> bool:
-    """True if P has more than 3 non-TM connectivity neighbors."""
+    """True if P should use 10e/12e rather than the default 8e octet.
+
+    Non-TM degree ≤ 3 (phosphine) stays 8e. Degree 4 with four H (PH4+)
+    or four C (PR4+) stays 8e. Other degree-4 environments (P–O, P–N, …)
+    and degree ≥ 5 still use expanded octet.
+    """
+    if _p_is_octet_phosphonium(p_idx, atom_el, edges):
+        return False
     return _non_tm_degree(p_idx, atom_el, edges) > _P_AS_EXPANDED_OCTET_NON_TM_DEG
 
 
@@ -2825,7 +2846,12 @@ def _plane_rmsd(points):
     return best if best < float("inf") else 999.0
 
 
-def aromatic_candidate_systems(atoms_packed, raw_edges, max_ring_size=12, planarity_rmsd=0.12):
+def aromatic_candidate_systems(
+    atoms_packed,
+    raw_edges,
+    max_ring_size=12,
+    planarity_rmsd=AROMATIC_PLANARITY_RMSD_A,
+):
     atom_symbol = {idx: el for idx, el, *_ in atoms_packed}
     atom_xyz = {idx: (x, y, z) for idx, _el, x, y, z in atoms_packed}
     cut_edges = _remove_metal_nonmetal_edges(raw_edges)
@@ -3365,7 +3391,7 @@ def build_bond_order_ilp(
             prob += y10 + y12 == 1
             s_oct_choice[i] = (y10, y12)
         if el == "P" and _p_allows_expanded_octet(i, atom_el, edges):
-            # Non-TM degree > 3: 10e or 12e (no 8e). Else fixed 8e below.
+            # Non-TM degree > 3 except PH4/PC4 (8e phosphonium): 10e or 12e.
             y10 = pulp.LpVariable(f"p10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"p12_{i}", cat="Binary")
             prob += y10 + y12 == 1
@@ -3443,22 +3469,12 @@ def build_bond_order_ilp(
             prob += u2[key] == 0
             prob += u3[key] == 0
 
-    heavy_deg = defaultdict(int)
-    for i, j, ei, ej in edges:
-        if ei != "H":
-            heavy_deg[i] += 1
-        if ej != "H":
-            heavy_deg[j] += 1
-
     for i, j, ei, ej in ilp_edges:
         key = (min(i, j), max(i, j))
         if (ei == "H" or ej == "H"):
             prob += u3[key] == 0
             continue
         if (base.is_TM(ei) or base.is_TM(ej)):
-            prob += u3[key] == 0
-            continue
-        if (heavy_deg[i] > 2 or heavy_deg[j] > 2):
             prob += u3[key] == 0
 
     # Monatomic ML single covalent rule:
