@@ -39,19 +39,21 @@ ILP_HARD_OX_GE_SIGMA = False
 ILP_HARD_ETA_CARBON_LP_ZERO = True
 
 # --- Soft objective weights (0 = disabled) ---
+# Selected on the 5,000-complex calibration panel (local_tm_ox_125):
+# J = 98.67%, L = 98.64%, O = 98.70%.
 ILP_WEIGHT_FORMAL_CHARGE = 100.0
-ILP_WEIGHT_AROMATIC_DEVIATION = 100.0
-ILP_WEIGHT_ENEG_NEGATIVE_FC = 10.0
-ILP_WEIGHT_ML_DISTANCE_CLASS = 50.0
-ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 25.0
+ILP_WEIGHT_AROMATIC_DEVIATION = 35.7665
+ILP_WEIGHT_ENEG_NEGATIVE_FC = 18.0565
+ILP_WEIGHT_ML_DISTANCE_CLASS = 70.5319
+ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 23.9508
 # When expanded octet is on: prefer 10e then 12e/14e (tie-break only).
-ILP_WEIGHT_EXPANDED_OCTET = 1.0
+ILP_WEIGHT_EXPANDED_OCTET = 2.6883
 # Soft: minimize Σox(TM). Must exceed aromatic-dev cost per ox unit to flip
 # cases like AYUNIT (20π peri-fused vs 4n+2). Above formal-charge (100) it can
 # also buy lower ox by putting extra |q| on ligands.
-ILP_WEIGHT_TM_OX_MINIMIZE = 50
+ILP_WEIGHT_TM_OX_MINIMIZE = 15.3657
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
-ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 200.0
+ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 33.0759
 
 # Safety check before connectivity/ILP: atoms closer than this are considered overlaps.
 ATOM_OVERLAP_DISTANCE_THRESHOLD_A = 0.60
