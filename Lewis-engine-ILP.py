@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""
-Lewis-engine-ILP.py
+"""Lewis-like assignment of mononuclear transition-metal complexes.
 
+Integer linear programming assigns bond orders, lone pairs, formal charges,
+and metal oxidation states from Cartesian coordinates, then reports CBC
+ligand classes and SMILES.
 """
 
 from __future__ import annotations
@@ -22,10 +24,8 @@ from rdkit import Chem
 
 # ---------------------------------------------------------------------------
 # ILP configuration (solve_bond_orders)
-#
-#   ILP_HARD_*    — true hard constraints; False drops them (may become infeasible
-#                   if nothing else compensates).
-#   ILP_WEIGHT_*  — objective penalties only (0 = off).
+# ILP_HARD_* : equality or inequality constraints (False disables the constraint).
+# ILP_WEIGHT_* : objective coefficients (0 disables the term).
 # ---------------------------------------------------------------------------
 
 # --- Hard constraints (must hold exactly) ---
@@ -39,18 +39,14 @@ ILP_HARD_OX_GE_SIGMA = False
 ILP_HARD_ETA_CARBON_LP_ZERO = True
 
 # --- Soft objective weights (0 = disabled) ---
-# Selected on the 5,000-complex calibration panel (local_tm_ox_125):
-# J = 98.67%, L = 98.64%, O = 98.70%.
 ILP_WEIGHT_FORMAL_CHARGE = 100.0
 ILP_WEIGHT_AROMATIC_DEVIATION = 35.7665
 ILP_WEIGHT_ENEG_NEGATIVE_FC = 18.0565
 ILP_WEIGHT_ML_DISTANCE_CLASS = 70.5319
 ILP_WEIGHT_ETA_GROUP_MAX_DOUBLE_BONDS = 23.9508
-# When expanded octet is on: prefer 10e then 12e/14e (tie-break only).
+# Prefer a lower expanded-octet count when 10e/12e/14e are allowed.
 ILP_WEIGHT_EXPANDED_OCTET = 2.6883
-# Soft: minimize Σox(TM). Must exceed aromatic-dev cost per ox unit to flip
-# cases like AYUNIT (20π peri-fused vs 4n+2). Above formal-charge (100) it can
-# also buy lower ox by putting extra |q| on ligands.
+# Soft: minimize Σox(TM).
 ILP_WEIGHT_TM_OX_MINIMIZE = 15.3657
 # Remote C (no TM neighbor in connectivity): penalize lp>0; 0 = off.
 ILP_WEIGHT_REMOTE_C_LP_VIOLATION = 33.0759
@@ -78,7 +74,7 @@ AROMATIC_PI_BY_RING_SIZE: dict[int, tuple[int | None, ...]] = {
     18: (18, None),
 }
 
-# Soft tie-break: similar M–L contact distances on the same ligand → same σ/dative class (z_cov).
+# Similar M–L distances on one ligand favor the same σ/dative class (z_cov).
 ML_DISTANCE_CLASS_EPSILON = 0.15  # Å; w_ij = max(0, ε − |d_i − d_j|)
 
 # Aromatic candidate rings: keep a minimal ring if plane RMSD is ≤ this (Å).
@@ -246,7 +242,7 @@ COV_R_CCDC = _load_ccdc_covalent_radii()
 CORE_E = {k: 0 for k in COV_R_CCDC}
 
 def _load_tm_nonmetal_bond_limits(path: str = _TM_NONMETAL_LIMITS_JSON) -> dict[str, float]:
-    """TM–ligand cutoff (Å): tmQM p99_A + margin, or Mercury GUI limit_A (no margin)."""
+    """TM–ligand cutoff (Å) from the limits JSON: p99_A plus margin, or a fixed limit_A."""
     try:
         with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
@@ -425,7 +421,7 @@ def is_tm(symbol: str) -> bool:
 
 
 def is_TM(symbol: str) -> bool:
-    """Compatibility alias for viewer bridge code."""
+    """Alias of ``is_tm``."""
     return is_tm(symbol)
 
 
@@ -578,14 +574,14 @@ def _bond_cutoff_cov(ei, ej):
 
 
 def _tm_nonmetal_bond_cutoff(metal: str, ligand: str) -> float | None:
-    """P99+0.05 Å limit for TM–nonmetal, or None to fall back to covalent radii."""
+    """P99+margin Å limit for TM–nonmetal, or None to fall back to covalent radii."""
     if is_tm(metal) and not is_tm(ligand):
         return TM_NONMETAL_BOND_LIMITS.get(f"{metal}-{ligand}")
     return None
 
 
 def _bond_cutoff(ei, ej):
-    """Distance cutoff (Å): TM–nonmetal uses tmQM P99+0.05; all other pairs use COV+margin."""
+    """Distance cutoff (Å): TM–nonmetal uses tmQM P99+margin; all other pairs use COV+margin."""
     tm_lim = _tm_nonmetal_bond_cutoff(ei, ej)
     if tm_lim is None:
         tm_lim = _tm_nonmetal_bond_cutoff(ej, ei)
@@ -627,8 +623,8 @@ def _assert_no_atom_overlap(atoms, threshold=ATOM_OVERLAP_DISTANCE_THRESHOLD_A):
 
 
 def connectivity(atoms, factor=None):
-    """Raw connectivity: TM–nonmetal uses tmQM P99+0.05 Å; other pairs COV+0.45/0.40 Å."""
-    _ = factor  # deprecated; kept for call-site compatibility
+    """Raw connectivity: TM–nonmetal uses tmQM P99+margin Å; other pairs COV+0.45/0.40 Å."""
+    _ = factor
     _assert_no_atom_overlap(atoms)
     edges = []
     n = len(atoms)
@@ -688,10 +684,7 @@ def check_octet_violations(
 
 
 def print_summary_and_choose_ilp(atom_syms, bonds, lp_out, mol_charge):
-    """
-    Lewis-engine.py print_summary_and_choose layout for ILP results.
-    All valence is reported as Lewis (non-Lewis rows zero); NBO-style table only.
-    """
+    """Print the Lewis assignment table and $CHOOSE block."""
     te = float(sum(VALENCE.get(s, 0) for s in atom_syms) - mol_charge)
     if te <= 0:
         te = 1.0
@@ -711,7 +704,7 @@ def print_summary_and_choose_ilp(atom_syms, bonds, lp_out, mol_charge):
 def print_octet_report(
     atom_syms, bo0, lp_full, fc0, *, metal_adjacency_edges=None, coords=None
 ):
-    """Lewis-engine.py-style octet / valence block after $CHOOSE."""
+    """Print the octet and valence report after the Lewis assignment."""
     adj_check = defaultdict(list)
     for i, j in bo0:
         adj_check[i].append(j)
@@ -1128,7 +1121,7 @@ def _cbc_record_for_h_neighbor(
     seen_hh_pairs=None,
 ):
     """
-    CBC for H in the metal coordination sphere (aligned with Lewis-engine.py):
+    CBC class for H in the metal coordination sphere.
 
     M–H in Lewis (bo>0) → X; agostic X–H (X = B,C,…) with b_tm=0 → (X,H) L;
     η²-H₂ → (H,H) L; protic H → X; geometric M···H only → None (skip).
@@ -2495,49 +2488,6 @@ def _subscript(n):
     return str(n).translate(subs) if n > 1 else ""
 
 
-# ----- ilp_bond_order_aromatic_workflow_V2.py -----
-# Aromatic-aware ILP workflow V2: TM–nonmetal bonds are optimized inside the ILP
-#
-# Key ideas:
-# 1) Build raw connectivity from XYZ.
-# 2) Remove metal-nonmetal edges for ring/fused-ring detection.
-# 3) Keep only planar ring/fused-ring systems as aromatic candidates.
-# 4) Soft (optional): aromatic π via ILP_WEIGHT_AROMATIC_DEVIATION; target from
-#    AROMATIC_PI_BY_RING_SIZE (m atoms → π count; 1–3 discrete options).
-# 4b) Soft: similar M–L distances on a ligand → same z_cov (ILP_WEIGHT_ML_DISTANCE_CLASS).
-# 4c) Hard (optional): η-fragment carbons → lp = 0 (ILP_HARD_ETA_CARBON_LP_ZERO).
-# 4c2) Hard (always): non-η coordinating C → z_cov=1, b_tm∈{1,2,3}; η C and terminal CO may stay dative.
-# 4d) Hard (always): terminal CO (2-atom C+O fragment, M–L via C) → C≡O triple, M–C dative (b_tm=0).
-# 4d2) Hard (always): nitrile arm M←N≡C–X (deg N=2, deg Cα=2, H counted) → C≡N triple, M–N dative.
-# 4d3) Hard (always): isonitrile arm M←C≡N–X (deg C=2, deg N=2, H counted) → C≡N triple, M–C dative.
-# 4d4) Hard (always): terminal nitrosyl {N,O} via N, not η². Linear M–N–O (>=160°) →
-#      N≡O triple, M←N dative (b_tm=0), NO⁺. Bent → N=O double, M–N covalent single.
-# 4d5) Hard (always): O2 fragment {O,O} with O–O and ≥1 M–O → O(−)–O(−) single,
-#      each q(O)=−1, M–O dative (b_tm=0).
-# 5) For O/N/S/P in aromatic systems:
-#    - if no double bond around that atom, one lone pair (2e) can contribute;
-#    - if double-bonded, pi contribution comes from double bonds (2 per double).
-# 6) For ring carbons not bonded to a transition metal: if unsaturated (any incident
-#    multiple bond or formal charge <= -1), the same optional lone-pair pi term applies.
-# 7) Soft (optional): remote C → prefer lp = 0 (ILP_WEIGHT_REMOTE_C_LP_VIOLATION).
-# 7b) Expanded octet if non-TM degree > 3 (P/As), > 2 (S), or > 1 (Cl/Br/I);
-#     then 10e/12e(/14e), preferring lower (ILP_WEIGHT_EXPANDED_OCTET).
-#     P exception: degree 4 with only C/H neighbors stays 8e (PH4+/RnPHn+/PR4+).
-# 7c) Boron: non-TM degree 3 → 6e (neutral BR3); degree 4 → 8e ([BR4]−).
-#     Tricoordinate B also bonded to a TM is Z-type (b_tm=0, M→B dative).
-# 8) Hard (optional): mol_charge = Σfc(ligands) + Σox(TM) − Σb_tm (ILP_HARD_MOL_CHARGE_BALANCE).
-# 9) Hard (optional): Σox(TM) ≥ Σb_tm on non-η M–L only (ILP_HARD_OX_GE_SIGMA); F/Cl/Br/I ligands omitted from RHS.
-# 10) Soft: minimize Σox(TM) (ILP_WEIGHT_TM_OX_MINIMIZE).
-# See ILP_HARD_* / ILP_WEIGHT_* at top of file.
-#
-# ILP uses full XYZ connectivity (raw): every TM–nonmetal contact is either
-# covalent order 1/2/3 (b_tm) or no Lewis M–L bond (b_tm=0), except monatomic
-# Cl/Br/I/F/H — fixed covalent single. Octet uses lp + bond_sum only (no dative
-# electron term in ILP). CBC/SMILES assign dative (L) when b_tm=0 and lp/fc/η rules apply.
-# Ring detection strips M–L edges before cycle search.
-# $CHOOSE omits b_tm=0 M–L; covalent M–L prints as S/D/T.
-# """
-
 base = sys.modules[__name__]
 
 pulp = base.pulp
@@ -2780,7 +2730,7 @@ def _build_adj_from_edges(edges):
 
 
 def _find_simple_rings(adj, atom_symbol, max_size=12):
-    """Simple cycle finder (set-unique), adapted from Lewis-engine style."""
+    """Enumerate unique simple cycles with at most *max_size* atoms."""
     nodes = sorted(adj.keys())
     rings = []
     seen = set()
@@ -3802,7 +3752,7 @@ def build_bond_order_ilp(
     if rc_lp_w > 0:
         for i, el, *_ in atoms:
             if el == "C" and i in lp and i not in tm_neighbor_atoms:
-                # Elastic remote-C lp=0: allow lp>0 but penalize in objective.
+                # Soft slack: remote C may have lp>0 at an objective penalty.
                 v = pulp.LpVariable(f"rcv_{i}", lowBound=0, cat="Integer")
                 remote_c_lp_violation[i] = v
                 prob += lp[i] <= v
@@ -3940,7 +3890,7 @@ def solve_bond_orders(
     lp_out = {i: int(round(pulp.value(v))) for i, v in lp.items()}
     fc_out = {i: int(round(pulp.value(v))) for i, v in q.items()}
 
-    # Stash remote-C lp violations for printing by the CLI.
+    # Remote-C lone-pair slack used by the CLI report.
     base.LAST_REMOTE_C_LP_VIOLATIONS = []
     if remote_c_lp_violation:
         viol = sorted(
