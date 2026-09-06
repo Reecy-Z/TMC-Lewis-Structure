@@ -218,7 +218,7 @@ VALENCE_ELECTRONS = dict(VALENCE)
 TM_MONATOMIC_COV_LIGANDS = frozenset({"F", "Cl", "Br", "I"})
 
 # Expanded octet when non-TM connectivity exceeds these (M–L edges ignored).
-# P degree 4 with four H or four C is kept at 8e (see _p_is_octet_phosphonium).
+# P degree 4 with only C/H neighbors is kept at 8e (see _p_is_octet_phosphonium).
 _P_AS_EXPANDED_OCTET_NON_TM_DEG = 3
 _S_EXPANDED_OCTET_NON_TM_DEG = 2
 _HEAVY_HALOGEN_EXPANDED_OCTET_NON_TM_DEG = 1
@@ -533,6 +533,41 @@ def _prune_si_over_coordination(atoms, edges, max_degree=4):
     return edge_list
 
 
+def _prune_saturated_bc_metal_contacts(atoms, edges, max_nonmetal_degree=4):
+    """
+    If B or C already has *max_nonmetal_degree* non-metal neighbors, drop all
+    TM–B / TM–C contacts. Saturated [BR4]− and CR4 cannot take an extra metal
+    coordination in the connectivity graph.
+    """
+    if not edges:
+        return edges
+    atom_el = {a[0]: a[1] for a in atoms}
+    nonmetal_nbrs: dict[int, set[int]] = defaultdict(set)
+    for i, j, ei, ej in edges:
+        if ei in ("B", "C") and not is_tm(ej):
+            nonmetal_nbrs[i].add(j)
+        if ej in ("B", "C") and not is_tm(ei):
+            nonmetal_nbrs[j].add(i)
+    saturated = {
+        idx
+        for idx, nbrs in nonmetal_nbrs.items()
+        if atom_el.get(idx) in ("B", "C") and len(nbrs) >= max_nonmetal_degree
+    }
+    if not saturated:
+        return edges
+    keep = []
+    for e in edges:
+        i, j, ei, ej = e
+        if not (is_tm(ei) ^ is_tm(ej)):
+            keep.append(e)
+            continue
+        lig = j if is_tm(ei) else i
+        if lig in saturated:
+            continue
+        keep.append(e)
+    return keep
+
+
 def _bond_cutoff_cov(ei, ej):
     margin = (
         COV_BOND_MARGIN_S_BLOCK
@@ -609,6 +644,7 @@ def connectivity(atoms, factor=None):
                 edges.append((ai[0], aj[0], ei, ej))
     edges = _prune_h_to_closest_nonmetal_neighbor(atoms, edges)
     edges = _prune_carbon_over_coordination(atoms, edges)
+    edges = _prune_saturated_bc_metal_contacts(atoms, edges)
     edges = _prune_aromatic_non_eta_tm_c_contacts(atoms, edges)
     return _prune_si_over_coordination(atoms, edges)
 
@@ -2486,7 +2522,7 @@ def _subscript(n):
 # 7) Soft (optional): remote C → prefer lp = 0 (ILP_WEIGHT_REMOTE_C_LP_VIOLATION).
 # 7b) Expanded octet if non-TM degree > 3 (P/As), > 2 (S), or > 1 (Cl/Br/I);
 #     then 10e/12e(/14e), preferring lower (ILP_WEIGHT_EXPANDED_OCTET).
-#     P exception: degree 4 with four H or four C stays 8e (PH4+/PR4+).
+#     P exception: degree 4 with only C/H neighbors stays 8e (PH4+/RnPHn+/PR4+).
 # 7c) Boron: non-TM degree 3 → 6e (neutral BR3); degree 4 → 8e ([BR4]−).
 #     Tricoordinate B also bonded to a TM is Z-type (b_tm=0, M→B dative).
 # 8) Hard (optional): mol_charge = Σfc(ligands) + Σox(TM) − Σb_tm (ILP_HARD_MOL_CHARGE_BALANCE).
@@ -2555,20 +2591,22 @@ def _is_tetracoordinate_boron(idx, atom_el, edges) -> bool:
 
 
 def _p_is_octet_phosphonium(p_idx, atom_el, edges) -> bool:
-    """Tetracoordinate P with four H or four C non-TM neighbors stays 8e."""
+    """Tetracoordinate P with only C/H non-TM neighbors stays 8e.
+
+    Covers PH4+, RPH3+, R2PH2+, R3PH+, and PR4+. P–O / P–N / … stay expanded.
+    """
     neighbors = _non_tm_neighbors_in_edges(p_idx, atom_el, edges)
     if len(neighbors) != 4:
         return False
-    symbols = [atom_el[other] for other in neighbors]
-    return all(sym == "H" for sym in symbols) or all(sym == "C" for sym in symbols)
+    return all(atom_el[other] in ("C", "H") for other in neighbors)
 
 
 def _p_allows_expanded_octet(p_idx, atom_el, edges) -> bool:
     """True if P should use 10e/12e rather than the default 8e octet.
 
-    Non-TM degree ≤ 3 (phosphine) stays 8e. Degree 4 with four H (PH4+)
-    or four C (PR4+) stays 8e. Other degree-4 environments (P–O, P–N, …)
-    and degree ≥ 5 still use expanded octet.
+    Non-TM degree ≤ 3 (phosphine) stays 8e. Degree 4 with only C/H
+    neighbors (PH4+, RnPHn+, PR4+) stays 8e. Other degree-4 environments
+    (P–O, P–N, …) and degree ≥ 5 still use expanded octet.
     """
     if _p_is_octet_phosphonium(p_idx, atom_el, edges):
         return False
@@ -3393,7 +3431,7 @@ def build_bond_order_ilp(
             prob += y10 + y12 == 1
             s_oct_choice[i] = (y10, y12)
         if el == "P" and _p_allows_expanded_octet(i, atom_el, edges):
-            # Non-TM degree > 3 except PH4/PC4 (8e phosphonium): 10e or 12e.
+            # Non-TM degree > 3 except C/H phosphonium (8e): 10e or 12e.
             y10 = pulp.LpVariable(f"p10_{i}", cat="Binary")
             y12 = pulp.LpVariable(f"p12_{i}", cat="Binary")
             prob += y10 + y12 == 1
