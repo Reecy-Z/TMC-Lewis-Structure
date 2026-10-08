@@ -367,12 +367,11 @@ def read_xyz(path: str):
             f"treats line 2 as the comment line. Insert a title/comment on line 2 "
             f"and move coordinates to lines 3–{n + 2}."
         )
-    need = 2 + n
-    if len(lines) < need:
+    n_file = sum(1 for ln in lines[2:] if ln.strip())
+    if n_file != n:
         raise ValueError(
-            f"{path}: for n={n}, need at least {need} lines "
-            f"(1 count + 1 comment + {n} coords starting at line 3); "
-            f"got {len(lines)}"
+            f"{path}: XYZ first-line atom count ({n}) does not match "
+            f"the number of atoms in the file ({n_file})"
         )
 
     atoms = []
@@ -1925,6 +1924,22 @@ def apply_eta_covalent_pi_corrections(
     return bonds_out, lp_out, fc_out
 
 
+def _sigma_bh_l_only_records(atoms, records):
+    """B-H in the metal coordination environment is L; isolated BR3 stays Z.
+
+    H must belong to the same B-H sigma-donation record, not just be any
+    nearby hydrogen. These L records come from metal-adjacency filtering.
+    A singleton tricoordinate-B Z record without such B-H donation is retained.
+    """
+    donating_boron = {
+        i for group, typ in records if typ == "L" and len(group) == 2
+        and sorted(atoms[j] for j in group) == ["B", "H"]
+        for i in group if atoms[i] == "B"
+    }
+    return [(group, typ) for group, typ in records
+            if not (typ == "Z" and len(group) == 1 and group[0] in donating_boron)]
+
+
 def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency_edges=None):
     n = len(atoms)
 
@@ -2139,7 +2154,7 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
         return None
 
     def _fix_symmetric_chelate_O_records(metal_idx, records):
-        """Promote one chelating O from L to X when two O donors share a π-linked C backbone."""
+        """Promote one chelating O from L to X when two O donors share a C-only backbone."""
         nbr_cls = {}
         for tup, t in records:
             for a in tup:
@@ -2163,9 +2178,11 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
                 )
                 if ci is None or cj is None:
                     continue
-                connected = ci == cj or cj in adj_lewis[ci] or ci in adj_lewis[cj]
+                connected = ci == cj or cj in adj_lewis[ci]
                 if not connected:
                     for mid in adj_lewis[ci]:
+                        if atoms[mid] != "C":
+                            continue
                         if cj in adj_lewis[mid]:
                             connected = True
                             break
@@ -2232,6 +2249,7 @@ def classify_cbc_ligands(atoms, coords, bo, lp, fc, charge=0, *, metal_adjacency
                 )
             )
 
+        interaction_records = _sigma_bh_l_only_records(atoms, interaction_records)
         interaction_records = _fix_symmetric_chelate_O_records(
             metal_idx, interaction_records
         )
@@ -4382,6 +4400,243 @@ def print_tm_oxidation_sigma_report(
         print()
 
 
+def build_tmc_be(
+    atoms,
+    bonds,
+    lp_out,
+    fc_out,
+    charge,
+    *,
+    cbc_interaction_records,
+):
+    """Build the CBC-informed, electron-number TMC-BE representation.
+
+    Covalent and diagonal entries participate in electron conservation.
+    Directional L/haptic and Z entries describe coordination, and are excluded
+    from the conserved-electron sum through ``electron_count_mask``.
+    """
+    if cbc_interaction_records is None:
+        raise ValueError("TMC-BE generation requires CBC interaction records")
+
+    n_atoms = len(atoms)
+    atom_ids = [int(atom[0]) for atom in atoms]
+    atom_syms = [atom[1] for atom in atoms]
+    if len(set(atom_ids)) != n_atoms:
+        raise ValueError("TMC-BE atom IDs must be unique")
+    id_to_pos = {atom_id: pos for pos, atom_id in enumerate(atom_ids)}
+
+    matrix = [[0 for _ in range(n_atoms)] for _ in range(n_atoms)]
+    count_mask = [[0 for _ in range(n_atoms)] for _ in range(n_atoms)]
+    bond_orders = {}
+    for atom_i, atom_j, order_raw in bonds:
+        if atom_i not in id_to_pos or atom_j not in id_to_pos:
+            raise ValueError(f"TMC-BE bond references unknown atoms: {atom_i}, {atom_j}")
+        order = int(order_raw)
+        if order <= 0:
+            continue
+        pos_i, pos_j = id_to_pos[atom_i], id_to_pos[atom_j]
+        if matrix[pos_i][pos_j] or matrix[pos_j][pos_i]:
+            raise ValueError(f"Duplicate TMC-BE covalent bond: {atom_i}-{atom_j}")
+        matrix[pos_i][pos_j] = order
+        matrix[pos_j][pos_i] = order
+        count_mask[pos_i][pos_j] = 1
+        count_mask[pos_j][pos_i] = 1
+        bond_orders[(min(pos_i, pos_j), max(pos_i, pos_j))] = order
+
+    d_counts = {}
+    for pos, (atom_id, symbol) in enumerate(zip(atom_ids, atom_syms)):
+        if symbol not in VALENCE_ELECTRONS:
+            raise ValueError(f"No valence-electron count for element {symbol}")
+        if is_TM(symbol):
+            oxidation_state = int(fc_out.get(atom_id, 0))
+            d_count = int(VALENCE_ELECTRONS[symbol]) - oxidation_state
+            if d_count < 0:
+                raise ValueError(
+                    f"Negative d-electron count for {symbol}{atom_id}: {d_count}"
+                )
+            matrix[pos][pos] = d_count
+            d_counts[pos] = d_count
+        else:
+            matrix[pos][pos] = 2 * int(lp_out.get(atom_id, 0))
+        count_mask[pos][pos] = 1
+
+
+    cbc_annotations = []
+    directional_entries = []
+
+    def add_directional(source_pos, target_pos, electrons, cbc_type):
+        if count_mask[source_pos][target_pos]:
+            raise ValueError(
+                "Directional CBC entry overlaps a covalent TMC-BE entry: "
+                f"{atom_ids[source_pos]}->{atom_ids[target_pos]}"
+            )
+        matrix[source_pos][target_pos] += int(electrons)
+        entry = {
+            "from_atom": atom_ids[source_pos],
+            "to_atom": atom_ids[target_pos],
+            "electrons": int(electrons),
+            "CBC_type": cbc_type,
+            "counted_in_electron_conservation": False,
+        }
+        directional_entries.append(entry)
+        return entry
+
+    for metal_pos in sorted(cbc_interaction_records):
+        if not 0 <= metal_pos < n_atoms:
+            raise ValueError(f"Invalid CBC metal array index: {metal_pos}")
+        if not is_TM(atom_syms[metal_pos]):
+            continue
+        records_out = []
+        records = _sigma_bh_l_only_records(atom_syms, cbc_interaction_records[metal_pos])
+        for atom_tuple, cbc_type in records:
+            donor_positions = [int(pos) for pos in atom_tuple]
+            if any(not 0 <= pos < n_atoms for pos in donor_positions):
+                raise ValueError(
+                    f"CBC record for metal {atom_ids[metal_pos]} has invalid atoms"
+                )
+            assignments = []
+            if cbc_type == "L":
+                if len(donor_positions) == 1:
+                    electron_shares = [2]
+                elif len(donor_positions) == 2:
+                    electron_shares = [1, 1]
+                else:
+                    raise ValueError(
+                        "CBC L donation is not uniquely atom-resolved for metal "
+                        f"{atom_ids[metal_pos]}: {donor_positions}"
+                    )
+                assignments = [
+                    add_directional(pos, metal_pos, share, "L")
+                    for pos, share in zip(donor_positions, electron_shares)
+                ]
+            elif cbc_type == "Z":
+                if len(donor_positions) != 1:
+                    raise ValueError(
+                        "CBC Z acceptance is not uniquely atom-resolved for metal "
+                        f"{atom_ids[metal_pos]}: {donor_positions}"
+                    )
+                assignments = [
+                    add_directional(metal_pos, donor_positions[0], 2, "Z")
+                ]
+            elif cbc_type == "X":
+                for ligand_pos in donor_positions:
+                    order = bond_orders.get(
+                        (min(metal_pos, ligand_pos), max(metal_pos, ligand_pos)),
+                        0,
+                    )
+                    if order <= 0:
+                        raise ValueError(
+                            "CBC X record has no covalent metal-ligand bond: "
+                            f"{atom_ids[metal_pos]}-{atom_ids[ligand_pos]}"
+                        )
+                    assignments.extend(
+                        [
+                            {
+                                "from_atom": atom_ids[metal_pos],
+                                "to_atom": atom_ids[ligand_pos],
+                                "electrons": order,
+                                "counted_in_electron_conservation": True,
+                            },
+                            {
+                                "from_atom": atom_ids[ligand_pos],
+                                "to_atom": atom_ids[metal_pos],
+                                "electrons": order,
+                                "counted_in_electron_conservation": True,
+                            },
+                        ]
+                    )
+            else:
+                raise ValueError(f"Unsupported CBC type {cbc_type!r}")
+
+            records_out.append(
+                {
+                    "atom_indices": [atom_ids[pos] for pos in donor_positions],
+                    "CBC_type": cbc_type,
+                    "matrix_entries": assignments,
+                }
+            )
+
+        n_l, n_x = mlx_lx_counts_from_cbc_records(
+            metal_pos, records, bond_orders
+        )
+        n_z = sum(1 for _, cbc_type in records if cbc_type == "Z")
+        mlx_parts = []
+        for label, count in (("L", n_l), ("X", n_x), ("Z", n_z)):
+            if count:
+                mlx_parts.append(label if count == 1 else f"{label}{count}")
+        cbc_annotations.append(
+            {
+                "metal_index": atom_ids[metal_pos],
+                "element": atom_syms[metal_pos],
+                "designation": "".join(mlx_parts),
+                "records": records_out,
+            }
+        )
+
+    expected_electrons = sum(VALENCE_ELECTRONS[sym] for sym in atom_syms) - int(charge)
+    counted_electrons = sum(
+        matrix[i][j] * count_mask[i][j]
+        for i in range(n_atoms)
+        for j in range(n_atoms)
+    )
+    if counted_electrons != expected_electrons:
+        raise ValueError(
+            "TMC-BE electron conservation failed: "
+            f"matrix={counted_electrons}, expected={expected_electrons}"
+        )
+
+    oxidation_states = [
+        int(fc_out.get(atom_id, 0)) if is_TM(symbol) else None
+        for atom_id, symbol in zip(atom_ids, atom_syms)
+    ]
+    return {
+        "Q": int(charge),
+        "atom_order": atom_ids,
+        "E": atom_syms,
+        "OS": oxidation_states,
+        "CBC": cbc_annotations,
+        "B": matrix,
+        "electron_count_mask": count_mask,
+        "directional_entries": directional_entries,
+        "validation": {
+            "electron_conservation": "passed",
+            "counted_matrix_electrons": counted_electrons,
+            "expected_valence_electrons": expected_electrons,
+            "integer_matrix": all(
+                isinstance(value, int) for row in matrix for value in row
+            ),
+        },
+    }
+
+
+def _format_tmc_be_matrix(matrix, labels):
+    widths = [max(len(label), 3) for label in labels]
+    for col in range(len(labels)):
+        for row in matrix:
+            widths[col] = max(widths[col], len(str(row[col])))
+    header = " " * (max(len(label) for label in labels) + 1)
+    header += " ".join(label.rjust(widths[i]) for i, label in enumerate(labels))
+    lines = [header]
+    for label, row in zip(labels, matrix):
+        cells = " ".join(str(value).rjust(widths[i]) for i, value in enumerate(row))
+        lines.append(f"{label} {cells}")
+    return "\n".join(lines)
+
+
+def print_tmc_be_report(tmc_be):
+    """Print only the labeled TMC-BE matrix; other fields already appear above."""
+    labels = [
+        f"{symbol}{atom_id}"
+        for symbol, atom_id in zip(tmc_be["E"], tmc_be["atom_order"])
+    ]
+    print()
+    print("=" * 72)
+    print("  TMC-BE")
+    print("=" * 72)
+    print(_format_tmc_be_matrix(tmc_be["B"], labels))
+    print()
+
+
 def main():
     if len(sys.argv) not in (2, 3):
         raise SystemExit(
@@ -4464,6 +4719,15 @@ def main():
     print_ilp_smiles_report(
         atoms, bonds, fc_out, dative_ml_pairs=dative_ml_pairs, edges=raw
     )
+    tmc_be = build_tmc_be(
+        atoms,
+        bonds,
+        lp_out,
+        fc_out,
+        charge,
+        cbc_interaction_records=cbc_interaction_records,
+    )
+    print_tmc_be_report(tmc_be)
 
 
 if __name__ == "__main__":

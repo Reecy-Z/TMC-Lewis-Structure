@@ -617,6 +617,32 @@ def format_tm_oxidation_summary(
     return "\n".join(lines)
 
 
+def format_tmc_be_matrix(
+    engine,
+    atoms_packed,
+    bonds,
+    lp,
+    fc_out,
+    mol_charge: int,
+    cbc_interaction_records,
+) -> str:
+    """Labeled TMC-BE matrix text, matching the CLI report."""
+    lp_out = {atom_id: lp.get(atom_id - 1, 0) for atom_id, *_ in atoms_packed}
+    tmc_be = engine.build_tmc_be(
+        atoms_packed,
+        bonds,
+        lp_out,
+        fc_out,
+        int(mol_charge),
+        cbc_interaction_records=cbc_interaction_records,
+    )
+    labels = [
+        f"{symbol}{atom_id}"
+        for symbol, atom_id in zip(tmc_be["E"], tmc_be["atom_order"])
+    ]
+    return engine._format_tmc_be_matrix(tmc_be["B"], labels)
+
+
 def build_viewer_payload(
     backend, atoms, coords, bo, lp, fc, charge, *, metal_adjacency_edges=None
 ):
@@ -1042,6 +1068,20 @@ def run_analyzer_app() -> None:
                 engine, atoms, coords, bo, lp, fc, int(mol_charge),
                 metal_adjacency_edges=metal_adj_0,
             )
+            tmc_be_text = None
+            tmc_be_error = None
+            try:
+                tmc_be_text = format_tmc_be_matrix(
+                    engine,
+                    atoms_packed,
+                    bonds_1b,
+                    lp,
+                    fc_out_1b,
+                    int(mol_charge),
+                    cbc_interaction_records,
+                )
+            except Exception as exc:
+                tmc_be_error = str(exc)
 
         show_3d_preview(viewer_payload)
 
@@ -1093,6 +1133,12 @@ def run_analyzer_app() -> None:
             )
             st.code(ox_summary, language="text")
 
+        st.markdown('<div class="section-head">TMC-BE</div>', unsafe_allow_html=True)
+        if tmc_be_text:
+            st.code(tmc_be_text, language="text")
+        else:
+            st.warning(f"TMC-BE generation failed: {tmc_be_error}")
+
         export_text = (
             f"Read {len(atoms)} atoms  (charge={int(mol_charge)})\n\n"
             f"{choose_block}\n\n"
@@ -1105,6 +1151,10 @@ def run_analyzer_app() -> None:
         export_text += f"\n{cbc_report}\n"
         if ox_report:
             export_text += f"\n{ox_report}\n"
+        if tmc_be_text:
+            export_text += f"\nTMC-BE:\n{tmc_be_text}\n"
+        elif tmc_be_error:
+            export_text += f"\nTMC-BE generation failed: {tmc_be_error}\n"
         export_text += f"\nStats:\n{stats}\n"
         st.download_button(
             "Download Result (.txt)",
