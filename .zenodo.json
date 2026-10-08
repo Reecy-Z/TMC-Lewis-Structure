@@ -1,0 +1,33 @@
+{
+    "title": "TMC-LewisGen: Automated Generation of Lewis-like Structures for Transition–Metal Complexes",
+    "version": "v2.0.0",
+    "upload_type": "software",
+    "license": "mit",
+    "language": "eng",
+    "creators": [
+        {"name": "Shiri, Farshad"},
+        {"name": "Zhu, Jingyuan"},
+        {"name": "Tong, Sin Hang"},
+        {"name": "Xiao, Liren"},
+        {"name": "Lin, Zhenyang"}
+    ],
+    "description": "<p>Software for <em>TMC-LewisGen: Automated Generation of Lewis-like Structures for Transition–Metal Complexes</em> (<a href=\"https://doi.org/10.1021/acs.jcim.6c02278\">https://doi.org/10.1021/acs.jcim.6c02278</a>).</p><p>This version adds the CBC-informed TMC-BE electron matrix to the command-line engine and Streamlit app, and only promotes chelating oxygen across a carbon-only backbone.</p>",
+    "related_identifiers": [
+        {
+            "identifier": "https://doi.org/10.1021/acs.jcim.6c02278",
+            "relation": "isSupplementTo",
+            "resource_type": "publication-article"
+        },
+        {
+            "identifier": "https://github.com/Reecy-Z/TMC-Lewis-Structure/tree/v2.0.0",
+            "relation": "isSupplementTo",
+            "resource_type": "software"
+        }
+    ],
+    "keywords": [
+        "transition-metal complexes",
+        "Lewis structures",
+        "integer linear programming",
+        "TMC-BE"
+    ]
+}
