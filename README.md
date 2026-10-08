@@ -1,6 +1,6 @@
 # TMC-Lewis-Structure
 
-Code repository for the manuscript **Automated Generation of Lewis-like Structures for Transition-Metal Complexes**.
+Code repository for **TMC-LewisGen: Automated Generation of Lewis-like Structures for Transition-Metal Complexes** ([https://doi.org/10.1021/acs.jcim.6c02278](https://doi.org/10.1021/acs.jcim.6c02278)).
 
 ILP-based Lewis structures for transition-metal complexes: bond orders, formal charges, CBC (L/X/Z), oxidation states, 3D viewer, and SMILES from XYZ.
 
